@@ -1,6 +1,6 @@
 {
   "name": "widget-user",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Implements different visualizations for a user.",
   "main": "index.js",
   "dependencies": {
