@@ -2,7 +2,7 @@
   "name": "widget-user",
   "version": "0.1.0",
   "description": "Implements different visualizations for a user.",
-  "main": "index.js",
+  "main": "user-widget-plugin.js",
   "dependencies": {
     "vue": "^2.5.17"
   },
