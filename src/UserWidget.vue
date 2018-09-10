@@ -7,12 +7,14 @@
 
 <script>
     export default {
-        name: "UserWidget"
+        name: "UserWidget",
         props: ['uuid', 'type'],
         data () {
             return {
                 showImg: (this.type == "medium" || this.type == "large"),
-                user: null
+                user: null,
+                uuid: this.uuid,
+                type: this.type
             }
         },
         methods: {
