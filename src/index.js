@@ -1,16 +1,16 @@
 import WidgetUser from './WidgetUser.vue'
 
 function plugin (Vue, options) {
-  Vue.mixin({
-    created: function () {
-      if (options != null && typeof options == 'object' && options.hasOwnProperty('uuid')) {
-        this.uuid = options.uuid
-      }
-      if (options != null && typeof options == 'object' && options.hasOwnProperty('type')) {
-        this.type = options.type
-      }
-    }
-  })
+  if (options != null && typeof options === 'object' && options.hasOwnProperty('uuid')) {
+    Vue.prototype.$widgetUserDefaultUUID = options.uuid
+  } else {
+    Vue.prototype.$widgetUserDefaultUUID = null
+  }
+  if (options != null && typeof options === 'object' && options.hasOwnProperty('type')) {
+    Vue.prototype.$widgetUserDefaultType = options.type
+  } else {
+    Vue.prototype.$widgetUserDefaultType = null
+  }
   Vue.component('widget-user', WidgetUser)
   // Vue.component('hello-jsx', HelloJsx)
 }

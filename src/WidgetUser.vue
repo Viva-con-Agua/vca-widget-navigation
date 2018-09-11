@@ -1,7 +1,10 @@
 <template>
-  <div>
+  <div v-if="defined">
     <img v-if="showImg" :src="user.avatar" alt="Missing image" />
-    <span :class="type">{{ this.user.firstname }} {{this.user.lastname }}</span>
+    <span :class="typeData">{{ user.firstname }} {{this.user.lastname }}</span>
+  </div>
+  <div v-else>
+    <span :class="typeData">There is currently no user logged in!</span>
   </div>
 </template>
 
@@ -13,15 +16,21 @@
       return {
         showImg: (this.type === 'medium' || this.type === 'large'),
         user: null,
-        uuid: this.uuid,
-        type: this.type
+        uuidData: this.uuid,
+        typeData: this.type
       }
     },
     methods: {
       init: function () {
+        if(this.uuidData == null) {
+          this.uuidData = Vue.$widgetUserDefaultUUID
+        }
+        if(this.typeData == null) {
+          this.typeData = Vue.$widgetUserDefaultType
+        }
         var that = this
         this.axios
-          .get('http://localhost/drops/widgets/user/' + this.uuid)
+          .get('http://localhost/drops/widgets/user/' + this.uuidData)
           .then(function (response) {
             switch (response.status) {
               case 200:
@@ -36,6 +45,12 @@
                 break
             }
           })
+      },
+      empty: function() {
+        return this.user == null
+      },
+      defined: function() {
+        return !this.empty();
       }
     }
   }
