@@ -3,11 +3,11 @@ import WidgetUser from './WidgetUser.vue'
 function plugin (Vue, options) {
   Vue.mixin({
     created: function () {
-      if(options.hasOwnProperty("uuid")) {
-        this.uuid = options.uuid;
+      if (options != null && typeof options == 'object' && options.hasOwnProperty('uuid')) {
+        this.uuid = options.uuid
       }
-      if(options.hasOwnProperty("type")) {
-        this.type = options.type;
+      if (options != null && typeof options == 'object' && options.hasOwnProperty('type')) {
+        this.type = options.type
       }
     }
   })
