@@ -9,6 +9,8 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+
   export default {
     name: 'UserWidget',
     props: ['uuid', 'type'],
@@ -22,10 +24,10 @@
     },
     methods: {
       init: function () {
-        if(this.uuidData == null) {
+        if (this.uuidData == null) {
           this.uuidData = Vue.$widgetUserDefaultUUID
         }
-        if(this.typeData == null) {
+        if (this.typeData == null) {
           this.typeData = Vue.$widgetUserDefaultType
         }
         var that = this
@@ -46,11 +48,11 @@
             }
           })
       },
-      empty: function() {
+      empty: function () {
         return this.user == null
       },
-      defined: function() {
-        return !this.empty();
+      defined: function () {
+        return !this.empty()
       }
     }
   }
