@@ -1,9 +1,9 @@
 <template>
 
-  <div v-if="exists">
-    <div :class="type" v-html="require('./images/default.svg')"/>
+  <div v-if="exists" :class="type" class="wrapper">
+    <div v-html="require('./images/default.svg')"/>
   </div>
-  <div v-else>
+  <div v-else class="wrapper">
     <img :src="user.profiles[0].avatar[0]" :class="type" :alt="user.profiles[0].supporter.fullName" />
   </div>
 </template>
@@ -23,19 +23,28 @@
 
 <style scoped>
 
-.small {
-  width: 32px;
-  height: 32px;
-}
+  .wrapper {
+    background-color: #2196f3;
+    margin: 0.5em;
+  }
 
-.medium {
-  width: 50px;
-  height: 50px;
-}
+  .wrapper svg {
+    color: #fff;
+  }
 
-.large {
-  width: 200px;
-  height: 200px;
-}
+  .small {
+    width: 2em;
+    height: 2em;
+  }
+
+  .medium {
+    width: 3em;
+    height: 3em;
+  }
+
+  .large {
+    width: 9em;
+    height: 9em;
+  }
 
 </style>
