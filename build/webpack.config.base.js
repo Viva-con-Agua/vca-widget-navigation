@@ -52,6 +52,22 @@ module.exports = {
           loaders: vueLoaders,
           postcss: [require('postcss-cssnext')()]
         }
+      },
+      {
+        test: /\.css$/,
+        loader: 'style!less!css'
+      },
+      // {
+      //   test: /\.(png|jpe?g|gif)(\?.*)?$/,
+      //   loader: 'url-loader',
+      //   options: {
+      //     limit: 10000,
+      //     name: utils.assetsPath('img/[name].[hash:7].[ext]')
+      //   }
+      // },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader?classPrefix'
       }
     ]
   },
