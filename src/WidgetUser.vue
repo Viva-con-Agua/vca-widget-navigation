@@ -7,7 +7,7 @@
         <span v-else :class="typeData" class="crew">(No crew)</span>
       </div>
     </div>
-    <div v-else>
+    <div v-else :class="typeData" class="card">
       <span :class="typeData">There is currently no user logged in!</span>
     </div>
 </template>

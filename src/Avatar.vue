@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="exists" :class="type" class="wrapper">
+  <div v-if="!exists()" :class="type" class="wrapper">
     <div v-html="require('./images/default.svg')"/>
   </div>
   <div v-else class="wrapper">
