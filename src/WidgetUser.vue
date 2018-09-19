@@ -100,6 +100,21 @@
     margin: 0 0 0.5em;
   }
 
+  div.small.card {
+    display: flex;
+    background-color: rgba(165, 119, 64, 0.6);
+    color: #fff;
+    margin: 0.5em;
+    width: 5em;
+    border-radius: 0.5em;
+    padding: 0.2em 0.5em;
+    justify-content: center;
+  }
+
+  div.small.card:hover {
+    background-color: rgba(165, 119, 64, 1);
+  }
+
   div.medium.card,
   div.large.card {
     display: flex;
