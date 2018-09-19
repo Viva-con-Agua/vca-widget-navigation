@@ -28,21 +28,24 @@
     margin: 0.5em;
   }
 
-  .wrapper svg {
-    color: #fff;
+  .wrapper >>> svg #freak {
+    fill: #fff;
   }
 
-  .small {
+  .small,
+  .small svg {
     width: 2em;
     height: 2em;
   }
 
-  .medium {
+  .medium,
+  .medium svg {
     width: 3em;
     height: 3em;
   }
 
-  .large {
+  .large,
+  .large svg {
     width: 9em;
     height: 9em;
   }

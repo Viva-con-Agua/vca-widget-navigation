@@ -1,9 +1,11 @@
 <template>
     <div v-if="defined()" :class="typeData" class="card">
       <Avatar v-if="typeData !== 'small'" v-bind:user="userData" v-bind:type="typeData"></Avatar>
-      <span :class="typeData">{{ userData.profiles[0].supporter.fullName }}</span>
-      <span v-if="typeData !== 'small' && userData.profiles[0].supporter.hasOwnProperty('crew')" :class="crew">({{ userData.profiles[0].supporter.crew }})</span>
-      <span v-else :class="crew">&nbsp;</span>
+      <div class="user-infos">
+        <span :class="typeData" class="name">{{ userData.profiles[0].supporter.fullName }}</span>
+        <span v-if="typeData !== 'small' && showCrew()" :class="typeData" class="crew">({{ userData.profiles[0].supporter.crew }})</span>
+        <span v-else :class="typeData" class="crew">(No crew)</span>
+      </div>
     </div>
     <div v-else>
       <span :class="typeData">There is currently no user logged in!</span>
@@ -44,7 +46,7 @@
           .then(response => {
             switch (response.status) {
               case 200:
-                console.log(response.data)
+                // console.log(response.data)
                 this.userData = response.data.additional_information
                 break
             }
@@ -64,6 +66,9 @@
       },
       defined: function () {
         return !this.empty()
+      },
+      showCrew: function () {
+        return this.defined() && this.userData.profiles[0].supporter.hasOwnProperty('crew')
       }
     }
   }
@@ -71,27 +76,28 @@
 
 <style scoped>
 
-  span.small {
+  span.small.name {
     font-size: 0.8em;
     font-style: italic;
   }
 
-  span.medium {
+  span.medium.name {
     font-size: 0.9em;
     font-weight: bold;
-    padding: 0.5em 0.5em 0;
   }
 
-  span.large {
+  span.large.name {
     font-size: 1.2em;
     font-weight: bolder;
-    padding: 0.5em 0.5em 0;
   }
 
   span.crew {
     font-style: italic;
-    font-size: 0.8em;
-    padding: 0 0.5em 0.5em;
+    font-size: 0.7em;
+  }
+
+  span.large.crew {
+    margin: 0 0 0.5em;
   }
 
   div.medium.card,
@@ -109,5 +115,15 @@
   div.medium.card {
     width: 12em;
     flex-direction: row;
+  }
+
+  div.user-infos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  div.medium .user-infos {
+    flex-grow: 1;
   }
 </style>
