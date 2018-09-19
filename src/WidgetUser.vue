@@ -8,7 +8,11 @@
       </div>
     </div>
     <div v-else :class="typeData" class="card">
-      <span :class="typeData">There is currently no user logged in!</span>
+      <Avatar v-if="typeData !== 'small'" notFound="true" v-bind:type="typeData"></Avatar>
+      <div class="user-infos">
+        <span :class="typeData">User not found</span>
+        <span v-if="typeData !== 'small'" :class="typeData" class="crew">&nbsp;</span>
+      </div>
     </div>
 </template>
 

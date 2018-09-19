@@ -1,6 +1,9 @@
 <template>
 
-  <div v-if="!exists()" :class="type" class="wrapper">
+  <div v-if="notFound" :class="type" class="wrapper">
+    <div v-html="require('./images/question_mark.svg')"/>
+  </div>
+  <div v-else-if="!exists()" :class="type" class="wrapper">
     <div v-html="require('./images/default.svg')"/>
   </div>
   <div v-else class="wrapper">
@@ -11,7 +14,7 @@
 <script>
     export default {
       name: 'Avatar',
-      props: ['user', 'type'],
+      props: ['user', 'type', 'notFound'],
       methods: {
         exists: function () {
           var avatar = this.user.profiles[0].avatar
@@ -47,7 +50,8 @@
     height: 10em;
   }
 
-  .wrapper >>> svg #freak {
+  .wrapper >>> svg #freak,
+  .wrapper >>> svg #questionMark {
     fill: #fff;
   }
 
