@@ -24,29 +24,42 @@
 <style scoped>
 
   .wrapper {
-    background-color: #2196f3;
-    margin: 0.5em;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .wrapper.small {
+    background-image: url('./images/avatar_bg_stripes_32x32.png');
+    width: 3em;
+    height: 3em;
+  }
+
+  .wrapper.medium {
+    background-image: url('./images/avatar_bg_stripes_32x32.png');
+    width: 4em;
+    height: 4em;
+  }
+
+  .wrapper.large {
+    background-image: url('./images/avatar_bg_200x162.png');
+    width: 10em;
+    height: 10em;
   }
 
   .wrapper >>> svg #freak {
     fill: #fff;
   }
 
-  .small,
   .small svg {
-    width: 2em;
     height: 2em;
   }
 
-  .medium,
   .medium svg {
-    width: 3em;
     height: 3em;
   }
 
-  .large,
   .large svg {
-    width: 9em;
     height: 9em;
   }
 
