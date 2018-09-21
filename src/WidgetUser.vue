@@ -1,8 +1,12 @@
 <template>
-    <div :class="typeData" class="card">
-      <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></Avatar>
-      <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></InfoField>
-    </div>
+  <div v-if="this.empty()" :class="typeData" class="card">
+    <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></Avatar>
+    <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></InfoField>
+  </div>
+  <a v-else :class="typeData" class="card" v-bind:href="getURL()">
+    <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></Avatar>
+    <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></InfoField>
+  </a>
 </template>
 
 <script>
@@ -50,13 +54,30 @@
             this.errorState = error.response.status
           })
       }
+    },
+    methods: {
+      empty: function () {
+        return this.userData == null || typeof this.userData === 'undefined'
+      },
+      getURL: function () {
+        var result = ''
+        if (!this.empty()) {
+          result = '/arise/#/profile/' + this.userData.id
+        }
+        return result
+      }
     }
   }
 </script>
 
 <style scoped>
 
-  div.small.card {
+  a {
+    text-decoration: none;
+    color: #0a6b91;
+  }
+
+  .small.card {
     display: flex;
     background-color: rgba(165, 119, 64, 0.6);
     color: #fff;
@@ -67,33 +88,37 @@
     justify-content: center;
   }
 
-  div.small.card:hover {
+  div.small.card {
+    background-color: lightgrey;
+  }
+
+  a.small.card:hover {
     background-color: rgba(165, 119, 64, 1);
   }
 
-  div.medium.card,
-  div.large.card {
+  .medium.card,
+  .large.card {
     display: flex;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     text-align: center;
   }
 
-  div.medium.card:hover,
-  div.large.card:hover {
+  a.medium.card:hover,
+  a.large.card:hover {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
   }
 
-  div.large.card {
+  .large.card {
     flex-direction: column;
     width: 10em;
   }
 
-  div.medium.card {
+  .medium.card {
     width: 12em;
     flex-direction: row;
   }
 
-  div.medium.user-infos {
+  .medium.user-infos {
     flex-grow: 1;
   }
 </style>

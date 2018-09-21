@@ -61,6 +61,10 @@
     height: 10em;
   }
 
+  .wrapper.error {
+    filter: grayscale(100%);
+  }
+
   .wrapper >>> svg #freak,
   .wrapper >>> svg #questionMark,
   .wrapper >>> svg #exclamationMark {

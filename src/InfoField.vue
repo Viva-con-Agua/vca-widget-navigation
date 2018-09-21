@@ -69,6 +69,10 @@
     font-size: 1em;
   }
 
+  span.error {
+    color: grey;
+  }
+
   span.crew {
     font-style: italic;
     font-size: 0.7em;
