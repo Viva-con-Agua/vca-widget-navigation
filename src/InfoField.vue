@@ -20,23 +20,23 @@
 
 <script>
     export default {
-        name: "InfoField",
-        props: ['type', 'user', 'errorCode'],
-        methods: {
-          empty: function () {
-            return this.user == null || typeof this.user === "undefined"
-          },
-          defined: function () {
-            return !this.empty()
-          },
-          showCrew: function () {
-            return this.defined() && this.user != null && typeof this.user !== "undefined" &&
+      name: 'InfoField',
+      props: ['type', 'user', 'errorCode'],
+      methods: {
+        empty: function () {
+          return this.user == null || typeof this.user === 'undefined'
+        },
+        defined: function () {
+          return !this.empty()
+        },
+        showCrew: function () {
+          return this.defined() && this.user != null && typeof this.user !== 'undefined' &&
               this.user.profiles[0].supporter.hasOwnProperty('crew')
-          },
-          error: function() {
-            return this.errorCode !== null
-          }
+        },
+        error: function () {
+          return this.errorCode !== null
         }
+      }
     }
 </script>
 

@@ -21,15 +21,15 @@
       props: ['user', 'type', 'errorCode'],
       methods: {
         exists: function () {
-          return this.user !== null && typeof user !== "undefined" && this.user.hasOwnProperty("profiles") &&
-            this.user.profiles[0].hasOwnProperty("avatar") && this.user.profiles[0].avatar !== null &&
+          return this.user !== null && typeof user !== 'undefined' && this.user.hasOwnProperty('profiles') &&
+            this.user.profiles[0].hasOwnProperty('avatar') && this.user.profiles[0].avatar !== null &&
             this.user.profiles[0].avatar.length !== 0
         },
-        error: function() {
+        error: function () {
           return this.errorCode !== null
         },
-        show: function() {
-          return this.type !== "small"
+        show: function () {
+          return this.type !== 'small'
         }
       }
     }
