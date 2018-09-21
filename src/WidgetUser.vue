@@ -1,18 +1,7 @@
 <template>
-    <div v-if="defined()" :class="typeData" class="card">
-      <Avatar v-if="typeData !== 'small'" v-bind:user="userData" v-bind:type="typeData"></Avatar>
-      <div class="user-infos">
-        <span :class="typeData" class="name">{{ userData.profiles[0].supporter.fullName }}</span>
-        <span v-if="typeData !== 'small' && showCrew()" :class="typeData" class="crew">({{ userData.profiles[0].supporter.crew }})</span>
-        <span v-else :class="typeData" class="crew">(No crew)</span>
-      </div>
-    </div>
-    <div v-else :class="typeData" class="card">
-      <Avatar v-if="typeData !== 'small'" notFound="true" v-bind:type="typeData"></Avatar>
-      <div class="user-infos">
-        <span :class="typeData">User not found</span>
-        <span v-if="typeData !== 'small'" :class="typeData" class="crew">&nbsp;</span>
-      </div>
+    <div :class="typeData" class="card">
+      <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></Avatar>
+      <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></InfoField>
     </div>
 </template>
 
@@ -20,19 +9,23 @@
   import Vue from 'vue'
   import axios from 'axios'
   import Avatar from './Avatar'
+  import InfoField from './InfoField'
 
   Vue.use(Avatar)
+  Vue.use(InfoField)
   // Vue.use(axios);
 
   export default {
     name: 'UserWidget',
     props: ['uuid', 'type', 'user'],
     components: {
-      'Avatar': Avatar
+      'Avatar': Avatar,
+      'InfoField': InfoField
     },
     data () {
       return {
         showImg: (this.type === 'medium' || this.type === 'large'),
+        errorState: null,
         userData: this.user,
         uuidData: this.uuid,
         typeData: this.type
@@ -50,59 +43,18 @@
           .then(response => {
             switch (response.status) {
               case 200:
-                // console.log(response.data)
                 this.userData = response.data.additional_information
                 break
             }
           }).catch(error => {
-            switch (error.response.status) {
-              case 404:
-              // Todo: How to handle error messages?
-              // that.open(that.$t('signin.error'), error.response.data.msg, "error");
-                break
-            }
+            this.errorState = error.response.status
           })
-      }
-    },
-    methods: {
-      empty: function () {
-        return this.userData == null
-      },
-      defined: function () {
-        return !this.empty()
-      },
-      showCrew: function () {
-        return this.defined() && this.userData.profiles[0].supporter.hasOwnProperty('crew')
       }
     }
   }
 </script>
 
 <style scoped>
-
-  span.small.name {
-    font-size: 0.8em;
-    font-style: italic;
-  }
-
-  span.medium.name {
-    font-size: 0.9em;
-    font-weight: bold;
-  }
-
-  span.large.name {
-    font-size: 1.2em;
-    font-weight: bolder;
-  }
-
-  span.crew {
-    font-style: italic;
-    font-size: 0.7em;
-  }
-
-  span.large.crew {
-    margin: 0 0 0.5em;
-  }
 
   div.small.card {
     display: flex;
@@ -136,13 +88,7 @@
     flex-direction: row;
   }
 
-  div.user-infos {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  div.medium .user-infos {
+  div.medium.user-infos {
     flex-grow: 1;
   }
 </style>
