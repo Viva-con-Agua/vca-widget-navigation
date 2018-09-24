@@ -1,6 +1,6 @@
 {
   "name": "vca-widget-user",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Implements different visualizations for a user.",
   "author": "Johann Sell",
   "main": "dist/vca-widget-user.common.js",
