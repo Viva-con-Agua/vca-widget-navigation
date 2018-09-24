@@ -1,13 +1,13 @@
 {
-  "name": "widget-user",
+  "name": "vca-widget-user",
   "version": "0.1.0",
   "description": "Implements different visualizations for a user.",
   "author": "Johann Sell",
-  "main": "dist/widget-user.common.js",
-  "module": "dist/widget-user.esm.js",
-  "browser": "dist/widget-user.js",
-  "unpkg": "dist/widget-user.js",
-  "style": "dist/widget-user.css",
+  "main": "dist/vca-widget-user.common.js",
+  "module": "dist/vca-widget-user.esm.js",
+  "browser": "dist/vca-widget-user.js",
+  "unpkg": "dist/vca-widget-user.js",
+  "style": "dist/vca-widget-user.css",
   "files": [
     "dist",
     "src"
@@ -42,7 +42,10 @@
   },
   "pre-commit": "lint:staged",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "element-ui": "^2.4.7",
+    "less-loader": "^4.1.0",
+    "v-tooltip": "^2.0.0-rc.33"
   },
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.0.0",
@@ -50,6 +53,7 @@
     "babel-eslint": "^7.2.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.0",
     "babel-loader": "^7.0.0",
+    "babel-plugin-component": "^1.1.1",
     "babel-plugin-istanbul": "^4.1.0",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
@@ -125,12 +129,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johannsell/widget-user.git"
+    "url": "git+https://github.com/Viva-con-Agua/vca-widget-user"
   },
   "bugs": {
-    "url": "https://github.com/johannsell/widget-user/issues"
+    "url": "https://github.com/Viva-con-Agua/vca-widget-user/issues"
   },
-  "homepage": "https://github.com/johannsell/widget-user#readme",
+  "homepage": "https://github.com/Viva-con-Agua/vca-widget-user#readme",
   "license": {
     "type": "MIT",
     "url": "http://www.opensource.org/licenses/mit-license.php"
