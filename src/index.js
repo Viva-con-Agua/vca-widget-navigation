@@ -1,4 +1,5 @@
 import WidgetUser from './WidgetUser.vue'
+import WidgetUserList from './WidgetUserList.vue'
 
 function plugin (Vue, options) {
   if (options != null && typeof options === 'object' && options.hasOwnProperty('uuid')) {
@@ -12,6 +13,7 @@ function plugin (Vue, options) {
     Vue.prototype.$widgetUserDefaultType = null
   }
   Vue.component('widget-user', WidgetUser)
+  Vue.component('widget-user-list', WidgetUserList)
   // Vue.component('hello-jsx', HelloJsx)
 }
 
@@ -25,5 +27,6 @@ const version = '__VERSION__'
 // Export all components too
 export {
   WidgetUser,
+  WidgetUserList,
   version
 }

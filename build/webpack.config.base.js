@@ -55,7 +55,12 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style!less!css'
+        loader: 'style!less!css',
+        options: {
+          modules: true,
+          sourceMap: true,
+          importLoaders: 1
+        }
       },
       {
         test: /\.(png|jpe?g|gif)(\?.*)?$/,

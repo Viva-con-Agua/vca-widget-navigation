@@ -1,9 +1,9 @@
 <template>
-  <div v-if="this.empty()" :class="typeData" class="card">
+  <div v-if="this.empty()" :class="typeData" class="card user">
     <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></Avatar>
     <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></InfoField>
   </div>
-  <a v-else :class="typeData" class="card" v-bind:href="getURL()">
+  <a v-else :class="typeData" class="card user" v-bind:href="getURL()">
     <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></Avatar>
     <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></InfoField>
   </a>
