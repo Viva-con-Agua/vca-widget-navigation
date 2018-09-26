@@ -17,33 +17,29 @@
 
   Vue.use(WidgetUser)
 
-    export default {
-        name: "WidgetUserList",
-        props: ['pageSize'],
-        components: {
-          'WidgetUser': WidgetUser
+  export default {
+    name: 'WidgetUserList',
+    props: ['pageSize'],
+    components: {
+      'WidgetUser': WidgetUser
+    },
+    data () {
+      return {
+        users: [],
+        count: null,
+        limit: {
+          pageSize: this.pageSize,
+          offset: 0
         },
-        data () {
-          return {
-            users: [],
-            count: null,
-            limit: {
-              pageSize: this.pageSize,
-              maxPageSize: this.pageSize * 4,
-              pageEnd: 0,
-              offset: 0
-            },
-            errorState: null
-          }
-        },
-        created () {
-          if(this.limit.pageSize == null || typeof this.limit.pageSize === "undefined") {
-            this.limit.pageSize = 20
-            this.limit.maxPageSize = this.limit.pageSize * 4
-            this.limit.pageEnd = this.limit.pageEnd + this.limit.pageSize
-          }
-          this.init()
-          axios.post('/drops/widgets/users/count', {})
+        errorState: null
+      }
+    },
+    created () {
+      if (this.limit.pageSize == null || typeof this.limit.pageSize === 'undefined') {
+        this.limit.pageSize = 20
+      }
+      this.init()
+      axios.post('/drops/widgets/users/count', {})
             .then(response => {
               switch (response.status) {
                 case 200:
@@ -52,43 +48,35 @@
             }).catch(error => {
               this.errorState = error.response.status
             })
-        },
-      methods: {
-          addPage: function(event) {
-            this.limit.pageEnd = this.limit.pageEnd + this.limit.pageSize
-            if(this.limit.pageEnd > this.count) {
-              this.limit.pageEnd = this.count
-            }
-            if(this.limit.pageEnd > (this.limit.offset + this.limit.maxPageSize)) {
-              this.limit.offset = this.limit.offset + this.limit.pageSize
-            }
-            this.init()
-          },
-          removePage: function(event) {
-            this.limit.offset = this.limit.offset - this.limit.pageSize
-            if(this.limit.offset < 0) {
-              this.limit.offset = 0
-            }
-            if(this.limit.pageEnd > (this.limit.offset + this.limit.maxPageSize)) {
-              this.limit.pageEnd = this.limit.pageEnd - this.limit.pageSize
-            }
-            this.init()
-          },
-          init: function() {
-            axios.post('/drops/widgets/users', {'limit': this.limit.pageEnd, 'offset': this.limit.offset})
+    },
+    methods: {
+      addPage: function (event) {
+        if (this.limit.offset + this.limit.pageSize <= this.count) {
+          this.limit.offset = this.limit.offset + this.limit.pageSize
+        }
+        this.init()
+      },
+      removePage: function (event) {
+        this.limit.offset = this.limit.offset - this.limit.pageSize
+        if (this.limit.offset < 0) {
+          this.limit.offset = 0
+        }
+        this.init()
+      },
+      init: function () {
+        axios.post('/drops/widgets/users', { 'limit': this.limit.pageSize, 'offset': this.limit.offset })
               .then(response => {
-                switch(response.status) {
+                switch (response.status) {
                   case 200:
-                    console.log(response.data.additional_information)
                     this.users = response.data.additional_information
                     break
                 }
               }).catch(error => {
                 this.errorState = error.response.status
               })
-            }
       }
     }
+  }
 </script>
 
 <style scoped>
