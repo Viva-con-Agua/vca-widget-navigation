@@ -1,6 +1,11 @@
 <template>
 
-  <div class="user-widget-list">
+  <div v-if="hasError()" class="user-widget-list error">
+    <span v-if="errorState === 401">Please, log in first.</span>
+    <span v-else-if="errorState === 403">Forbidden.</span>
+    <span v-else>An error occurred!</span>
+  </div>
+  <div v-else class="user-widget-list">
     <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous ({{ page.howManyPrevious() }})</button>
     <div class="users-list">
       <WidgetUser v-for="user of users" v-bind:user="user" type="large" :key="user.id"></WidgetUser>
@@ -25,18 +30,18 @@
       'WidgetUser': WidgetUser
     },
     data () {
-      var size = 40;
-      if(this.pageSize !== null && typeof this.pageSize !== "undefined") {
-        size = this.pageSize;
+      var size = 40
+      if (this.pageSize !== null && typeof this.pageSize !== 'undefined') {
+        size = this.pageSize
       }
 
-      var sliding = Math.floor(size / 2);
-      if(this.pageSliding !== null && typeof this.pageSliding !== "undefined") {
-        sliding = this.pageSliding;
+      var sliding = Math.floor(size / 2)
+      if (this.pageSliding !== null && typeof this.pageSliding !== 'undefined') {
+        sliding = this.pageSliding
       }
       return {
         users: [],
-        pageParams: { "size" : size, "sliding" : sliding },
+        pageParams: { 'size': size, 'sliding': sliding },
         page: Page.apply(0, sliding, size),
         errorState: null
       }
@@ -51,7 +56,7 @@
                   break
               }
             }).catch(error => {
-              this.errorState = error.status
+              this.errorState = error.response.status
             })
     },
     methods: {
@@ -78,6 +83,9 @@
               }).catch(error => {
                 this.errorState = error.response.status
               })
+      },
+      hasError() {
+        return this.errorState !== null && (typeof this.errorState != "undefined")
       }
     }
   }
@@ -88,6 +96,20 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .user-widget-list.error {
+    align-items: center;
+  }
+
+  .user-widget-list.error span {
+    color: white;
+    background-color: lightcoral;
+    width: 30em;
+    border-radius: 1em;
+    height: 2em;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    line-height: 2em;
   }
 
   .paginate {
