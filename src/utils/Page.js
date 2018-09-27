@@ -1,65 +1,65 @@
 export default class Page {
 
-  constructor(numberOfItems, offset = 0, size = 20, maxElements = 40, currentSize = 20) {
-    this.numberOfItems = numberOfItems;
-    this.offset = offset;
-    this.size = size;
-    this.currentSize = currentSize;
-    this.maxElements = maxElements;
+  constructor (numberOfItems, offset = 0, sliding = 20, maxElements = 40, size = 40) {
+    this.numberOfItems = numberOfItems
+    this.offset = offset
+    this.sliding = sliding
+    this.size = size
+    this.maxElements = maxElements
   }
 
-  static apply(numberOfItems) {
-    return new Page(numberOfItems, 0, 20, 40, 20)
+  static apply (numberOfItems, sliding, size) {
+    return new Page(numberOfItems, 0, sliding, size, size)
   }
 
-  getCopy(newOffset, newCurrentSize) {
-    return new Page(this.numberOfItems, newOffset, this.size, this.maxElements, newCurrentSize)
+  getCopy (newOffset, newSize) {
+    return new Page(this.numberOfItems, newOffset, this.sliding, this.maxElements, newSize)
   }
 
-  getOffset() {
-    return this.offset;
+  getOffset () {
+    return this.offset
   }
 
-  getSize() {
-    return this.currentSize;
+  getSize () {
+    return this.size
   }
 
-  next() {
-    var newPage = this;
-    if(this.currentSize < this.maxElements) {
-      var newCurrentSize = this.currentSize + this.size;
-      newPage = this.getCopy(this.offset, newCurrentSize)
+  next () {
+    var newPage = this
+    if (this.size < this.maxElements) {
+      var newSize = this.size + this.sliding
+      newPage = this.getCopy(this.offset, newSize)
     } else {
-      var newOffset = this.offset + this.size;
-      if (newOffset + this.currentSize > this.numberOfItems) {
-        newOffset = this.numberOfItems - this.currentSize;
+      var newOffset = this.offset + this.sliding
+      if (newOffset + this.size > this.numberOfItems) {
+        newOffset = this.numberOfItems - this.size
       }
-      newPage = this.getCopy(newOffset, this.currentSize)
+      newPage = this.getCopy(newOffset, this.size)
     }
-    return newPage;
+    return newPage
   }
 
-  previous() {
-    var newOffset = this.offset - this.size;
+  previous () {
+    var newOffset = this.offset - this.sliding
     if (newOffset < 0) {
       newOffset = 0
     }
-    return this.getCopy(newOffset, this.currentSize);
+    return this.getCopy(newOffset, this.size)
   }
 
-  hasPrevious() {
-    return this.offset !== 0;
+  hasPrevious () {
+    return this.offset !== 0
   }
 
-  hasNext() {
-    return (this.offset + this.currentSize) < this.numberOfItems;
+  hasNext () {
+    return (this.offset + this.size) < this.numberOfItems
   }
 
-  howManyNext() {
-    return this.numberOfItems - (this.offset + this.currentSize);
+  howManyNext () {
+    return this.numberOfItems - (this.offset + this.size)
   }
 
-  howManyPrevious() {
-    return this.offset;
+  howManyPrevious () {
+    return this.offset
   }
 }

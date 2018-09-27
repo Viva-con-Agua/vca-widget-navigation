@@ -20,14 +20,24 @@
 
   export default {
     name: 'WidgetUserList',
-    props: ['pageSize'],
+    props: ['pageSize', 'pageSliding'],
     components: {
       'WidgetUser': WidgetUser
     },
     data () {
+      var size = 40;
+      if(this.pageSize !== null && typeof this.pageSize !== "undefined") {
+        size = this.pageSize;
+      }
+
+      var sliding = Math.floor(size / 2);
+      if(this.pageSliding !== null && typeof this.pageSliding !== "undefined") {
+        sliding = this.pageSliding;
+      }
       return {
         users: [],
-        page: Page.apply(0),
+        pageParams: { "size" : size, "sliding" : sliding },
+        page: Page.apply(0, sliding, size),
         errorState: null
       }
     },
@@ -36,12 +46,12 @@
             .then(response => {
               switch (response.status) {
                 case 200:
-                  this.page = Page.apply(response.data.additional_information.count)
+                  this.page = Page.apply(response.data.additional_information.count, this.pageParams.sliding, this.pageParams.size)
                   this.getPage()
                   break
               }
             }).catch(error => {
-              this.errorState = error.response.status
+              this.errorState = error.status
             })
     },
     methods: {
