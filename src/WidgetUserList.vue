@@ -1,11 +1,11 @@
 <template>
 
   <div class="user-widget-list">
-    <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous</button>
+    <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous ({{ page.howManyPrevious() }})</button>
     <div class="users-list">
       <WidgetUser v-for="user of users" v-bind:user="user" type="large" :key="user.id"></WidgetUser>
     </div>
-    <button v-if="page.hasNext()" v-on:click="addPage" class="paginate">Show next</button>
+    <button v-if="page.hasNext()" v-on:click="addPage" class="paginate">Show next ({{ page.howManyNext() }})</button>
   </div>
 
 </template>
@@ -46,13 +46,13 @@
     },
     methods: {
       addPage: function (event) {
-        if(this.page.hasNext()) {
+        if (this.page.hasNext()) {
           this.page = this.page.next()
           this.getPage()
         }
       },
       removePage: function (event) {
-        if(this.page.hasPrevious()) {
+        if (this.page.hasPrevious()) {
           this.page = this.page.previous()
           this.getPage()
         }
@@ -62,7 +62,7 @@
               .then(response => {
                 switch (response.status) {
                   case 200:
-                      this.users = response.data.additional_information
+                    this.users = response.data.additional_information
                     break
                 }
               }).catch(error => {
