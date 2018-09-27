@@ -1,11 +1,11 @@
 <template>
 
   <div class="user-widget-list">
-    <button v-if="limit.offset != 0" v-on:click="removePage" class="paginate">Show previous</button>
+    <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous</button>
     <div class="users-list">
       <WidgetUser v-for="user of users" v-bind:user="user" type="large" :key="user.id"></WidgetUser>
     </div>
-    <button va-if="limit.pageEnd != count" v-on:click="addPage" class="paginate">Show next</button>
+    <button v-if="page.hasNext()" v-on:click="addPage" class="paginate">Show next</button>
   </div>
 
 </template>
@@ -14,6 +14,7 @@
   import Vue from 'vue'
   import axios from 'axios'
   import WidgetUser from './WidgetUser'
+  import Page from './utils/Page'
 
   Vue.use(WidgetUser)
 
@@ -26,24 +27,18 @@
     data () {
       return {
         users: [],
-        count: null,
-        limit: {
-          pageSize: this.pageSize,
-          offset: 0
-        },
+        page: Page.apply(0),
         errorState: null
       }
     },
     created () {
-      if (this.limit.pageSize == null || typeof this.limit.pageSize === 'undefined') {
-        this.limit.pageSize = 20
-      }
-      this.init()
       axios.post('/drops/widgets/users/count', {})
             .then(response => {
               switch (response.status) {
                 case 200:
-                  this.count = response.data.additional_information.count
+                  this.page = Page.apply(response.data.additional_information.count)
+                  this.getPage()
+                  break
               }
             }).catch(error => {
               this.errorState = error.response.status
@@ -51,24 +46,23 @@
     },
     methods: {
       addPage: function (event) {
-        if (this.limit.offset + this.limit.pageSize <= this.count) {
-          this.limit.offset = this.limit.offset + this.limit.pageSize
+        if(this.page.hasNext()) {
+          this.page = this.page.next()
+          this.getPage()
         }
-        this.init()
       },
       removePage: function (event) {
-        this.limit.offset = this.limit.offset - this.limit.pageSize
-        if (this.limit.offset < 0) {
-          this.limit.offset = 0
+        if(this.page.hasPrevious()) {
+          this.page = this.page.previous()
+          this.getPage()
         }
-        this.init()
       },
-      init: function () {
-        axios.post('/drops/widgets/users', { 'limit': this.limit.pageSize, 'offset': this.limit.offset })
+      getPage: function () {
+        axios.post('/drops/widgets/users', { 'limit': this.page.getSize(), 'offset': this.page.getOffset() })
               .then(response => {
                 switch (response.status) {
                   case 200:
-                    this.users = response.data.additional_information
+                      this.users = response.data.additional_information
                     break
                 }
               }).catch(error => {
