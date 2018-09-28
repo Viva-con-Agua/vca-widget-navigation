@@ -6,7 +6,13 @@
     <span v-else>An error occurred!</span>
   </div>
   <div v-else class="user-widget-list">
-    <ListMenu v-bind:type="type" v-on:input="type = $event" />
+    <ListMenu v-bind:type="type"
+              v-on:typeSelect="type = $event"
+              v-bind:sortDirection="sortDir"
+              v-on:sortDirSelect="setSortingDir"
+              v-bind:sortField="sortField"
+              v-on:sortFieldSelect="setSortingField"
+    />
     <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous ({{ page.howManyPrevious() }})</button>
     <div class="users-list">
       <WidgetUser v-for="user of users" v-bind:user="user" v-bind:type="type" :key="user.id"></WidgetUser>
@@ -45,7 +51,7 @@
       }
 
       var defaultType = 'large'
-      if(this.elementType !== null && typeof this.elementType !== "undefined") {
+      if (this.elementType !== null && typeof this.elementType !== 'undefined') {
         defaultType = this.elementType
       }
       return {
@@ -53,6 +59,8 @@
         users: [],
         pageParams: { 'size': size, 'sliding': sliding },
         page: Page.apply(0, sliding, size),
+        sortDir: 'ASC',
+        sortField: 'Supporter_firstName',
         errorState: null
       }
     },
@@ -83,7 +91,7 @@
         }
       },
       getPage: function () {
-        axios.post('/drops/widgets/users', { 'limit': this.page.getSize(), 'offset': this.page.getOffset() })
+        axios.post('/drops/widgets/users', { 'sort': this.getSorting(), 'limit': this.page.getSize(), 'offset': this.page.getOffset() })
               .then(response => {
                 switch (response.status) {
                   case 200:
@@ -93,6 +101,17 @@
               }).catch(error => {
                 this.errorState = error.response.status
               })
+      },
+      getSorting: function () {
+        return { 'attributes': [this.sortField], 'dir': this.sortDir }
+      },
+      setSortingDir: function (event) {
+        this.sortDir = event
+        this.getPage()
+      },
+      setSortingField: function (event) {
+        this.sortField = event
+        this.getPage()
       },
       hasError () {
         return this.errorState !== null && (typeof this.errorState !== 'undefined')
