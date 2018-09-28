@@ -5,7 +5,10 @@
     </li>
     <li class="sorting">
       <v-select v-model="sortData" @input="fireFieldSelection" :options="sortingFields" :clearable="false"></v-select>
-      <button v-bind:value="sortDir" @click="fireSortDirSelection">{{ sortDir }}</button>
+      <button v-bind:value="sortDir" @click="fireSortDirSelection">
+        <div v-if="sortDir === 'ASC'" v-html="require('./images/sort-alpha-down.svg')" />
+        <div v-if="sortDir === 'DESC'" v-html="require('./images/sort-alpha-up.svg')" />
+      </button>
     </li>
   </ul>
 </template>
@@ -111,6 +114,19 @@
 
   .listMenu li button {
     margin-left: 1em;
+    background: none;
+    border: 1px solid rgba(60, 60, 60, 0.26);
+    border-radius: 4px;
+  }
+
+  .listMenu li button >>> div {
+    pointer-events: none;
+  }
+
+  .listMenu li button >>> svg {
+    width: 1.5em;
+    pointer-events: none;
+    cursor: pointer;
   }
 
 </style>
