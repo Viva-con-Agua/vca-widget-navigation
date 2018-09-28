@@ -6,9 +6,10 @@
     <span v-else>An error occurred!</span>
   </div>
   <div v-else class="user-widget-list">
+    <ListMenu v-bind:type="type" v-on:input="type = $event" />
     <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous ({{ page.howManyPrevious() }})</button>
     <div class="users-list">
-      <WidgetUser v-for="user of users" v-bind:user="user" type="large" :key="user.id"></WidgetUser>
+      <WidgetUser v-for="user of users" v-bind:user="user" v-bind:type="type" :key="user.id"></WidgetUser>
     </div>
     <button v-if="page.hasNext()" v-on:click="addPage" class="paginate">Show next ({{ page.howManyNext() }})</button>
   </div>
@@ -20,14 +21,17 @@
   import axios from 'axios'
   import WidgetUser from './WidgetUser'
   import Page from './utils/Page'
+  import ListMenu from './ListMenu'
 
   Vue.use(WidgetUser)
+  Vue.use(ListMenu)
 
   export default {
     name: 'WidgetUserList',
     props: ['pageSize', 'pageSliding'],
     components: {
-      'WidgetUser': WidgetUser
+      'WidgetUser': WidgetUser,
+      'ListMenu': ListMenu
     },
     data () {
       var size = 40
@@ -40,6 +44,7 @@
         sliding = this.pageSliding
       }
       return {
+        type: 'large',
         users: [],
         pageParams: { 'size': size, 'sliding': sliding },
         page: Page.apply(0, sliding, size),
@@ -84,8 +89,8 @@
                 this.errorState = error.response.status
               })
       },
-      hasError() {
-        return this.errorState !== null && (typeof this.errorState != "undefined")
+      hasError () {
+        return this.errorState !== null && (typeof this.errorState !== 'undefined')
       }
     }
   }

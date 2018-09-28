@@ -1,11 +1,11 @@
 <template>
-  <div v-if="this.empty()" :class="typeData" class="card user">
-    <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></Avatar>
-    <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></InfoField>
+  <div v-if="this.empty()" :class="type" class="card user">
+    <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></Avatar>
+    <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></InfoField>
   </div>
-  <a v-else :class="typeData" class="card user" v-bind:href="getURL()">
-    <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></Avatar>
-    <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="typeData"></InfoField>
+  <a v-else :class="type" class="card user" v-bind:href="getURL()">
+    <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></Avatar>
+    <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></InfoField>
   </a>
 </template>
 
@@ -28,20 +28,20 @@
     },
     data () {
       return {
-        showImg: (this.type === 'medium' || this.type === 'large'),
         errorState: null,
         userData: this.user,
-        uuidData: this.uuid,
-        typeData: this.type
+        uuidData: this.uuid// ,
+        // typeData: null
       }
     },
     created () {
-      if (this.uuidData == null) {
-        this.uuidData = Vue.$widgetUserDefaultUUID
-      }
-      if (this.typeData == null) {
-        this.typeData = Vue.$widgetUserDefaultType
-      }
+      // Todo: Should be part of some external wrapper solution!
+      // if (this.uuidData == null) {
+      //   this.uuidData = Vue.$widgetUserDefaultUUID
+      // }
+      // if (this.typeData == null) {
+      //   this.typeData = Vue.$widgetUserDefaultType
+      // }
       if (this.userData == null) {
         axios.get('/drops/widgets/user/' + this.uuidData)
           .then(response => {

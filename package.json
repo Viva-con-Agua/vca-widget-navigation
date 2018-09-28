@@ -138,5 +138,10 @@
   },
   "browserslist": [
     "last 2 versions"
-  ]
+  ],
+  "dependencies": {
+    "axios": "^0.18.0",
+    "v-tooltip": "^2.0.0-rc.33",
+    "vue-select": "^2.5.1"
+  }
 }
