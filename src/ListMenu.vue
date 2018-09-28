@@ -1,11 +1,13 @@
 <template>
-  <div class="listMenu">
-    <v-select v-model="typeData" @input="fireTypeSelection" :options="types" :clearable="false"></v-select>
-    <div class="sorting">
+  <ul class="listMenu">
+    <li class="view">
+      <v-select v-model="typeData" @input="fireTypeSelection" :options="types" :clearable="false"></v-select>
+    </li>
+    <li class="sorting">
       <v-select v-model="sortData" @input="fireFieldSelection" :options="sortingFields" :clearable="false"></v-select>
       <button v-bind:value="sortDir" @click="fireSortDirSelection">{{ sortDir }}</button>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -89,5 +91,26 @@
 </script>
 
 <style scoped>
+
+  .listMenu {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .listMenu li {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    margin-left: 1em;
+  }
+
+  .listMenu li .v-select {
+    min-width: 10em;
+  }
+
+  .listMenu li button {
+    margin-left: 1em;
+  }
 
 </style>
