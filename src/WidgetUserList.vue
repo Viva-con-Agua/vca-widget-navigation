@@ -28,7 +28,7 @@
 
   export default {
     name: 'WidgetUserList',
-    props: ['pageSize', 'pageSliding'],
+    props: ['pageSize', 'pageSliding', 'elementType'],
     components: {
       'WidgetUser': WidgetUser,
       'ListMenu': ListMenu
@@ -43,8 +43,13 @@
       if (this.pageSliding !== null && typeof this.pageSliding !== 'undefined') {
         sliding = this.pageSliding
       }
+
+      var defaultType = 'large'
+      if(this.elementType !== null && typeof this.elementType !== "undefined") {
+        defaultType = this.elementType
+      }
       return {
-        type: 'large',
+        type: defaultType,
         users: [],
         pageParams: { 'size': size, 'sliding': sliding },
         page: Page.apply(0, sliding, size),
