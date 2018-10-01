@@ -26,7 +26,7 @@
             this.user.profiles[0].avatar.length !== 0
         },
         error: function () {
-          return this.errorCode !== null
+          return this.errorCode !== null && (typeof this.errorCode !== 'undefined')
         },
         show: function () {
           return this.type !== 'small'

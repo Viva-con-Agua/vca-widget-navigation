@@ -14,9 +14,10 @@
               v-on:sortFieldSelect="setSortingField"
     />
     <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous ({{ page.howManyPrevious() }})</button>
-    <div class="users-list">
+    <div v-if="type !== 'tableRow'" class="users-list">
       <WidgetUser v-for="user of users" v-bind:user="user" v-bind:type="type" :key="user.id"></WidgetUser>
     </div>
+    <TableUsers v-else :users="users" />
     <button v-if="page.hasNext()" v-on:click="addPage" class="paginate">Show next ({{ page.howManyNext() }})</button>
   </div>
 
@@ -28,6 +29,7 @@
   import WidgetUser from './WidgetUser'
   import Page from './utils/Page'
   import ListMenu from './ListMenu'
+  import TableUsers from './TableUsers'
 
   Vue.use(WidgetUser)
   Vue.use(ListMenu)
@@ -37,7 +39,8 @@
     props: ['pageSize', 'pageSliding', 'elementType'],
     components: {
       'WidgetUser': WidgetUser,
-      'ListMenu': ListMenu
+      'ListMenu': ListMenu,
+      'TableUsers': TableUsers
     },
     data () {
       var size = 40

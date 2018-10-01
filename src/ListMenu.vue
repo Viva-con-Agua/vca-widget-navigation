@@ -59,6 +59,10 @@
         {
           'label': 'Small',
           'value': 'small'
+        },
+        {
+          'label': 'Table',
+          'value': 'tableRow'
         }
       ]
       var dir = 'ASC'
