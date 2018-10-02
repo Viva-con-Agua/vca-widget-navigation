@@ -4,10 +4,10 @@
       <v-select v-model="typeData" @input="fireTypeSelection" :options="types" :clearable="false"></v-select>
     </li>
     <li class="sorting">
-      <v-select v-model="sortData" @input="fireFieldSelection" :options="sortingFields" :clearable="false"></v-select>
-      <button v-bind:value="sortDir" @click="fireSortDirSelection">
-        <div v-if="sortDir === 'ASC'" v-html="require('./images/sort-alpha-down.svg')" />
-        <div v-if="sortDir === 'DESC'" v-html="require('./images/sort-alpha-up.svg')" />
+      <v-select v-model="sorting.getCurrentField()" @input="fireFieldSelection" :options="sorting.getFields()" :clearable="false"></v-select>
+      <button v-bind:value="sorting.sortDir" @click="fireSortDirSelection">
+        <div v-if="sorting.is('ASC')" v-html="require('./images/sort-alpha-down.svg')" />
+        <div v-if="sorting.is('DESC')" v-html="require('./images/sort-alpha-up.svg')" />
       </button>
     </li>
   </ul>
@@ -19,34 +19,11 @@
 
   export default {
     name: 'ListMenu',
-    props: ['type', 'sortDirection', 'sortField'],
+    props: ['type', 'sorting'],
     components: {
       'v-select': vSelect
     },
     data () {
-      var sortingFields = [
-        {
-          'label': 'First name',
-          'value': 'Supporter_firstName'
-        },
-        {
-          'label': 'Last name',
-          'value': 'Supporter_lastName'
-        },
-        {
-          'label': 'Email',
-          'value': 'Profile_email'
-        },
-        {
-          'label': 'Active since',
-          'value': 'User_created'
-        },
-        {
-          'label': 'Place of residence',
-          'value': 'Supporter_placeOfResidence'
-        }
-      ]
-
       var types = [
         {
           'label': 'Large',
@@ -65,33 +42,27 @@
           'value': 'tableRow'
         }
       ]
-      var dir = 'ASC'
-      if (this.sortDirection !== null && typeof this.sortDirection !== 'undefined') {
-        dir = this.sortDirection
-      }
 
       return {
-        'sortDir': dir,
         'typeData': types.filter((t) => t.value === this.type).pop(),
-        'types': types,
-        'sortingFields': sortingFields,
-        'sortData': sortingFields.filter((field) => field.value === this.sortField).pop()
+        'types': types
       }
     },
     methods: {
       fireTypeSelection: function () {
         this.$emit('typeSelect', this.typeData.value)
       },
-      fireFieldSelection: function () {
-        this.$emit('sortFieldSelect', this.sortData.value)
+      fireFieldSelection: function (event) {
+        this.sorting.setField(event.value)
+        this.$emit('sortFieldSelect', event.value)
       },
       fireSortDirSelection: function (event) {
         if (event.target.value === 'ASC') {
-          this.sortDir = 'DESC'
+          this.sorting.setDir('DESC')
         } else {
-          this.sortDir = 'ASC'
+          this.sorting.setDir('ASC')
         }
-        this.$emit('sortDirSelect', this.sortDir)
+        this.$emit('sortDirSelect', this.sorting.sortDir)
       }
     }
   }

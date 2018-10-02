@@ -7,10 +7,9 @@
   </div>
   <div v-else class="user-widget-list">
     <ListMenu v-bind:type="type"
-              v-on:typeSelect="type = $event"
-              v-bind:sortDirection="sortDir"
+              v-bind:sorting="sorting"
+              v-on:typeSelect="setType"
               v-on:sortDirSelect="setSortingDir"
-              v-bind:sortField="sortField"
               v-on:sortFieldSelect="setSortingField"
     />
     <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous ({{ page.howManyPrevious() }})</button>
@@ -28,6 +27,7 @@
   import axios from 'axios'
   import WidgetUser from './WidgetUser'
   import Page from './utils/Page'
+  import Sorting from './utils/Sorting'
   import ListMenu from './ListMenu'
   import TableUsers from './TableUsers'
 
@@ -57,13 +57,13 @@
       if (this.elementType !== null && typeof this.elementType !== 'undefined') {
         defaultType = this.elementType
       }
+
       return {
         type: defaultType,
         users: [],
         pageParams: { 'size': size, 'sliding': sliding },
         page: Page.apply(0, sliding, size),
-        sortDir: 'ASC',
-        sortField: 'Supporter_firstName',
+        sorting: new Sorting(defaultType),
         errorState: null
       }
     },
@@ -94,7 +94,7 @@
         }
       },
       getPage: function () {
-        axios.post('/drops/widgets/users', { 'sort': this.getSorting(), 'limit': this.page.getSize(), 'offset': this.page.getOffset() })
+        axios.post('/drops/widgets/users', { 'sort': this.sorting.toJSONRequest(), 'limit': this.page.getSize(), 'offset': this.page.getOffset() })
               .then(response => {
                 switch (response.status) {
                   case 200:
@@ -105,15 +105,16 @@
                 this.errorState = error.response.status
               })
       },
-      getSorting: function () {
-        return { 'attributes': [this.sortField], 'dir': this.sortDir }
+      setType: function (event) {
+        this.type = event
+        this.sorting.setType(this.type)
       },
       setSortingDir: function (event) {
-        this.sortDir = event
+        this.sorting.setDir(event)
         this.getPage()
       },
       setSortingField: function (event) {
-        this.sortField = event
+        this.sorting.setField(event)
         this.getPage()
       },
       hasError () {
