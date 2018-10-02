@@ -13,9 +13,7 @@
               v-on:sortFieldSelect="setSortingField"
     />
     <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous ({{ page.howManyPrevious() }})</button>
-    <div v-if="type !== 'tableRow'" class="users-list">
-      <WidgetUser v-for="user of users" v-bind:user="user" v-bind:type="type" :key="user.id"></WidgetUser>
-    </div>
+    <WidgetUsers v-if="type !== 'tableRow'" :users="users" :type="type" />
     <TableUsers v-else :users="users" />
     <button v-if="page.hasNext()" v-on:click="addPage" class="paginate">Show next ({{ page.howManyNext() }})</button>
   </div>
@@ -23,24 +21,20 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   import axios from 'axios'
-  import WidgetUser from './WidgetUser'
   import Page from './utils/Page'
   import Sorting from './utils/Sorting'
   import ListMenu from './ListMenu'
   import TableUsers from './TableUsers'
-
-  Vue.use(WidgetUser)
-  Vue.use(ListMenu)
+  import WidgetUsers from './WidgetUsers'
 
   export default {
     name: 'WidgetUserList',
     props: ['pageSize', 'pageSliding', 'elementType'],
     components: {
-      'WidgetUser': WidgetUser,
       'ListMenu': ListMenu,
-      'TableUsers': TableUsers
+      'TableUsers': TableUsers,
+      'WidgetUsers': WidgetUsers
     },
     data () {
       var size = 40
@@ -156,18 +150,5 @@
 
   .paginate:hover {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-  }
-
-  .users-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    width: 100%;
-    align-content: flex-start;
-  }
-
-  .users-list >>> .user.card {
-    margin: 0.5em;
   }
 </style>
