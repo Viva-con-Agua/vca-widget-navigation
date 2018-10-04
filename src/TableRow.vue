@@ -4,10 +4,10 @@
     <th class="name">Name</th>
     <th class="since">Dabei seit</th>
     <th class="crew">Crew</th>
-    <th class="email">Email</th>
-    <th class="mobilePhone">Handynummer</th>
-    <th class="age">Alter</th>
-    <th class="gender">Geschlecht</th>
+    <th class="email noPhone">Email</th>
+    <th class="mobilePhone noPhone">Handynummer</th>
+    <th class="age noPhone noTablet">Alter</th>
+    <th class="gender noPhone noTablet">Geschlecht</th>
   </tr>
   <tr v-else :class="getClass()" class="rowWrapper content" v-on:click="callLink()">
     <td class="image">
@@ -16,10 +16,10 @@
     <td class="name"><a :href="getURL()" ref="profileLink">{{ user.profiles[0].supporter.fullName }}</a></td>
     <td class="since">{{ getSince() }}</td>
     <td class="crew">{{ hasCrew() ? user.profiles[0].supporter.crew : 'Keine Crew' }}</td>
-    <td class="email">{{ user.profiles[0].email }}</td>
-    <td class="mobilePhone">{{ user.profiles[0].supporter.mobilePhone }}</td>
-    <td class="age">{{ getAge() }}</td>
-    <td class="gender">{{ user.profiles[0].supporter.sex }}</td>
+    <td class="email noPhone">{{ user.profiles[0].email }}</td>
+    <td class="mobilePhone noPhone">{{ user.profiles[0].supporter.mobilePhone }}</td>
+    <td class="age noPhone noTablet">{{ getAge() }}</td>
+    <td class="gender noPhone noTablet">{{ user.profiles[0].supporter.sex }}</td>
   </tr>
 </template>
 
@@ -61,6 +61,7 @@
 
 <style scoped lang="less">
   @import "./assets/general.less";
+  @import "./assets/responsive.less";
 
   .rowWrapper {
     height: 2em;
@@ -87,5 +88,17 @@
 
   .image {
     width: 4em;
+  }
+
+  .noPhone {
+    @media @small-tablet-down {
+      display: none;
+    }
+  }
+
+  .noTablet {
+    @media @tablet-down {
+      display: none;
+    }
   }
 </style>
