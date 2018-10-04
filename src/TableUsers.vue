@@ -18,16 +18,14 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  @import "./assets/general.less";
+
   .users-table {
     border: 0.3em;
-    border-color: rgba(10, 107, 145, 1);
+    border-color: #colors[primary];
     border-spacing: 0.5rem;
     border-collapse: collapse;
     overflow-y: auto;
-  }
-
-  .users-table .odd {
-    background-color: rgba(10, 107, 145, 0.2);
   }
 </style>

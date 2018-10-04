@@ -70,42 +70,28 @@
   }
 </script>
 
-<style scoped>
-
-  a {
-    text-decoration: none;
-    color: #0a6b91;
-  }
+<style scoped lang="less">
+  @import "./assets/general.less";
 
   .small.card {
     display: flex;
-    background-color: rgba(165, 119, 64, 0.6);
-    color: #fff;
+    .colorProfileThirdly();
     margin: 0.5em;
     width: 5em;
-    border-radius: 0.5em;
+    border-radius: @radius;
     padding: 0.2em 0.5em;
     justify-content: center;
-  }
 
-  div.small.card {
-    background-color: lightgrey;
-  }
-
-  a.small.card:hover {
-    background-color: rgba(165, 119, 64, 1);
+    &:hover {
+      background-color: #colors[thirdlyHover];
+    }
   }
 
   .medium.card,
   .large.card {
     display: flex;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     text-align: center;
-  }
-
-  a.medium.card:hover,
-  a.large.card:hover {
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    .button();
   }
 
   .large.card {

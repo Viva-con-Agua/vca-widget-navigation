@@ -59,31 +59,30 @@
     }
 </script>
 
-<style scoped>
-
-  a {
-    text-decoration: none;
-    color: #0a6b91;
-  }
+<style scoped lang="less">
+  @import "./assets/general.less";
 
   .rowWrapper {
     height: 2em;
     padding: 1em 0;
-  }
 
-  .rowWrapper.content {
-    color: #0a6b91;
-    cursor: pointer;
-  }
+    &.content {
+      .colorProfileSecundary();
+      cursor: pointer;
 
-  .rowWrapper.content:hover {
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-  }
+      &:hover {
+        box-shadow: #shadow[secundary];
+      }
+    }
 
-  .rowWrapper th {
-    background-color: #0a6b91;
-    color: #fff;
-    font-weight: bold;
+    &.odd {
+      background-color: fadeout(#colors[primary], 80%);
+    }
+
+    th {
+      .colorProfilePrimary();
+      font-weight: bold;
+    }
   }
 
   .image {

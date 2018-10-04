@@ -118,37 +118,33 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  @import './assets/general.less';
+
   .user-widget-list {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-  }
 
-  .user-widget-list.error {
-    align-items: center;
-  }
+    &.error {
+      align-items: center;
 
-  .user-widget-list.error span {
-    color: white;
-    background-color: lightcoral;
-    width: 30em;
-    border-radius: 1em;
-    height: 2em;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    line-height: 2em;
+      span {
+        .colorProfileThirdly();
+        width: 30em;
+        border-radius: @radius;
+        height: 2em;
+        box-shadow: #shadow[primary];
+        line-height: 2em;
+      }
+    }
   }
 
   .paginate {
-    background-color: white;
+    .colorProfileSecundary();
     border: 1pt solid #0a8eb6;
-    color: #0a6b91;
-    border-radius: 1em;
+    border-radius: @radius;
     height: 2.5em;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  }
-
-  .paginate:hover {
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    .button();
   }
 </style>

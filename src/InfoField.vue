@@ -69,41 +69,49 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  @import "./assets/general.less";
+
   h2.name {
     margin: 0;
   }
 
-  .small h2.name {
-    font-size: 0.7em;
-    font-style: italic;
-  }
-
-  .small span.error {
-    font-size: 0.7em;
-    font-style: italic;
-  }
-
-  .medium h2.name {
-    font-size: 0.8em;
-    font-weight: bold;
-  }
-
-  .medium span.error {
-    font-size: 0.8em;
-  }
-
-  .large h2.name {
-    font-size: 1em;
-    font-weight: bolder;
-  }
-
-  .large span.error {
-    font-size: 1em;
-  }
-
   span.error {
     color: grey;
+  }
+
+  .small {
+    font-style: italic;
+
+    h2.name {
+      font-size: 0.7em;
+    }
+
+    span.error {
+      font-size: 0.7em;
+    }
+  }
+
+  .medium {
+    h2.name {
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    span.error {
+      font-size: 0.8em;
+    }
+  }
+
+  .large {
+    h2.name {
+      font-size: 1em;
+      font-weight: bolder;
+    }
+
+    span.error {
+      font-size: 1em;
+    }
   }
 
   .details {
@@ -111,51 +119,51 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 0.3em;
-  }
 
-  .details div {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+    div {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
-  .details div span {
-    font-style: italic;
-    font-size: 0.7em;
-  }
+      span {
+        font-style: italic;
+        font-size: 0.7em;
+      }
+    }
 
-  .details .personal {
-    text-align: left;
-  }
+    .personal {
+      text-align: left;
 
-  .details .personal .contact {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    height: 0.7em;
-  }
+      .contact {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        height: 0.7em;
 
-  .details .personal .contact div {
-    height: 0.7em;
-  }
+        div {
+          height: 0.7em;
+        }
 
-  .details .personal .contact div >>> svg #icon {
-    fill: #0a6b91;
-  }
+        div /deep/ svg #icon {
+          fill: #colors[primary];
+        }
+      }
+    }
 
-  .details .vca {
-    text-align: right;
+    .vca {
+      text-align: right;
+    }
   }
 
   div.user-infos {
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
 
-  div.user-infos.large {
-    margin-top: 0.3em;
-    height: 4em;
+    &.large {
+      margin-top: 0.3em;
+      height: 4em;
+    }
   }
 </style>

@@ -35,7 +35,11 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  @import "./assets/general.less";
+  @small-bg: "./images/avatar_bg_stripes_32x32.png";
+  @medium-bg: "./images/avatar_bg_stripes_32x32.png";
+  @large-bg: "./images/avatar_bg_200x162.png";
 
   .wrapper {
     background-position: center;
@@ -44,19 +48,19 @@
   }
 
   .wrapper.small {
-    background-image: url('./images/avatar_bg_stripes_32x32.png');
+    background-image: url(@small-bg);
     width: 3em;
     height: 3em;
   }
 
   .wrapper.medium {
-    background-image: url('./images/avatar_bg_stripes_32x32.png');
+    background-image: url(@medium-bg);
     width: 4em;
     height: 4em;
   }
 
   .wrapper.large {
-    background-image: url('./images/avatar_bg_200x162.png');
+    background-image: url(@large-bg);
     width: 10em;
     height: 10em;
   }
@@ -65,26 +69,26 @@
     filter: grayscale(100%);
   }
 
-  .wrapper >>> svg #freak,
-  .wrapper >>> svg #questionMark,
-  .wrapper >>> svg #exclamationMark {
-    fill: #fff;
+  .wrapper /deep/ svg #freak,
+  .wrapper /deep/ svg #questionMark,
+  .wrapper /deep/ svg #exclamationMark {
+    fill: #colors[secundary];
   }
 
-  .small >>> svg {
+  .small /deep/ svg {
     height: 2em;
   }
 
-  .large >>> svg {
+  .large /deep/ svg {
     height: 9em;
   }
 
-  .medium.error >>> svg {
+  .medium.error /deep/ svg {
     margin-top: 0.5em;
     height: 3em;
   }
 
-  .large.error >>> svg {
+  .large.error /deep/ svg {
     margin-top: 2em;
     height: 6em;
   }
