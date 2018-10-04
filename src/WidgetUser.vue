@@ -73,38 +73,46 @@
 <style scoped lang="less">
   @import "./assets/general.less";
 
-  .small.card {
-    display: flex;
-    .colorProfileThirdly();
-    margin: 0.5em;
-    width: 5em;
-    border-radius: @radius;
-    padding: 0.2em 0.5em;
-    justify-content: center;
+  #sizes() {
+    small: 5em;
+    medium: 12em;
+    large: 10em;
+  }
 
-    &:hover {
-      background-color: #colors[thirdlyHover];
+  .card {
+    display: flex;
+
+    &.small {
+      .colorProfileThirdly();
+      width: #sizes[small];
+      border-radius: @radius;
+      padding: 0.2em 0.5em;
+      justify-content: center;
+
+      &:hover {
+        background-color: #colors[thirdlyHover];
+      }
     }
-  }
 
-  .medium.card,
-  .large.card {
-    display: flex;
-    text-align: center;
-    .button();
-  }
+    &.medium {
+      text-align: center;
+      .button();
 
-  .large.card {
-    flex-direction: column;
-    width: 10em;
-  }
+      &.card {
+        width: #sizes[medium];
+        flex-direction: row;
+      }
 
-  .medium.card {
-    width: 12em;
-    flex-direction: row;
-  }
+      &.user-infos {
+        flex-grow: 1;
+      }
+    }
 
-  .medium.user-infos {
-    flex-grow: 1;
+    &.large {
+      text-align: center;
+      .button();
+      flex-direction: column;
+      width: #sizes[large];
+    }
   }
 </style>

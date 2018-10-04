@@ -9,7 +9,10 @@
     <span class="error">Forbidden</span>
   </div>
   <div v-else-if="defined()" class="user-infos" :class="type">
-    <h2 class="name">{{ user.profiles[0].supporter.fullName }}</h2>
+    <h2 class="name">
+      <span class="firstName">{{ user.profiles[0].supporter.firstName }}</span>
+      <span class="lastName">{{ user.profiles[0].supporter.lastName }}</span>
+    </h2>
     <div class="details">
       <div class="personal details-column">
         <span v-if="type !== 'small'" class="age">Alter: {{ getAge() }}</span>
@@ -72,6 +75,15 @@
 <style scoped lang="less">
   @import "./assets/general.less";
 
+  @padding: 0.3em;
+
+  #fontSizes() {
+    small: 0.7em;
+    medium: 0.8em;
+    large: 1em;
+    details: 0.7em;
+  }
+
   h2.name {
     margin: 0;
   }
@@ -84,33 +96,41 @@
     font-style: italic;
 
     h2.name {
-      font-size: 0.7em;
+      font-size: #fontSizes[small];
     }
 
     span.error {
-      font-size: 0.7em;
+      font-size: #fontSizes[small];
     }
   }
 
   .medium {
     h2.name {
-      font-size: 0.8em;
+      font-size: #fontSizes[medium];
       font-weight: bold;
+
+      .lastName {
+        font-size: #fontSizes[medium] * 0.8;
+      }
     }
 
     span.error {
-      font-size: 0.8em;
+      font-size: #fontSizes[medium];
     }
   }
 
   .large {
     h2.name {
-      font-size: 1em;
+      font-size: #fontSizes[large];
       font-weight: bolder;
+
+      .lastName {
+        font-size: #fontSizes[large] * 0.7;
+      }
     }
 
     span.error {
-      font-size: 1em;
+      font-size: #fontSizes[large];
     }
   }
 
@@ -118,7 +138,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0.3em;
 
     div {
       flex-grow: 1;
@@ -128,7 +147,7 @@
 
       span {
         font-style: italic;
-        font-size: 0.7em;
+        font-size: #fontSizes[details];
       }
     }
 
@@ -139,10 +158,10 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        height: 0.7em;
+        height: #fontSizes[details];
 
         div {
-          height: 0.7em;
+          height: #fontSizes[details];
         }
 
         div /deep/ svg #icon {
@@ -156,14 +175,19 @@
     }
   }
 
-  div.user-infos {
+  .user-infos {
     display: flex;
     flex-direction: column;
     justify-content: center;
 
     &.large {
-      margin-top: 0.3em;
-      height: 4em;
+      margin-top: @padding;
+      height: (3* @padding) + #fontSizes[large] + (#fontSizes[details] * 2);
+      padding-bottom: @padding;
+    }
+
+    &.large .details, &medium .details {
+      padding: @padding;
     }
   }
 </style>

@@ -41,32 +41,38 @@
   @medium-bg: "./images/avatar_bg_stripes_32x32.png";
   @large-bg: "./images/avatar_bg_200x162.png";
 
+  #sizes() {
+    small: 3em;
+    medium: 4em;
+    large: 10em;
+  }
+
   .wrapper {
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-  }
 
-  .wrapper.small {
-    background-image: url(@small-bg);
-    width: 3em;
-    height: 3em;
-  }
+    &.small {
+      background-image: url(@small-bg);
+      width: #sizes[small];
+      height: #sizes[small];
+    }
 
-  .wrapper.medium {
-    background-image: url(@medium-bg);
-    width: 4em;
-    height: 4em;
-  }
+    &.medium {
+      background-image: url(@medium-bg);
+      width: #sizes[medium];
+      height: #sizes[medium];
+    }
 
-  .wrapper.large {
-    background-image: url(@large-bg);
-    width: 10em;
-    height: 10em;
-  }
+    &.large {
+      background-image: url(@large-bg);
+      width: #sizes[large];
+      height: #sizes[large];
+    }
 
-  .wrapper.error {
-    filter: grayscale(100%);
+    &.error {
+      filter: grayscale(100%);
+    }
   }
 
   .wrapper /deep/ svg #freak,
@@ -76,21 +82,21 @@
   }
 
   .small /deep/ svg {
-    height: 2em;
+    height: #sizes[small] - 1;
   }
 
   .large /deep/ svg {
-    height: 9em;
+    height: #sizes[large] - 1;
   }
 
   .medium.error /deep/ svg {
-    margin-top: 0.5em;
-    height: 3em;
+    margin-top: #sizes[medium] * 0.125;
+    height: #sizes[medium] * 0.75;;
   }
 
   .large.error /deep/ svg {
-    margin-top: 2em;
-    height: 6em;
+    margin-top:#sizes[large] * 0.2;
+    height: #sizes[large] * 0.6;
   }
 
 </style>
