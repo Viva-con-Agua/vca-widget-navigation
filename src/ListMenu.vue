@@ -68,23 +68,41 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  @import "./assets/responsive";
 
   .listMenu {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    padding: 0;
+    list-style-type: none;
+
+    @media @phone-down {
+      flex-direction: column;
+      justify-content: flex-start;
+    }
   }
 
   .listMenu li {
     display: flex;
     flex-direction: row;
     justify-content: stretch;
-    margin-left: 1em;
+    &:not(:first-child) {
+      margin-left: 1em;
+
+      @media @phone-down {
+        margin-top: 0.5em;
+        margin-left: 0em;
+      }
+    }
   }
 
   .listMenu li .v-select {
     min-width: 10em;
+    @media @phone-down {
+      flex-grow: 1;
+    }
   }
 
   .listMenu li button {
@@ -94,11 +112,11 @@
     border-radius: 4px;
   }
 
-  .listMenu li button >>> div {
+  .listMenu li button /deep/ div {
     pointer-events: none;
   }
 
-  .listMenu li button >>> svg {
+  .listMenu li button /deep/ svg {
     width: 1.5em;
     pointer-events: none;
     cursor: pointer;

@@ -37,6 +37,8 @@
 
 <style scoped lang="less">
   @import "./assets/general.less";
+  @import "./assets/responsive.less";
+
   @small-bg: "./images/avatar_bg_stripes_32x32.png";
   @medium-bg: "./images/avatar_bg_stripes_32x32.png";
   @large-bg: "./images/avatar_bg_200x162.png";
@@ -68,6 +70,11 @@
       background-image: url(@large-bg);
       width: #sizes[large];
       height: #sizes[large];
+
+      @media @phone-down {
+        width: 100%;
+        height: auto;
+      }
     }
 
     &.error {

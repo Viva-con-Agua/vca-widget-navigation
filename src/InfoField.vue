@@ -139,7 +139,7 @@
     flex-direction: row;
     justify-content: space-between;
 
-    div {
+    .details-column {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
@@ -162,6 +162,10 @@
 
         div {
           height: #fontSizes[details];
+          width: #fontSizes[details];
+          &:not(:first-child) {
+            margin-left: #fontSizes[details] * 0.5;
+          }
         }
 
         div /deep/ svg #icon {
@@ -186,7 +190,7 @@
       padding-bottom: @padding;
     }
 
-    &.large .details, &medium .details {
+    &.large .details, &.medium .details {
       padding: @padding;
     }
   }

@@ -72,11 +72,16 @@
 
 <style scoped lang="less">
   @import "./assets/general.less";
+  @import "./assets/responsive.less";
 
   #sizes() {
     small: 5em;
-    medium: 12em;
+    medium: 14em;
     large: 10em;
+  }
+
+  #heights() {
+    small: 2em;
   }
 
   .card {
@@ -85,6 +90,7 @@
     &.small {
       .colorProfileThirdly();
       width: #sizes[small];
+      height: #heights[small];
       border-radius: @radius;
       padding: 0.2em 0.5em;
       justify-content: center;
@@ -97,13 +103,14 @@
     &.medium {
       text-align: center;
       .button();
+      width: #sizes[medium];
+      flex-direction: row;
 
-      &.card {
-        width: #sizes[medium];
-        flex-direction: row;
+      @media @phone-down {
+        width: 100%;
       }
 
-      &.user-infos {
+      .user-infos {
         flex-grow: 1;
       }
     }
@@ -113,6 +120,10 @@
       .button();
       flex-direction: column;
       width: #sizes[large];
+
+      @media @phone-down {
+        width: 45%;
+      }
     }
   }
 </style>
