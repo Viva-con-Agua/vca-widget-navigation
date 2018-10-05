@@ -136,8 +136,8 @@
   ],
   "dependencies": {
     "axios": "^0.18.0",
-    "textfit": "^2.3.1",
     "v-tooltip": "^2.0.0-rc.33",
+    "vue-i18n": "^8.1.0",
     "vue-select": "^2.5.1"
   }
 }
