@@ -1,13 +1,13 @@
 <template>
   <tr v-if="type === 'header'" :class="getClass()" class="rowWrapper">
-    <th class="image">Avatar</th>
-    <th class="name">Name</th>
-    <th class="since">Dabei seit</th>
-    <th class="crew">Crew</th>
-    <th class="email noPhone">Email</th>
-    <th class="mobilePhone noPhone">Handynummer</th>
-    <th class="age noPhone noTablet">Alter</th>
-    <th class="gender noPhone noTablet">Geschlecht</th>
+    <th class="image">{{ $vcaI18n.t('label.table.avatar') }}</th>
+    <th class="name">{{ $vcaI18n.t('label.table.name') }}</th>
+    <th class="since">{{ $vcaI18n.t('label.table.since') }}</th>
+    <th class="crew">{{ $vcaI18n.t('label.table.crew') }}</th>
+    <th class="email noPhone">{{ $vcaI18n.t('label.table.email') }}</th>
+    <th class="mobilePhone noPhone">{{ $vcaI18n.t('label.table.mobile') }}</th>
+    <th class="age noPhone noTablet">{{ $vcaI18n.t('label.table.age') }}</th>
+    <th class="gender noPhone noTablet">{{ $vcaI18n.t('label.table.gender') }}</th>
   </tr>
   <tr v-else :class="getClass()" class="rowWrapper content" v-on:click="callLink()">
     <td class="image">
@@ -15,11 +15,11 @@
     </td>
     <td class="name"><a :href="getURL()" ref="profileLink">{{ user.profiles[0].supporter.fullName }}</a></td>
     <td class="since">{{ getSince() }}</td>
-    <td class="crew">{{ hasCrew() ? user.profiles[0].supporter.crew : 'Keine Crew' }}</td>
+    <td class="crew">{{ hasCrew() ? user.profiles[0].supporter.crew : $vcaI18n.t('fallback.noCrew') }}</td>
     <td class="email noPhone">{{ user.profiles[0].email }}</td>
     <td class="mobilePhone noPhone">{{ user.profiles[0].supporter.mobilePhone }}</td>
     <td class="age noPhone noTablet">{{ getAge() }}</td>
-    <td class="gender noPhone noTablet">{{ user.profiles[0].supporter.sex }}</td>
+    <td class="gender noPhone noTablet">{{ $vcaI18n.t('value.gender.' + user.profiles[0].supporter.sex) }}</td>
   </tr>
 </template>
 

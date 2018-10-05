@@ -1,12 +1,12 @@
 <template>
   <div v-if="error() && errorCode === 404" class="user-infos" :class="type">
-    <span class="error">Not Found</span>
+    <span class="error">{{ $vcaI18n.t('error.notFound') }}</span>
   </div>
   <div v-else-if="error() && errorCode === 401" class="user-infos" :class="type">
-    <span class="error">Not Authenticated</span>
+    <span class="error">{{ $vcaI18n.t('error.notAuthenticated') }}</span>
   </div>
   <div v-else-if="error() && errorCode === 403" class="user-infos" :class="type">
-    <span class="error">Forbidden</span>
+    <span class="error">{{ $vcaI18n.t('error.forbidden') }}</span>
   </div>
   <div v-else-if="defined()" class="user-infos" :class="type">
     <h2 class="name">
@@ -15,7 +15,7 @@
     </h2>
     <div class="details">
       <div class="personal details-column">
-        <span v-if="type !== 'small'" class="age">Alter: {{ getAge() }}</span>
+        <span v-if="type !== 'small'" class="age">{{ $vcaI18n.t('label.age') + $vcaI18n.t('label.separator') + getAge() }}</span>
         <div v-if="type !== 'small'" class="contact">
           <!--<span v-if="user.profiles[0].hasOwnProperty('email')" class="typcn typcn-mail"></span>-->
           <!--<span v-if="user.profiles[0].supporter.hasOwnProperty('mobilePhone') && user.profiles[0].supporter.mobilePhone !== null" class="typcn typcn-phone"></span>-->
@@ -24,14 +24,14 @@
         </div>
       </div>
       <div class="vca details-column">
-        <span v-if="type !== 'small'" class="since">Dabei seit: {{ getSince() }}</span>
+        <span v-if="type !== 'small'" class="since">{{ $vcaI18n.t('label.since') + $vcaI18n.t('label.separator') + getSince() }}</span>
         <span v-if="type !== 'small' && showCrew()" class="crew">{{ user.profiles[0].supporter.crew }}</span>
-        <span v-else-if="type !== 'small'" class="crew">Keine Crew</span>
+        <span v-else-if="type !== 'small'" class="crew">{{ $vcaI18n.t('fallback.noCrew') }}</span>
       </div>
     </div>
   </div>
   <div v-else class="user-infos" :class="type">
-    <span class="error">An unknown error occurred</span>
+    <span class="error">{{ $vcaI18n.t("error.unknown") }}</span>
   </div>
 </template>
 

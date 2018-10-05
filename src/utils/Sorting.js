@@ -1,65 +1,73 @@
 export default class Sorting {
 
-  constructor (type) {
+  constructor (type, i18n) {
     this.type = type
     this.sortDir = 'ASC'
     this.sortField = 'Supporter_firstName'
-    this.fields = {
+    this.fields = Sorting.generateFields(i18n)
+    this.setFields()
+    this.currentSelected = this.current.filter((field) => field.value === this.sortField).pop()
+  }
+
+  static generateFields (i18n) {
+    return {
       'widgets': [
         {
-          'label': 'Vorname',
+          'label': i18n.t("label.sorting.fields.firstName"),
           'value': 'Supporter_firstName'
         },
         {
-          'label': 'Nachname',
+          'label': i18n.t("label.sorting.fields.lastName"),
           'value': 'Supporter_lastName'
         },
         {
-          'label': 'Email',
+          'label': i18n.t("label.sorting.fields.email"),
           'value': 'Profile_email'
         },
         {
-          'label': 'Dabei seid',
+          'label': i18n.t("label.sorting.fields.since"),
           'value': 'User_created'
         },
         {
-          'label': 'Wohnort',
+          'label': i18n.t("label.sorting.fields.residence"),
           'value': 'Supporter_placeOfResidence'
         }
       ],
       'table': [
         {
-          'label': 'Vorname',
+          'label': i18n.t("label.sorting.fields.firstName"),
           'value': 'Supporter_firstName'
         },
         {
-          'label': 'Nachname',
+          'label': i18n.t("label.sorting.fields.lastName"),
           'value': 'Supporter_lastName'
         },
         {
-          'label': 'Email',
+          'label': i18n.t("label.sorting.fields.email"),
           'value': 'Profile_email'
         },
         {
-          'label': 'Dabei seid',
+          'label': i18n.t("label.sorting.fields.since"),
           'value': 'User_created'
         },
         {
-          'label': 'Handynummer',
+          'label': i18n.t("label.sorting.fields.mobile"),
           'value': 'Supporter_mobilePhone'
         },
         {
-          'label': 'Alter',
+          'label': i18n.t("label.sorting.fields.age"),
           'value': 'Supporter_birthday'
         },
         {
-          'label': 'Geschlecht',
+          'label': i18n.t("label.sorting.fields.gender"),
           'value': 'Supporter_sex'
         }
       ]
     }
-    this.setFields()
-    this.currentSelected = this.current.filter((field) => field.value === this.sortField).pop()
+  }
+
+  setFields (i18n) {
+    this.fields = Sorting.generateFields(i18n)
   }
 
   toJSONRequest () {

@@ -5,7 +5,7 @@
     </li>
     <li class="sorting">
       <v-select v-model="sorting.getCurrentField()" @input="fireFieldSelection" :options="sorting.getFields()" :clearable="false"></v-select>
-      <button v-bind:value="sorting.sortDir" @click="fireSortDirSelection">
+      <button v-bind:value="sorting.sortDir" @click="fireSortDirSelection" :title="$vcaI18n.t('label.sorting.dirButton.' + sorting.sortDir)">
         <div v-if="sorting.is('ASC')" v-html="require('./images/sort-alpha-down.svg')" />
         <div v-if="sorting.is('DESC')" v-html="require('./images/sort-alpha-up.svg')" />
       </button>
@@ -26,19 +26,19 @@
     data () {
       var types = [
         {
-          'label': 'Large',
+          'label': this.$vcaI18n.t('label.typeSelection.large'),
           'value': 'large'
         },
         {
-          'label': 'Middle',
+          'label': this.$vcaI18n.t('label.typeSelection.medium'),
           'value': 'medium'
         },
         {
-          'label': 'Small',
+          'label': this.$vcaI18n.t('label.typeSelection.small'),
           'value': 'small'
         },
         {
-          'label': 'Table',
+          'label': this.$vcaI18n.t('label.typeSelection.table'),
           'value': 'tableRow'
         }
       ]

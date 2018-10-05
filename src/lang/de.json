@@ -1,0 +1,61 @@
+{
+  "error": {
+    "notFound": "Nichts gefunden",
+    "notAuthenticated": "Nicht eingeloggt",
+    "forbidden": "Keine Berechtigung",
+    "unknown": "Ein unbekannter Fehler ist aufgetreten"
+  },
+  "value": {
+    "gender": {
+      "male": "Mann",
+      "female": "Frau",
+      "notDefined": "Nicht angegeben"
+    }
+  },
+  "label": {
+    "separator": ": ",
+    "age": "Alter",
+    "since": "Dabei seit",
+    "sorting": {
+      "dirButton" : {
+        "ASC": "Klicken für absteigende Sortierung",
+        "DESC": "Klicken für aufsteigende Sortierung"
+      },
+      "fields": {
+        "firstName" : "Vorname",
+        "lastName" : "Nachname",
+        "email" : "Email",
+        "since" : "Dabei seit",
+        "residence" : "Wohnort",
+        "mobile" : "Handynummer",
+        "age" : "Alter",
+        "gender" : "Geschlecht"
+      }
+    },
+    "typeSelection": {
+      "large": "Große Widgets",
+      "medium": "Kleine Widgets",
+      "small": "Tags",
+      "table": "Tabelle"
+    },
+    "pagination": {
+      "button": {
+        "previous": "Keine vorherigen Supporter | Ersten Supporter | Vorherige %{number} Supporter",
+        "next": "Keine nächsten Supporter | Letzten Supporter | Nächste %{number} Supporter"
+      }
+    },
+    "table" : {
+      "avatar": "Avatar",
+      "name": "Name",
+      "since": "Dabei seit",
+      "crew": "Crew",
+      "email": "Email",
+      "mobile": "Handynummer",
+      "age": "Alter",
+      "gender": "Geschlecht"
+    }
+  },
+  "fallback": {
+    "noCrew": "Keine Crew"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "error": {
+    "notFound": "Not Found",
+    "notAuthenticated": "Not Authenticated",
+    "forbidden": "Forbidden",
+    "unknown": "An unknown error occurred"
+  },
+  "value": {
+    "gender": {
+      "male": "Man",
+      "female": "Woman",
+      "notDefined": "Not said"
+    }
+  },
+  "label": {
+    "separator": ": ",
+    "age": "Age",
+    "since": "Since",
+    "sorting": {
+      "dirButton" : {
+        "ASC": "Click to sort descending",
+        "DESC": "Click to sort ascending"
+      },
+      "fields": {
+        "firstName" : "First name",
+        "lastName" : "Last name",
+        "email" : "Email",
+        "since" : "Since",
+        "residence" : "Place of residence",
+        "mobile" : "Mobile phone",
+        "age" : "Age",
+        "gender" : "Gender"
+      }
+    },
+    "typeSelection": {
+      "large": "Big Widgets",
+      "medium": "Small Widgets",
+      "small": "Tags",
+      "table": "Table"
+    },
+    "pagination": {
+      "button": {
+        "previous": "No more supporter | Show first | Show previous (%{number})",
+        "next": "No more supporter | Show last | Show next (%{number})"
+      }
+    },
+    "table" : {
+      "avatar": "Avatar",
+      "name": "Name",
+      "since": "Since",
+      "crew": "Crew",
+      "email": "Email",
+      "mobile": "Mobile phone",
+      "age": "Age",
+      "gender": "Gender"
+    }
+  },
+  "fallback": {
+    "noCrew": "No Crew"
+  }
+}

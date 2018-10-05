@@ -99,7 +99,8 @@
     "yarn-or-npm": "^2.0.0"
   },
   "peerDependencies": {
-    "vue": "^2.3.0"
+    "vue": "^2.3.0",
+    "vue-i18n": "^8.1.0"
   },
   "dllPlugin": {
     "name": "vuePluginTemplateDeps",

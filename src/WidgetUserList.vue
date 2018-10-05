@@ -1,9 +1,9 @@
 <template>
 
   <div v-if="hasError()" class="user-widget-list error">
-    <span v-if="errorState === 401">Please, log in first.</span>
-    <span v-else-if="errorState === 403">Forbidden.</span>
-    <span v-else>An error occurred!</span>
+    <span v-if="errorState === 401">{{ $vcaI18n.t('error.notAuthenticated') }}</span>
+    <span v-else-if="errorState === 403">{{ $vcaI18n.t('error.forbidden') }}</span>
+    <span v-else>{{ $vcaI18n.t('error.unknown') }}</span>
   </div>
   <div v-else class="user-widget-list">
     <ListMenu v-bind:type="type"
@@ -12,10 +12,14 @@
               v-on:sortDirSelect="setSortingDir"
               v-on:sortFieldSelect="setSortingField"
     />
-    <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">Show previous ({{ page.howManyPrevious() }})</button>
+    <button v-if="page.hasPrevious()" v-on:click="removePage" class="paginate">
+      {{ $vcaI18n.tc('label.pagination.button.previous', page.howManyPrevious(), { 'number': page.howManyPrevious() }) }}
+    </button>
     <WidgetUsers v-if="type !== 'tableRow'" :users="users" :type="type" />
     <TableUsers v-else :users="users" />
-    <button v-if="page.hasNext()" v-on:click="addPage" class="paginate">Show next ({{ page.howManyNext() }})</button>
+    <button v-if="page.hasNext()" v-on:click="addPage" class="paginate">
+      {{ $vcaI18n.tc('label.pagination.button.next', page.howManyNext(), { 'number': page.howManyNext() }) }}
+    </button>
   </div>
 
 </template>
@@ -57,22 +61,22 @@
         users: [],
         pageParams: { 'size': size, 'sliding': sliding },
         page: Page.apply(0, sliding, size),
-        sorting: new Sorting(defaultType),
+        sorting: new Sorting(defaultType, this.$vcaI18n),
         errorState: null
       }
     },
     created () {
       axios.post('/drops/widgets/users/count', {})
-            .then(response => {
-              switch (response.status) {
-                case 200:
-                  this.page = Page.apply(response.data.additional_information.count, this.pageParams.sliding, this.pageParams.size)
-                  this.getPage()
-                  break
-              }
-            }).catch(error => {
-              this.errorState = error.response.status
-            })
+        .then(response => {
+          switch (response.status) {
+            case 200:
+              this.page = Page.apply(response.data.additional_information.count, this.pageParams.sliding, this.pageParams.size)
+              this.getPage()
+              break
+          }
+        }).catch(error => {
+          this.errorState = error.response.status
+        })
     },
     methods: {
       addPage: function (event) {
