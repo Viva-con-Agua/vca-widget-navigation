@@ -53,6 +53,9 @@
       "mobile": "Mobile phone",
       "age": "Age",
       "gender": "Gender"
+    },
+    "placeholder": {
+      "search": "Search..."
     }
   },
   "fallback": {

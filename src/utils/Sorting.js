@@ -1,9 +1,15 @@
 export default class Sorting {
 
-  constructor (type, i18n) {
+  constructor (type, i18n, defaults) {
     this.type = type
-    this.sortDir = 'ASC'
-    this.sortField = 'Supporter_firstName'
+    this.sortDir = Sorting.defaults.dir
+    if((typeof defaults !== "undefined") && defaults !== null && defaults.hasOwnProperty("dir")) {
+      this.sortDir = defaults.dir
+    }
+    this.sortField = Sorting.defaults.field
+    if((typeof defaults !== "undefined") && defaults !== null && defaults.hasOwnProperty("field")) {
+      this.sortField = defaults.field
+    }
     this.fields = Sorting.generateFields(i18n)
     this.setFields()
     this.currentSelected = this.current.filter((field) => field.value === this.sortField).pop()
@@ -110,4 +116,9 @@ export default class Sorting {
     }
     return res
   }
+}
+
+Sorting.defaults = {
+  'field': 'Supporter_firstName',
+  'dir': 'ASC'
 }

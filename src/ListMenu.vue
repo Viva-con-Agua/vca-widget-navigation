@@ -1,11 +1,11 @@
 <template>
   <ul class="listMenu">
-    <li class="view">
+    <li v-if="config.hasTypeSelect()" class="view">
       <v-select v-model="typeData" @input="fireTypeSelection" :options="types" :clearable="false"></v-select>
     </li>
-    <li class="sorting">
-      <v-select v-model="sorting.getCurrentField()" @input="fireFieldSelection" :options="sorting.getFields()" :clearable="false"></v-select>
-      <button v-bind:value="sorting.sortDir" @click="fireSortDirSelection" :title="$vcaI18n.t('label.sorting.dirButton.' + sorting.sortDir)">
+    <li v-if="config.hasSortingSelect() || this.hasSortingDirButton()" class="sorting">
+      <v-select v-if="config.hasSortingSelect()" v-model="sorting.getCurrentField()" @input="fireFieldSelection" :options="sorting.getFields()" :clearable="false"></v-select>
+      <button v-if="config.hasSortingDirButton()" v-bind:value="sorting.sortDir" @click="fireSortDirSelection" :title="$vcaI18n.t('label.sorting.dirButton.' + sorting.sortDir)">
         <div v-if="sorting.is('ASC')" v-html="require('./images/sort-alpha-down.svg')" />
         <div v-if="sorting.is('DESC')" v-html="require('./images/sort-alpha-up.svg')" />
       </button>
@@ -19,7 +19,7 @@
 
   export default {
     name: 'ListMenu',
-    props: ['type', 'sorting'],
+    props: ['type', 'sorting', 'config'],
     components: {
       'v-select': vSelect
     },
