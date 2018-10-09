@@ -22,7 +22,7 @@
           var res = { 'state': 'error' }
           if(typeof query !== "undefined") {
             res = query.getQuery()
-            res['state'] = 'success'
+            res['state'] = query.status
           }
           this.$emit('newQuery', res)
         }

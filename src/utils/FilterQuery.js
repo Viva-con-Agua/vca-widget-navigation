@@ -1,14 +1,117 @@
 export default class FilterQuery {
 
-  constructor (keyword, fieldSet, maskedKeywords) {
-    this.keyword = keyword
-    this.maskedKeywords = maskedKeywords
-    this.fieldSet = fieldSet
-    this.query = FilterQuery.getResult(this.fieldSet, this.maskedKeywords)
+  constructor (keywords, fieldSet, maskedKeywords) {
+    this.keywords = keywords
+
+    this.maskedKeywords = []
+    if(Array.isArray(maskedKeywords) && maskedKeywords.length !== 0) {
+      this.maskedKeywords = maskedKeywords
+      if(!Array.isArray(maskedKeywords[0])) {
+        this.maskedKeywords = Array.of(maskedKeywords)
+      }
+    }
+
+    this.fieldSet = []
+    if(Array.isArray(fieldSet) && fieldSet.length !== 0) {
+      this.fieldSet = fieldSet
+      if(!Array.isArray(fieldSet[0])) {
+        this.fieldSet = Array.of(fieldSet)
+      }
+    }
+
+    this.query = null
+    this.status = "error"
+    if(this.maskedKeywords.length === this.fieldSet.length) {
+      this.query = this.getResult()
+      this.status = "success"
+    }
   }
 
   getQuery () {
     return this.query
+  }
+
+  merge (other) {
+    function unique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+
+    return new FilterQuery(
+      this.keywords.concat(other.keywords).filter(unique),
+      this.fieldSet.concat(other.fieldSet),
+      this.maskedKeywords.concat(other.maskedKeywords)
+    )
+  }
+
+  getResult () {
+    var res = {}
+    var q = this.generateQuery()
+    var v = this.generateValues()
+    Object.keys(q).forEach(key => res[key] = q[key])
+    Object.keys(v).forEach(key => res[key] = v[key])
+    return res
+  }
+
+  generateValues () {
+    var offsets = {}
+    var res = {}
+    res["values"] = {}
+    for (var l = 0; l < this.maskedKeywords.length; l++) {
+      for (var k = 0; k < this.maskedKeywords[l].length; k++) {
+        for (var i in this.fieldSet[l]) {
+          var path = this.fieldSet[l][i].path.split(".")
+          var prefix = path.slice(0, path.length - 1)
+          var last = path[path.length - 1]
+          var tree = res["values"]
+          for (var j in prefix) {
+            if (!tree.hasOwnProperty(prefix[j])) {
+              tree[prefix[j]] = {}
+            }
+            tree = tree[prefix[j]]
+          }
+          if (!tree.hasOwnProperty(last)) {
+            tree[last] = {}
+          }
+          var number = (k + 1)
+          if(offsets.hasOwnProperty(this.fieldSet[l][i].name)) {
+            number += offsets[this.fieldSet[l][i].name]
+          }
+          tree[last]["" + number] = this.maskedKeywords[l][k]
+        }
+        this.fieldSet.forEach(field => {
+          if(offsets.hasOwnProperty(field.name)) {
+          offsets[field.name] += k + 1
+        } else {
+          offsets[field.name] = k + 1
+        }
+      })
+      }
+    }
+    return res
+  }
+
+  generateQuery () {
+    var offsets = {}
+    var queries = []
+    for (var l = 0; l < this.maskedKeywords.length; l++) {
+      for (var i = 0; i < this.maskedKeywords[l].length; i++) {
+        queries.push(this.fieldSet[l].map(field => {
+          var number = (i + 1)
+          if(offsets.hasOwnProperty(field.name)) {
+            number += offsets[field.name]
+          }
+          return field.path + "." + number + "." + field.op
+        }).join("_OR_"))
+        this.fieldSet.forEach(field => {
+          if(offsets.hasOwnProperty(field.name)) {
+            offsets[field.name] += i + 1
+          } else {
+            offsets[field.name] = i + 1
+          }
+        })
+      }
+    }
+    return { "query": queries.join("_OR_")}
   }
 
   static apply(keyword) {
@@ -20,7 +123,7 @@ export default class FilterQuery {
       console.log("is phone")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_mobilePhone")
       var maskedKeywords = FilterQuery.getPhone(keyword)
-      queries.push(new FilterQuery(keyword, currentFieldSet, maskedKeywords))
+      queries.push(new FilterQuery([keyword], currentFieldSet, maskedKeywords))
 
     }
 
@@ -34,18 +137,21 @@ export default class FilterQuery {
       console.log("is gender")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_sex")
       var maskedKeywords = [FilterQuery.getGender(keyword)]
-      queries.push(new FilterQuery(keyword, currentFieldSet, maskedKeywords))
+      queries.push(new FilterQuery([keyword], currentFieldSet, maskedKeywords))
       defaultSearch = false
     }
 
     if(defaultSearch) {
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" && field.name !== "Supporter_sex")
       var maskedKeywords = ["%" + keyword + "%"]
-      queries.push(new FilterQuery(keyword, currentFieldSet, maskedKeywords))
+      queries.push(new FilterQuery([keyword], currentFieldSet, maskedKeywords))
 
     }
-    
-    return queries[0]
+
+    var res = queries.pop()
+    res = queries.reduce((acc, current) => acc.merge(current), res)
+
+    return res
   }
 
   static isDate (keyword) {
@@ -79,47 +185,6 @@ export default class FilterQuery {
     return ([
       "%" + keyword + "%"
     ]).concat(separated)
-  }
-
-  static generateQuery (currentFieldSet, numberOfKeywordAlternatives) {
-    var queries = []
-    for (var i = 0; i < numberOfKeywordAlternatives; i++) {
-      queries.push(currentFieldSet.map(field => field.path + "." + i + "." + field.op).join("_OR_"))
-    }
-    return { "query": queries.join("_OR_")}
-  }
-
-  static generateValues (currentFieldSet, maskedKeywords) {
-    var res = {}
-    res["values"] = {}
-    for(var k in maskedKeywords) {
-      for (var i in currentFieldSet) {
-        var path = currentFieldSet[i].path.split(".")
-        var prefix = path.slice(0, path.length - 1)
-        var last = path[path.length - 1]
-        var tree = res["values"]
-        for (var j in prefix) {
-          if (!tree.hasOwnProperty(prefix[j])) {
-            tree[prefix[j]] = {}
-          }
-          tree = tree[prefix[j]]
-        }
-        if(!tree.hasOwnProperty(last)) {
-          tree[last] = {}
-        }
-        tree[last]["" + k] = maskedKeywords[k]
-      }
-    }
-    return res
-  }
-
-  static getResult (currentFieldSet, maskedKeywords) {
-    var res = {}
-    var q = FilterQuery.generateQuery(currentFieldSet, maskedKeywords.length)
-    var v = FilterQuery.generateValues(currentFieldSet, maskedKeywords)
-    Object.keys(q).forEach(key => res[key] = q[key])
-    Object.keys(v).forEach(key => res[key] = v[key])
-    return res
   }
 }
 
