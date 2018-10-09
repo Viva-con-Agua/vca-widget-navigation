@@ -130,9 +130,11 @@
         this.getPage()
       },
       setQuery: function(event) {
-        this.query = event
-        this.getCount()
-        this.getPage()
+        if(event.state === "success") {
+          this.query = event
+          this.getCount()
+          this.getPage()
+        }
       },
       hasError () {
         return this.errorState !== null && (typeof this.errorState !== 'undefined')
