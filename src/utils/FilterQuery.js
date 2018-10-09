@@ -147,11 +147,7 @@ export default class FilterQuery {
       queries.push(new FilterQuery([keyword], currentFieldSet, maskedKeywords))
 
     }
-
-    var res = queries.pop()
-    res = queries.reduce((acc, current) => acc.merge(current), res)
-
-    return res
+    return queries
   }
 
   static isDate (keyword) {

@@ -12,13 +12,19 @@
       props: ['query'], // Todo: Do something with that given query!
       data () {
         return {
-          "keyword": ""
+          "keyword": "",
+          "currentQueries": []
         }
       },
       methods: {
         input: function (event) {
           this.keyword = event.target.value
-          var query = FilterQuery.apply(this.keyword)
+          var queries = FilterQuery.apply(this.keyword)
+          this.currentQueries = queries.slice(0)
+
+          var query = queries.pop()
+          query = queries.reduce((acc, current) => acc.merge(current), query)
+
           var res = { 'state': 'error' }
           if(typeof query !== "undefined") {
             res = query.getQuery()
