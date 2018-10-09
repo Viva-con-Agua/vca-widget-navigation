@@ -18,8 +18,13 @@
       methods: {
         input: function (event) {
           this.keyword = event.target.value
-          var query = new FilterQuery(this.keyword)
-          this.$emit('newQuery', query.getQuery())
+          var query = FilterQuery.apply(this.keyword)
+          var res = { 'state': 'error' }
+          if(typeof query !== "undefined") {
+            res = query.getQuery()
+            res['state'] = 'success'
+          }
+          this.$emit('newQuery', res)
         }
       }
     }
