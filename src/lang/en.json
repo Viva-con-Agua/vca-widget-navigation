@@ -56,6 +56,19 @@
     },
     "placeholder": {
       "search": "Search..."
+    },
+    "search": {
+      "Supporter_firstName": "First name",
+      "Supporter_lastName": "Last name",
+      "Profile_email": "Email",
+      "User_created": "Since",
+      "Supporter_placeOfResidence": "Place of residence",
+      "Supporter_mobilePhone": "Mobile phone",
+      "Supporter_birthday": "Age",
+      "Supporter_sex": "Gender",
+      "remove": {
+        "tag": "Remove query condition"
+      }
     }
   },
   "fallback": {

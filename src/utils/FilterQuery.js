@@ -19,16 +19,53 @@ export default class FilterQuery {
       }
     }
 
+    this.generateRequest()
+  }
+
+  isEmpty() {
+    return this.fieldSet.length === 0 || this.keywords.length === 0
+  }
+
+  getQuery () {
+    return this.query
+  }
+
+  getKeywords () {
+    return this.keywords
+  }
+
+  getFieldSet () {
+    return this.fieldSet.flat(1)
+  }
+
+  removeField (field) {
+    var cleanup = []
+    for(var i = 0; i < this.fieldSet.length; i++) {
+      for(var j = 0; j < this.fieldSet[i].length; j++) {
+        if(this.fieldSet[i][j].name === field.name) {
+          this.fieldSet[i].splice(j, 1)
+          if(this.fieldSet[i].length === 0) {
+            cleanup.push(i)
+          }
+        }
+      }
+    }
+
+    for (var i of cleanup) {
+      this.fieldSet.splice(i, 1)
+      this.maskedKeywords.splice(i, 1)
+    }
+
+    this.generateRequest()
+  }
+
+  generateRequest() {
     this.query = null
     this.status = "error"
     if(this.maskedKeywords.length === this.fieldSet.length) {
       this.query = this.getResult()
       this.status = "success"
     }
-  }
-
-  getQuery () {
-    return this.query
   }
 
   merge (other) {
@@ -138,7 +175,6 @@ export default class FilterQuery {
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_sex")
       var maskedKeywords = [FilterQuery.getGender(keyword)]
       queries.push(new FilterQuery([keyword], currentFieldSet, maskedKeywords))
-      defaultSearch = false
     }
 
     if(defaultSearch) {

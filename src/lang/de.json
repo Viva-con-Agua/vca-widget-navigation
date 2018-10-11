@@ -56,6 +56,19 @@
     },
     "placeholder": {
       "search": "Suche..."
+    },
+    "search": {
+      "Supporter_firstName": "Vorname",
+      "Supporter_lastName": "Nachname",
+      "Profile_email": "Email",
+      "User_created": "Dabei seid",
+      "Supporter_placeOfResidence": "Wohnort",
+      "Supporter_mobilePhone": "Handynummer",
+      "Supporter_birthday": "Geburtstag",
+      "Supporter_sex": "Geschlecht",
+      "remove": {
+        "tag": "Entferne diese Suchbedingung"
+      }
     }
   },
   "fallback": {
