@@ -68,6 +68,9 @@
       "Supporter_sex": "Geschlecht",
       "remove": {
         "tag": "Entferne diese Suchbedingung"
+      },
+      "button": {
+        "and": "Weitere Bedingung hinzufügen"
       }
     }
   },

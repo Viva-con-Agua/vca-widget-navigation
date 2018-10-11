@@ -68,6 +68,9 @@
       "Supporter_sex": "Gender",
       "remove": {
         "tag": "Remove query condition"
+      },
+      "button": {
+        "and": "Add condition"
       }
     }
   },

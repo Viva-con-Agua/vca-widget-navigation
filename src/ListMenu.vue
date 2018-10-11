@@ -69,6 +69,7 @@
 </script>
 
 <style scoped lang="less">
+  @import "./assets/general";
   @import "./assets/responsive";
 
   .listMenu {
@@ -106,20 +107,24 @@
   }
 
   .listMenu li button {
-    margin-left: 1em;
-    background: none;
-    border: 1px solid rgba(60, 60, 60, 0.26);
-    border-radius: 4px;
+    .svgButton()
   }
 
-  .listMenu li button /deep/ div {
-    pointer-events: none;
-  }
+  /*.listMenu li button {*/
+    /*margin-left: 1em;*/
+    /*background: none;*/
+    /*border: 1px solid rgba(60, 60, 60, 0.26);*/
+    /*border-radius: 4px;*/
+  /*}*/
 
-  .listMenu li button /deep/ svg {
-    width: 1.5em;
-    pointer-events: none;
-    cursor: pointer;
-  }
+  /*.listMenu li button /deep/ div {*/
+    /*pointer-events: none;*/
+  /*}*/
+
+  /*.listMenu li button /deep/ svg {*/
+    /*width: 1.5em;*/
+    /*pointer-events: none;*/
+    /*cursor: pointer;*/
+  /*}*/
 
 </style>

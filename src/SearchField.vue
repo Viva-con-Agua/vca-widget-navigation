@@ -1,6 +1,11 @@
 <template>
   <div class="searchWrapper">
-    <input v-bind:value="keyword" :placeholder="$vcaI18n.t('label.placeholder.search')" v-on:input="input" v-on:keyup.enter="clean" />
+    <div class="search">
+      <input v-bind:value="keyword" :placeholder="$vcaI18n.t('label.placeholder.search')" v-on:input="input" v-on:keyup.enter="clean" />
+      <button @click="clean" :title="$vcaI18n.t('label.search.button.and')">
+        <div v-html="require('./images/plus.svg')" />
+      </button>
+    </div>
     <div class="tags">
       <SearchTagQuery v-for="(q,k) in currentQueries" :query="q" :index="k" :key="k" v-on:changeQuery="updateQuery" />
     </div>
@@ -64,7 +69,8 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  @import './assets/general.less';
 
   .searchWrapper {
     display: flex;
@@ -76,6 +82,19 @@
   .tags {
     display: flex;
     flex-direction: row;
+  }
+
+  .search {
+    display: flex;
+    flex-direction: row;
+
+    input {
+      flex-grow: 1;
+    }
+
+    button {
+      .svgButton()
+    }
   }
 
 </style>
