@@ -1,29 +1,18 @@
+import FilterFieldList from './FilterFieldList';
+import merge from 'deepmerge';
+
 export default class FilterQuery {
 
-  constructor (keywords, fieldSet, maskedKeywords) {
+  constructor (keywords, fieldLists) {
     this.keywords = keywords
-
-    this.maskedKeywords = []
-    if(Array.isArray(maskedKeywords) && maskedKeywords.length !== 0) {
-      this.maskedKeywords = maskedKeywords
-      if(!Array.isArray(maskedKeywords[0])) {
-        this.maskedKeywords = Array.of(maskedKeywords)
-      }
-    }
-
-    this.fieldSet = []
-    if(Array.isArray(fieldSet) && fieldSet.length !== 0) {
-      this.fieldSet = fieldSet
-      if(!Array.isArray(fieldSet[0])) {
-        this.fieldSet = Array.of(fieldSet)
-      }
-    }
-
-    this.generateRequest()
+    this.status = "error"
+    this.fieldLists = fieldLists
+    this.query = this.getResult()
+    this.status = "success"
   }
 
   isEmpty() {
-    return this.fieldSet.length === 0 || this.keywords.length === 0
+    return this.fieldLists.length === 0
   }
 
   getQuery () {
@@ -35,37 +24,18 @@ export default class FilterQuery {
   }
 
   getFieldSet () {
-    return this.fieldSet.flat(1)
+    return this.fieldLists.map(l => l.getFields()).flat(1)
   }
 
   removeField (field) {
-    var cleanup = []
-    for(var i = 0; i < this.fieldSet.length; i++) {
-      for(var j = 0; j < this.fieldSet[i].length; j++) {
-        if(this.fieldSet[i][j].name === field.name) {
-          this.fieldSet[i].splice(j, 1)
-          if(this.fieldSet[i].length === 0) {
-            cleanup.push(i)
-          }
-        }
+    this.fieldLists.forEach((list, i) => {
+      list.removeField(field)
+      if(list.isEmpty()) {
+        this.fieldLists.splice(i, 1)
       }
-    }
-
-    for (var i of cleanup) {
-      this.fieldSet.splice(i, 1)
-      this.maskedKeywords.splice(i, 1)
-    }
-
-    this.generateRequest()
-  }
-
-  generateRequest() {
-    this.query = null
-    this.status = "error"
-    if(this.maskedKeywords.length === this.fieldSet.length) {
-      this.query = this.getResult()
-      this.status = "success"
-    }
+    })
+    this.query = this.getResult()
+    this.status = "success"
   }
 
   merge (other) {
@@ -75,8 +45,7 @@ export default class FilterQuery {
 
     return new FilterQuery(
       this.keywords.concat(other.keywords).filter(unique),
-      this.fieldSet.concat(other.fieldSet),
-      this.maskedKeywords.concat(other.maskedKeywords)
+      this.fieldLists.concat(other.fieldLists)
     )
   }
 
@@ -92,62 +61,33 @@ export default class FilterQuery {
   generateValues () {
     var offsets = {}
     var res = {}
-    res["values"] = {}
-    for (var l = 0; l < this.maskedKeywords.length; l++) {
-      for (var k = 0; k < this.maskedKeywords[l].length; k++) {
-        for (var i in this.fieldSet[l]) {
-          var path = this.fieldSet[l][i].path.split(".")
-          var prefix = path.slice(0, path.length - 1)
-          var last = path[path.length - 1]
-          var tree = res["values"]
-          for (var j in prefix) {
-            if (!tree.hasOwnProperty(prefix[j])) {
-              tree[prefix[j]] = {}
-            }
-            tree = tree[prefix[j]]
-          }
-          if (!tree.hasOwnProperty(last)) {
-            tree[last] = {}
-          }
-          var number = (k + 1)
-          if(offsets.hasOwnProperty(this.fieldSet[l][i].name)) {
-            number += offsets[this.fieldSet[l][i].name]
-          }
-          tree[last]["" + number] = this.maskedKeywords[l][k]
-        }
-        this.fieldSet.forEach(field => {
-          if(offsets.hasOwnProperty(field.name)) {
-          offsets[field.name] += k + 1
+    res["values"] = this.fieldLists.reduce((values, list) => {
+      var merged = merge(values, list.getValues(offsets))
+      for(var fieldName in list.getOffsets()) {
+        if(offsets.hasOwnProperty(fieldName)) {
+          offsets[fieldName] += list.getOffsets()[fieldName]
         } else {
-          offsets[field.name] = k + 1
+          offsets[fieldName] = list.getOffsets()[fieldName]
         }
-      })
       }
-    }
+      return merged
+    }, {})
     return res
   }
 
   generateQuery () {
     var offsets = {}
-    var queries = []
-    for (var l = 0; l < this.maskedKeywords.length; l++) {
-      for (var i = 0; i < this.maskedKeywords[l].length; i++) {
-        queries.push(this.fieldSet[l].map(field => {
-          var number = (i + 1)
-          if(offsets.hasOwnProperty(field.name)) {
-            number += offsets[field.name]
-          }
-          return field.path + "." + number + "." + field.op
-        }).join("_OR_"))
-        this.fieldSet.forEach(field => {
-          if(offsets.hasOwnProperty(field.name)) {
-            offsets[field.name] += i + 1
-          } else {
-            offsets[field.name] = i + 1
-          }
-        })
+    var queries = this.fieldLists.map(list => {
+      var res = list.getQuery(offsets)
+      for(var fieldName in list.getOffsets()) {
+        if(offsets.hasOwnProperty(fieldName)) {
+          offsets[fieldName] += list.getOffsets()[fieldName]
+        } else {
+          offsets[fieldName] = list.getOffsets()[fieldName]
+        }
       }
-    }
+      return res
+    })
     return { "query": queries.join("_OR_")}
   }
 
@@ -160,7 +100,7 @@ export default class FilterQuery {
       console.log("is phone")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_mobilePhone")
       var maskedKeywords = FilterQuery.getPhone(keyword)
-      queries.push(new FilterQuery([keyword], currentFieldSet, maskedKeywords))
+      queries.push(FilterQuery.construct([keyword], currentFieldSet, maskedKeywords))
 
     }
 
@@ -174,16 +114,26 @@ export default class FilterQuery {
       console.log("is gender")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_sex")
       var maskedKeywords = [FilterQuery.getGender(keyword)]
-      queries.push(new FilterQuery([keyword], currentFieldSet, maskedKeywords))
+      queries.push(FilterQuery.construct([keyword], currentFieldSet, maskedKeywords))
     }
 
     if(defaultSearch) {
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" && field.name !== "Supporter_sex")
       var maskedKeywords = ["%" + keyword + "%"]
-      queries.push(new FilterQuery([keyword], currentFieldSet, maskedKeywords))
+      queries.push(FilterQuery.construct([keyword], currentFieldSet, maskedKeywords))
 
     }
     return queries
+  }
+
+  static construct (keywords, fieldSet, maskedKeywords) {
+    var res = null
+    var fieldLists = []
+    if (Array.isArray(maskedKeywords) && Array.isArray(fieldSet)) {
+      fieldLists.push(new FilterFieldList(fieldSet, maskedKeywords, "_OR_"))
+      res = new FilterQuery(keywords, fieldLists)
+    }
+    return res
   }
 
   static isDate (keyword) {

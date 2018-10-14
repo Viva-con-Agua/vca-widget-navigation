@@ -91,7 +91,7 @@
     "vue": "^2.3.0",
     "vue-loader": "^12.0.0",
     "vue-template-compiler": "^2.3.0",
-    "webpack": "^2.5.0",
+    "webpack": "^2.7.0",
     "webpack-bundle-analyzer": "^2.4.0",
     "webpack-dashboard": "^0.4.0",
     "webpack-dev-server": "^2.4.0",
@@ -103,7 +103,8 @@
     "vue-i18n": "^8.1.0",
     "axios": "^0.18.0",
     "v-tooltip": "^2.0.0-rc.33",
-    "vue-select": "^2.5.1"
+    "vue-select": "^2.5.1",
+    "deepmerge": "^2.2.1"
   },
   "dllPlugin": {
     "name": "vuePluginTemplateDeps",
@@ -137,5 +138,12 @@
   "browserslist": [
     "last 2 versions"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "ajv": "^6.5.4",
+    "axios": "^0.18.0",
+    "deepmerge": "^2.2.1",
+    "v-tooltip": "^2.0.0-rc.33",
+    "vue-i18n": "^8.1.0",
+    "vue-select": "^2.5.1"
+  }
 }
