@@ -161,7 +161,7 @@ export default class FilterQuery {
   }
 
   static isDate (keyword) {
-    return keyword.match(FilterQuery.Match.date.pattern)
+    return keyword.match(FilterQuery.Match.date.pattern) || keyword.match(FilterQuery.Match.date.part.month) || keyword.match(FilterQuery.Match.date.part.year)
   }
 
   static isPhoneNumber (keyword) {
@@ -203,12 +203,20 @@ export default class FilterQuery {
   }
 
   static getDate (keyword) {
-    var res = -1
-    var date = (new XDate(keyword)).setHours(1)
+    var range = -1
+    var date = new XDate(keyword)
     if((typeof date !== "undefined") && date !== null && date !== NaN) {
-      res = date.getTime()
+      var range = [date.setHours(0).getTime(), date.setHours(23).getTime()]
+      if(keyword.match(FilterQuery.Match.date.part.month)) {
+        range = [date.setDate(1).setHours(0).getTime(), date.setDate(31).setHours(23).getTime()]
+      } else if(keyword.match(FilterQuery.Match.date.part.year)) {
+        range = [
+          date.setMonth(0).setDate(1).setHours(0).getTime(),
+          date.setMonth(11).setDate(31).setHours(23).getTime()
+        ]
+      }
     }
-    return [{ "keyword": keyword, "masked": res }]
+    return [{ "keyword": keyword, "masked": range }]
   }
 }
 
@@ -223,7 +231,11 @@ FilterQuery.Match = {
   },
   'date': {
     'name': 'date',
-    'pattern': /^((\d{2}([./-])?)?\d{2}([./-])?)?\d{4}$/
+    'pattern': /^((\d{2}([./-]))?\d{2}([./-]))?\d{4}$/,
+    'part': {
+      'month': /^\d{2}([./-])\d{4}$/,
+      'year': /^\d{4}$/
+    }
   },
   'male': {
     'name': 'male',
@@ -254,7 +266,7 @@ FilterQuery.Fields = [{
 }, {
   "name": "User_created",
   "path": "user.created",
-  "op": "=", // Todo: LESS EQAUL und GREATER EQUAL
+  "op": "BETWEEN", // Todo: LESS EQAUL und GREATER EQUAL
   "type": "Number"
 }, {
   "name": "Supporter_placeOfResidence",
@@ -269,7 +281,7 @@ FilterQuery.Fields = [{
 }, {
   "name": "Supporter_birthday",
   "path": "supporter.birthday",
-  "op": "=", // Todo: Use the Age (Year with Less equal and greater equal)
+  "op": "BETWEEN", // Todo: Use the Age (Year with Less equal and greater equal)
   "type": "Number"
 }, {
   "name": "Supporter_sex",
