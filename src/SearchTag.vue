@@ -16,10 +16,10 @@
       props: ['keywords', 'field'],
       methods: {
         getKeyword() {
-          return this.keywords.join(", ")
+          return this.field.getKeyword()
         },
         getFieldName() {
-          return this.$vcaI18n.t('label.search.' + this.field.name)
+          return this.$vcaI18n.t('label.search.' + this.field.getName())
         },
         fireRemove(event) {
           this.$emit('removeField', this.field)

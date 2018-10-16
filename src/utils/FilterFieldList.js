@@ -52,12 +52,12 @@ export default class FilterFieldList {
   }
 
   getFields() {
-    return this.fields.map(f => f.field)
+    return this.fields
   }
 
   removeField(field) {
     for(var i = 0; i < this.fields.length; i++) {
-      if(this.fields[i].getName() === field.name) {
+      if(this.fields[i].equals(field)) {
         this.fields.splice(i, 1)
       }
     }

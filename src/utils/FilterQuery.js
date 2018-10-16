@@ -1,10 +1,45 @@
 import FilterFieldList from './FilterFieldList';
 import merge from 'deepmerge';
+import XDate from 'xdate';
+
+function parseMDY(str) {
+  // this example parses dates like "month/date/year"
+  var parts = str.split('/');
+  if (parts.length == 3) {
+    return new XDate(
+      parseInt(parts[2]), // year
+      parseInt(parts[0] ? parts[0]-1 : 0), // month
+      parseInt(parts[1]) // date
+    );
+  }
+}
+
+function parseGerman(str) {
+  // this example parses dates like "day.month.year"
+  var parts = str.split('.');
+  if (parts.length === 3) {
+    return new XDate(
+      parseInt(parts[2]), // year
+      parseInt(parts[1] - 1), // month
+      parseInt(parts[0]) // date
+    );
+  } else if (parts.length === 2) {
+    return new XDate(
+      parseInt(parts[1]),
+      parseInt(parts[0] - 1),
+      1
+    )
+  } else if (parts.length === 1) {
+    return new XDate(parseInt(parts[0], 1, 1))
+  }
+}
+
+XDate.parsers.push(parseMDY);
+XDate.parsers.push(parseGerman);
 
 export default class FilterQuery {
 
-  constructor (keywords, fieldLists) {
-    this.keywords = keywords
+  constructor (fieldLists) {
     this.status = "error"
     this.fieldLists = fieldLists
     this.query = this.getResult()
@@ -19,11 +54,7 @@ export default class FilterQuery {
     return this.query
   }
 
-  getKeywords () {
-    return this.keywords
-  }
-
-  getFieldSet () {
+  getFields () {
     return this.fieldLists.map(l => l.getFields()).flat(1)
   }
 
@@ -39,12 +70,7 @@ export default class FilterQuery {
   }
 
   merge (other) {
-    function unique(value, index, self) {
-      return self.indexOf(value) === index;
-    }
-
     return new FilterQuery(
-      this.keywords.concat(other.keywords).filter(unique),
       this.fieldLists.concat(other.fieldLists)
     )
   }
@@ -99,39 +125,37 @@ export default class FilterQuery {
     if(FilterQuery.isPhoneNumber(keyword)) {
       console.log("is phone")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_mobilePhone")
-      var maskedKeywords = FilterQuery.getPhone(keyword)
-      queries.push(FilterQuery.construct([keyword], currentFieldSet, maskedKeywords))
+      queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getPhone(keyword)))
 
     }
 
     if(FilterQuery.isDate(keyword)) {
       console.log("is date")
-      // Todo!
+      var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "Number" && (field.name === "Supporter_birthday" || field.name === "User_created"))
+      queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getDate(keyword)))
 
     }
 
     if(FilterQuery.isGender(keyword)) {
       console.log("is gender")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_sex")
-      var maskedKeywords = [FilterQuery.getGender(keyword)]
-      queries.push(FilterQuery.construct([keyword], currentFieldSet, maskedKeywords))
+      queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getGender(keyword)))
     }
 
     if(defaultSearch) {
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" && field.name !== "Supporter_sex")
-      var maskedKeywords = ["%" + keyword + "%"]
-      queries.push(FilterQuery.construct([keyword], currentFieldSet, maskedKeywords))
+      queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getString(keyword)))
 
     }
     return queries
   }
 
-  static construct (keywords, fieldSet, maskedKeywords) {
+  static construct (fieldSet, maskedKeywords) {
     var res = null
     var fieldLists = []
     if (Array.isArray(maskedKeywords) && Array.isArray(fieldSet)) {
       fieldLists.push(new FilterFieldList(fieldSet, maskedKeywords, "_OR_"))
-      res = new FilterQuery(keywords, fieldLists)
+      res = new FilterQuery(fieldLists)
     }
     return res
   }
@@ -148,15 +172,24 @@ export default class FilterQuery {
     return keyword.match(FilterQuery.Match.male.pattern) || keyword.match(FilterQuery.Match.female.pattern)
   }
 
+  static getString (keyword) {
+    return keyword.split(" ").map(token => {
+      return { "keyword": token, "masked": "%" + token + "%" }
+    })
+  }
+
   static getGender (keyword) {
     var res = 'female'
     if(keyword.match(FilterQuery.Match.male.pattern)) {
       res = 'male'
     }
-    return res
+    return [{ "keyword": keyword, "masked": res }]
   }
 
   static getPhone (keyword) {
+    function unique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
     var separated = keyword
       .split(/\s|-/)
       .filter(p =>
@@ -166,7 +199,16 @@ export default class FilterQuery {
       ).map(p => "%" + p + "%")
     return ([
       "%" + keyword + "%"
-    ]).concat(separated)
+    ]).concat(separated).filter(unique).map(k => { return { "keyword": keyword, "masked": k }})
+  }
+
+  static getDate (keyword) {
+    var res = -1
+    var date = (new XDate(keyword)).setHours(1)
+    if((typeof date !== "undefined") && date !== null && date !== NaN) {
+      res = date.getTime()
+    }
+    return [{ "keyword": keyword, "masked": res }]
   }
 }
 
@@ -181,15 +223,15 @@ FilterQuery.Match = {
   },
   'date': {
     'name': 'date',
-    'pattern': /^((\d{2}([./-]))?\d{2}\1)?\d{4}$/
+    'pattern': /^((\d{2}([./-])?)?\d{2}([./-])?)?\d{4}$/
   },
   'male': {
     'name': 'male',
-    'pattern': /^(males?)|(männlich)|(mann)|(männer)|(men)|(man)$/i
+    'pattern': /^((males?)|(m\u00e4nnlich)|(mann)|(m\u00e4nner)|(men)|(man))$/i
   },
   'female': {
     'name': 'female',
-    'pattern': /^(females?)|(weiblich)|(frau)|(frauen)|(woman)|(women)a$/i
+    'pattern': /^((females?)|(weiblich)|(frau)|(frauen)|(woman)|(women))$/i
   }
 }
 

@@ -10,6 +10,10 @@ export default class FilterFieldKeyword {
     return this.field.name
   }
 
+  getKeyword() {
+    return this.keyword['keyword']
+  }
+
   getQuery(offset = 0) {
     var number = offset + this.index
     return this.field.path + "." + number + "." + this.field.op
@@ -30,9 +34,14 @@ export default class FilterFieldKeyword {
       }
       if(fields.length - 1 === i) {
         var number = offset + this.index
-        pointer[attr]["" + number] = this.keyword
+        pointer[attr]["" + number] = this.keyword['masked']
       }
       return res
     }, values)
+  }
+
+  equals(other) {
+    return (typeof other !== "undefined") && other !== null && (typeof other.getName() !== "undefined") &&
+      (typeof other.getKeyword() !== "undefined") && (this.getName() === other.getName() && this.getKeyword() === other.getKeyword())
   }
 }

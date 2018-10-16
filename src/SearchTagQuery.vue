@@ -1,6 +1,6 @@
 <template>
   <div class="query-tags">
-    <SearchTag v-for="(f,k) in query.getFieldSet()" :keywords="query.getKeywords()" :field="f" :key="k" v-on:removeField="handleRemove" />
+    <SearchTag v-for="(f,k) in query.getFields()" :field="f" :key="k" v-on:removeField="handleRemove" />
   </div>
 </template>
 
