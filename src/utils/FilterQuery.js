@@ -1,42 +1,6 @@
 import FilterFieldList from './FilterFieldList';
+import FilterFieldKeyword from './FilterFieldKeyword';
 import merge from 'deepmerge';
-import XDate from 'xdate';
-
-function parseMDY(str) {
-  // this example parses dates like "month/date/year"
-  var parts = str.split('/');
-  if (parts.length == 3) {
-    return new XDate(
-      parseInt(parts[2]), // year
-      parseInt(parts[0] ? parts[0]-1 : 0), // month
-      parseInt(parts[1]) // date
-    );
-  }
-}
-
-function parseGerman(str) {
-  // parses dates like "day.month.year"
-
-  var parts = str.split('.');
-  if (parts.length === 3) {
-    return new XDate(
-      parseInt(parts[2]), // year
-      parseInt(parts[1] - 1), // month
-      parseInt(parts[0]) // date
-    );
-  } else if (parts.length === 2) {
-    return new XDate(
-      parseInt(parts[1]),
-      parseInt(parts[0] - 1),
-      1
-    )
-  } else if (parts.length === 1) {
-    return new XDate(parseInt(parts[0], 1, 1))
-  }
-}
-
-XDate.parsers.push(parseMDY);
-XDate.parsers.push(parseGerman);
 
 export default class FilterQuery {
 
@@ -123,28 +87,23 @@ export default class FilterQuery {
     var queries = []
     var defaultSearch = true
 
-    if(FilterQuery.isPhoneNumber(keyword)) {
-      var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_mobilePhone")
-      queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getPhone(keyword)))
-
+    if(FilterFieldKeyword.isPhoneNumber(keyword)) {
+      queries.push(FilterQuery.construct(FilterFieldKeyword.getPhoneFields(), FilterFieldKeyword.getPhone(keyword)))
     }
 
-    if(FilterQuery.isDate(keyword)) {
-      var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "Number" && (field.name === "Supporter_birthday" || field.name === "User_created"))
-      queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getDate(keyword)))
-      if(FilterQuery.isDate(keyword, true)) {
+    if(FilterFieldKeyword.isDate(keyword)) {
+      queries.push(FilterQuery.construct(FilterFieldKeyword.getDateFields(), FilterFieldKeyword.getDate(keyword)))
+      if(FilterFieldKeyword.isDate(keyword, true)) {
         defaultSearch = false
       }
     }
 
-    if(FilterQuery.isGender(keyword)) {
-      var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_sex")
-      queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getGender(keyword)))
+    if(FilterFieldKeyword.isGender(keyword)) {
+      queries.push(FilterQuery.construct(FilterFieldKeyword.getGenderFields(), FilterFieldKeyword.getGender(keyword)))
     }
 
     if(defaultSearch) {
-      var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" && field.name !== "Supporter_sex")
-      queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getString(keyword)))
+      queries.push(FilterQuery.construct(FilterFieldKeyword.getDefaultFields(), FilterFieldKeyword.getString(keyword)))
     }
     return queries
   }
@@ -158,135 +117,4 @@ export default class FilterQuery {
     }
     return res
   }
-
-  static isDate (keyword, complete = false) {
-    return keyword.match(FilterQuery.Match.date.pattern) ||
-      (!complete && keyword.match(FilterQuery.Match.date.part.month)) ||
-      (!complete && keyword.match(FilterQuery.Match.date.part.year))
-  }
-
-  static isPhoneNumber (keyword) {
-    return keyword.match(FilterQuery.Match.phone.pattern)
-  }
-
-  static isGender (keyword) {
-    return keyword.match(FilterQuery.Match.male.pattern) || keyword.match(FilterQuery.Match.female.pattern)
-  }
-
-  static getString (keyword) {
-    return keyword.split(" ").map(token => {
-      return { "keyword": token, "masked": "%" + token + "%" }
-    })
-  }
-
-  static getGender (keyword) {
-    var res = 'female'
-    if(keyword.match(FilterQuery.Match.male.pattern)) {
-      res = 'male'
-    }
-    return [{ "keyword": keyword, "masked": res }]
-  }
-
-  static getPhone (keyword) {
-    function unique(value, index, self) {
-      return self.indexOf(value) === index;
-    }
-    var separated = keyword
-      .split(/\s|-/)
-      .filter(p =>
-        (typeof p !== "undefined") &&
-        !p.match(FilterQuery.Match.phone.removable.prefix) &&
-        !p.match(FilterQuery.Match.phone.removable.countryCode)
-      ).map(p => "%" + p + "%")
-    return ([
-      "%" + keyword + "%"
-    ]).concat(separated).filter(unique).map(k => { return { "keyword": keyword, "masked": k }})
-  }
-
-  static getDate (keyword) {
-    var range = -1
-    var date = new XDate(keyword)
-    if((typeof date !== "undefined") && date !== null && date !== NaN) {
-      var range = [date.setHours(0).getTime(), date.setHours(23).getTime()]
-      if(keyword.match(FilterQuery.Match.date.part.month)) {
-        range = [date.setDate(1).setHours(0).getTime(), date.setDate(31).setHours(23).getTime()]
-      } else if(keyword.match(FilterQuery.Match.date.part.year)) {
-        range = [
-          date.setMonth(0).setDate(1).setHours(0).getTime(),
-          date.setMonth(11).setDate(31).setHours(23).getTime()
-        ]
-      }
-    }
-    return [{ "keyword": keyword, "masked": range }]
-  }
 }
-
-FilterQuery.Match = {
-  'phone': {
-    'name': 'phone',
-    'pattern': /^([0-9]|-|\s)+$/,  // /^\(?(((\(?\+\d{2}\)?)(\s|-)?)|0)\d{2,5}\)?(\s|-)?([0-9]|-|\s)+$/,
-    'removable': {
-      'countryCode': /\(?\+\d{2}\)?(\s|-)? /,
-      'prefix': /^\(?(((\(?\+\d{2}\)?)(\s|-)?)|0)\d{2,5}\)?/
-    }
-  },
-  'date': {
-    'name': 'date',
-    'pattern': /^((\d{2}([./-]))?\d{2}([./-]))?\d{4}$/,
-    'part': {
-      'month': /^\d{2}([./-])\d{4}$/,
-      'year': /^\d{4}$/
-    }
-  },
-  'male': {
-    'name': 'male',
-    'pattern': /^((males?)|(m\u00e4nnlich)|(mann)|(m\u00e4nner)|(men)|(man))$/i
-  },
-  'female': {
-    'name': 'female',
-    'pattern': /^((females?)|(weiblich)|(frau)|(frauen)|(woman)|(women))$/i
-  }
-}
-
-
-FilterQuery.Fields = [{
-  "name": "Supporter_firstName",
-  "path": "supporter.firstName",
-  "op": "LIKE",
-  "type": "String"
-}, {
-  "name": "Supporter_lastName",
-  "path": "supporter.lastName",
-  "op": "LIKE",
-  "type": "String"
-}, {
-  "name": "Profile_email",
-  "path": "profile.email",
-  "op": "LIKE",
-  "type": "String"
-}, {
-  "name": "User_created",
-  "path": "user.created",
-  "op": "BETWEEN", // Todo: LESS EQAUL und GREATER EQUAL
-  "type": "Number"
-}, {
-  "name": "Supporter_placeOfResidence",
-  "path": "supporter.placeOfResidence",
-  "op": "LIKE",
-  "type": "String"
-}, {
-  "name": "Supporter_mobilePhone",
-  "path": "supporter.mobilePhone",
-  "op": "LIKE", // Todo: Consider +49 (country code)
-  "type": "String"
-}, {
-  "name": "Supporter_birthday",
-  "path": "supporter.birthday",
-  "op": "BETWEEN", // Todo: Use the Age (Year with Less equal and greater equal)
-  "type": "Number"
-}, {
-  "name": "Supporter_sex",
-  "path": "supporter.sex",
-  "op": "=", // Todo: transform input in possible values!
-  "type": "String"
-}]
