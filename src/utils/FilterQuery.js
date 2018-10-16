@@ -15,7 +15,8 @@ function parseMDY(str) {
 }
 
 function parseGerman(str) {
-  // this example parses dates like "day.month.year"
+  // parses dates like "day.month.year"
+
   var parts = str.split('.');
   if (parts.length === 3) {
     return new XDate(
@@ -123,21 +124,20 @@ export default class FilterQuery {
     var defaultSearch = true
 
     if(FilterQuery.isPhoneNumber(keyword)) {
-      console.log("is phone")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_mobilePhone")
       queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getPhone(keyword)))
 
     }
 
     if(FilterQuery.isDate(keyword)) {
-      console.log("is date")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "Number" && (field.name === "Supporter_birthday" || field.name === "User_created"))
       queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getDate(keyword)))
-
+      if(FilterQuery.isDate(keyword, true)) {
+        defaultSearch = false
+      }
     }
 
     if(FilterQuery.isGender(keyword)) {
-      console.log("is gender")
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name === "Supporter_sex")
       queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getGender(keyword)))
     }
@@ -145,7 +145,6 @@ export default class FilterQuery {
     if(defaultSearch) {
       var currentFieldSet = FilterQuery.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" && field.name !== "Supporter_sex")
       queries.push(FilterQuery.construct(currentFieldSet, FilterQuery.getString(keyword)))
-
     }
     return queries
   }
@@ -160,8 +159,10 @@ export default class FilterQuery {
     return res
   }
 
-  static isDate (keyword) {
-    return keyword.match(FilterQuery.Match.date.pattern) || keyword.match(FilterQuery.Match.date.part.month) || keyword.match(FilterQuery.Match.date.part.year)
+  static isDate (keyword, complete = false) {
+    return keyword.match(FilterQuery.Match.date.pattern) ||
+      (!complete && keyword.match(FilterQuery.Match.date.part.month)) ||
+      (!complete && keyword.match(FilterQuery.Match.date.part.year))
   }
 
   static isPhoneNumber (keyword) {
