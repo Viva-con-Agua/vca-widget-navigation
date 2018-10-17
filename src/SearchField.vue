@@ -1,13 +1,17 @@
 <template>
   <div class="searchWrapper">
     <div class="search">
-      <input v-bind:value="keyword" :placeholder="$vcaI18n.t('label.placeholder.search')" v-on:input="input" v-on:keyup.enter="clean" />
+      <input v-bind:value="keyword" :placeholder="$vcaI18n.t('label.placeholder.search')"
+             v-on:input="input" v-on:keyup.enter="clean" v-on:keyup.space="clean" />
       <button @click="clean" :title="$vcaI18n.t('label.search.button.and')">
         <div v-html="require('./images/plus.svg')" />
       </button>
     </div>
     <div class="tags">
-      <SearchTagQuery v-for="(q,k) in currentQueries" :query="q" :index="k" :key="k" v-on:changeQuery="updateQuery" />
+      <template v-for="(q,k) in currentQueries">
+        <SearchTagQuery :query="q" :index="k" :key="k" v-on:changeQuery="updateQuery" />
+        <div v-if="k !== (currentQueries.length - 1)" class="divider" v-html="require('./images/plus.svg')" />
+      </template>
     </div>
   </div>
 </template>
@@ -25,20 +29,28 @@
       data () {
         return {
           "keyword": "",
-          "currentQueries": []
+          "currentQueries": [],
+          "pointer": 0
         }
       },
       methods: {
         input: function (event) {
-          this.keyword = event.target.value
-          this.currentQueries = FilterQuery.apply(this.keyword)
+          this.keyword = event.target.value.trim()
+          if(this.keyword !== "") {
+            this.currentQueries.splice(this.pointer, 1, FilterQuery.apply(this.keyword))
+          } else {
+            this.currentQueries.splice(this.pointer, 1)
+            this.clean()
+          }
           this.issueRequest()
         },
         updateQuery(event) {
-          this.currentQueries[event.index] = event.query
+          this.currentQueries.splice(event.index, 1, event.query)
           if(event.query.isEmpty()) {
             this.currentQueries.splice(event.index, 1)
-            this.clean()
+            if(event.index === this.pointer) {
+              this.clean()
+            }
           }
           this.issueRequest()
         },
@@ -46,7 +58,7 @@
           var queries = this.currentQueries.slice(0)
           if(queries.length > 0) {
             var query = queries.pop()
-            query = queries.reduce((acc, current) => acc.merge(current), query)
+            query = queries.reduce((acc, current) => acc.and(current), query)
 
             var res = {'state': 'error'}
             if (typeof query !== "undefined") {
@@ -64,6 +76,7 @@
         },
         clean() {
           this.keyword = ""
+          this.pointer = this.currentQueries.length
         }
       }
     }
@@ -94,6 +107,16 @@
 
     button {
       .svgButton()
+    }
+  }
+
+  .divider {
+    margin: 0.2em;
+    padding: 0.5em 0.8em;
+
+    & /deep/ svg {
+      width: 1.5em;
+      fill: #colors[primaryDeactivated];
     }
   }
 

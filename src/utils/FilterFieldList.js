@@ -59,6 +59,9 @@ export default class FilterFieldList {
     for(var i = 0; i < this.fields.length; i++) {
       if(this.fields[i].equals(field)) {
         this.fields.splice(i, 1)
+        if(this.offsets.hasOwnProperty(field.getName())) {
+          delete this.offsets[field.getName()]
+        }
       }
     }
   }

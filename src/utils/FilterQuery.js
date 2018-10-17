@@ -39,10 +39,17 @@ export default class FilterQuery {
     this.status = "success"
   }
 
-  merge (other) {
+  or (other) {
     return new FilterQuery(
       this.fieldLists.concat(other.fieldLists),
       this.concatOperations.concat(["_OR_"].concat(other.concatOperations))
+    )
+  }
+
+  and (other) {
+    return new FilterQuery(
+      this.fieldLists.concat(other.fieldLists),
+      this.concatOperations.concat(["_AND_"].concat(other.concatOperations))
     )
   }
 
@@ -85,10 +92,7 @@ export default class FilterQuery {
       }
       return res
     })
-    console.log(this.fieldLists)
-    console.log(this.concatOperations)
     var res = queries.reduce((q, current, i) => {
-      console.log(i)
       var res = q
       if(i > 0) {
         res += this.concatOperations[i - 1] + current
@@ -97,6 +101,9 @@ export default class FilterQuery {
       }
       return res
     }, "")
+
+    // set parentheses around AND blocks
+    // res = res.split("_AND_").map(p => "(" + p + ")").join("_AND_")
     return { "query": res }
   }
 
@@ -123,7 +130,10 @@ export default class FilterQuery {
     if(defaultSearch) {
       queries.push(FilterQuery.construct(FilterFieldKeyword.getDefaultFields(), FilterFieldKeyword.getString(keyword)))
     }
-    return queries
+
+    var query = queries.pop()
+    query = queries.reduce((acc, current) => acc.or(current), query)
+    return query
   }
 
   static construct (fieldSet, maskedKeywords) {
