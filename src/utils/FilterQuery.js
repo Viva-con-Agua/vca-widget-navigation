@@ -4,9 +4,13 @@ import merge from 'deepmerge';
 
 export default class FilterQuery {
 
-  constructor (fieldLists) {
+  constructor (fieldLists, concatOperations = []) {
     this.status = "error"
     this.fieldLists = fieldLists
+    this.concatOperations = concatOperations
+    if(this.concatOperations.length !== this.fieldLists.length - 1) {
+      this.concatOperations.fill("_OR_", 0, this.fieldLists.length - 2)
+    }
     this.query = this.getResult()
     this.status = "success"
   }
@@ -28,6 +32,7 @@ export default class FilterQuery {
       list.removeField(field)
       if(list.isEmpty()) {
         this.fieldLists.splice(i, 1)
+        this.concatOperations.splice(i - 1, 1)
       }
     })
     this.query = this.getResult()
@@ -36,7 +41,8 @@ export default class FilterQuery {
 
   merge (other) {
     return new FilterQuery(
-      this.fieldLists.concat(other.fieldLists)
+      this.fieldLists.concat(other.fieldLists),
+      this.concatOperations.concat(["_OR_"].concat(other.concatOperations))
     )
   }
 
@@ -79,7 +85,19 @@ export default class FilterQuery {
       }
       return res
     })
-    return { "query": queries.join("_OR_")}
+    console.log(this.fieldLists)
+    console.log(this.concatOperations)
+    var res = queries.reduce((q, current, i) => {
+      console.log(i)
+      var res = q
+      if(i > 0) {
+        res += this.concatOperations[i - 1] + current
+      } else {
+        res += current
+      }
+      return res
+    }, "")
+    return { "query": res }
   }
 
   static apply(keyword) {
