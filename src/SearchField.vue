@@ -48,10 +48,8 @@
           this.currentQueries.splice(event.index, 1, event.query)
           if(event.query.isEmpty()) {
             this.currentQueries.splice(event.index, 1)
-            if(event.index === this.pointer) {
-              this.clean()
-            }
           }
+          this.clean()
           this.issueRequest()
         },
         issueRequest() {
