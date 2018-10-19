@@ -97,6 +97,7 @@
 
     h2.name {
       font-size: #fontSizes[small];
+      text-align: center;
     }
 
     span.error {

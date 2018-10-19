@@ -70,6 +70,7 @@
     &.content {
       .colorProfileSecundary();
       cursor: pointer;
+      text-align: center;
 
       &:hover {
         box-shadow: #shadow[secundary];
