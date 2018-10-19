@@ -166,10 +166,11 @@
   }
 
   .paginate {
-    .colorProfileSecundary();
-    border: 1pt solid #0a8eb6;
-    border-radius: @radius;
+    //.colorProfileSecundary();
     height: 2.5em;
-    .button();
+    //.button();
+    .inputElement();
+    cursor: pointer;
+    background: none;
   }
 </style>
