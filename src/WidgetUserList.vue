@@ -66,6 +66,7 @@
       var lang = this.config.getLang()
       Vue.config.lang = lang
       this.$vcaI18n.locale = lang
+      this.sorting = new Sorting(this.config.getType(), this.$vcaI18n, this.config.getSortingInit())
 
       this.getCount()
       this.getPage()
