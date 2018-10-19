@@ -129,6 +129,8 @@
 
     input {
       flex-grow: 1;
+      .inputElement();
+      padding: 0 0.25em;
     }
 
     button {
