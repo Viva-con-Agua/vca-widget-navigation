@@ -7,30 +7,38 @@
         <div v-html="require('./images/plus.svg')" />
       </button>
     </div>
-    <div class="tags">
-      <template v-for="(q,k) in currentQueries">
-        <SearchTagQuery :query="q" :index="k" :key="k" v-on:changeQuery="updateQuery" />
-        <div v-if="k !== (currentQueries.length - 1)" class="divider" v-html="require('./images/plus.svg')" />
-      </template>
-    </div>
+    <vue-scrollbar classes="tags-scroll" ref="VueScrollbar" :key="rerender">
+      <div class="tags" ref="tags" :style="'width: ' + tagsWidth + 'px'">
+        <template v-for="(q,k) in currentQueries">
+          <div ref="tagQueries" class="tagQueries">
+            <SearchTagQuery :query="q" :index="k" :key="k" v-on:changeQuery="updateQuery" />
+            <div v-if="k !== (currentQueries.length - 1)" class="divider" v-html="require('./images/plus.svg')" />
+          </div>
+        </template>
+      </div>
+    </vue-scrollbar>
   </div>
 </template>
 
 <script>
   import FilterQuery from './utils/FilterQuery'
   import SearchTagQuery from './SearchTagQuery'
+  import VueScrollbar from 'vue2-scrollbar'
 
     export default {
       name: "SearchField",
       components: {
-        'SearchTagQuery': SearchTagQuery
+        'SearchTagQuery': SearchTagQuery,
+        VueScrollbar
       },
       props: ['query'], // Todo: Do something with that given query!
       data () {
         return {
           "keyword": "",
           "currentQueries": [],
-          "pointer": 0
+          "pointer": 0,
+          "rerender": false,
+          "tagsWidth": 0,
         }
       },
       methods: {
@@ -42,17 +50,19 @@
             this.currentQueries.splice(this.pointer, 1)
             this.clean()
           }
+          this.calculateTagsWidth()
           this.issueRequest()
         },
-        updateQuery(event) {
+        updateQuery (event) {
           this.currentQueries.splice(event.index, 1, event.query)
           if(event.query.isEmpty()) {
             this.currentQueries.splice(event.index, 1)
           }
           this.clean()
+          this.calculateTagsWidth()
           this.issueRequest()
         },
-        issueRequest() {
+        issueRequest () {
           var queries = this.currentQueries.slice(0)
           if(queries.length > 0) {
             var query = queries.pop()
@@ -72,9 +82,16 @@
             })
           }
         },
-        clean() {
+        clean () {
           this.keyword = ""
           this.pointer = this.currentQueries.length
+        },
+        calculateTagsWidth () {
+          if(this.$refs.hasOwnProperty("tagQueries")) {
+            this.tagsWidth = this.$refs.tagQueries.reduce((acc, div) => acc + div.clientWidth, 0)
+            this.$refs.tags.style.width = this.tagsWidth + "px"
+            this.rerender = !(this.rerender)
+          }
         }
       }
     }
@@ -82,6 +99,7 @@
 
 <style scoped lang="less">
   @import './assets/general.less';
+  @import './assets/vue2-scrollbar.css';
 
   .searchWrapper {
     display: flex;
@@ -90,9 +108,19 @@
     justify-content: stretch;
   }
 
-  .tags {
+  .tags-scroll {
+    width: 100%;
+    min-width: 100%;
+    max-height: 4em;
+  }
+
+  .tags, .tagQueries {
     display: flex;
     flex-direction: row;
+  }
+
+  .tags {
+    min-width: 100%;
   }
 
   .search {
