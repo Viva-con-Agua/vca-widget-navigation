@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import axios from 'axios'
   import Config from './utils/Config'
   import Page from './utils/Page'
@@ -62,6 +63,10 @@
       }
     },
     created () {
+      var lang = this.config.getLang()
+      Vue.config.lang = lang
+      this.$vcaI18n.locale = lang
+
       this.getCount()
       this.getPage()
     },
@@ -153,6 +158,7 @@
 
     &.error {
       align-items: center;
+      text-align: center;
 
       span {
         .colorProfileThirdly();
@@ -166,9 +172,7 @@
   }
 
   .paginate {
-    //.colorProfileSecundary();
     height: 2.5em;
-    //.button();
     .inputElement();
     cursor: pointer;
     background: none;

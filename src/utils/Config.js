@@ -1,6 +1,11 @@
 export default class Config {
 
   constructor (options) {
+    this.lang = Config.default.lang
+    if(options !== null && (typeof options !== "undefined") && options.hasOwnProperty("lang")) {
+      this.lang = options.lang
+    }
+
     this.type = Config.default.type
     if(options !== null && (typeof options !== "undefined") && options.hasOwnProperty("type")) {
       this.type = options.type
@@ -41,6 +46,10 @@ export default class Config {
 
   hasPagination() {
     return (this.pagination.hasOwnProperty("activated") && this.pagination.activated)
+  }
+
+  getLang() {
+    return this.lang
   }
 
   getType() {
@@ -88,5 +97,6 @@ Config.default = {
     "activated": true,
     "size": 40,
     "sliding": 20
-  }
+  },
+  "lang": "de"
 }
