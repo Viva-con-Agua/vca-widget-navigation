@@ -22,11 +22,32 @@ npm install --save vca-widget-user
 
 ```js
 import Vue from 'vue'
-import WidgetUser from 'vca-widget-user'
+import WidgetUserList from 'vca-widget-user'
 // You need a specific loader for CSS files like https://github.com/webpack/css-loader
-import 'vca-widget-user/dist/widget-user.css'
+import 'vca-widget-user/dist/vca-widget-user.css'
 
-Vue.use(WidgetUser)
+export default {
+  name: 'App',
+  components: { WidgetUserList },
+  data () {
+    return { options: {
+      'type': { 'menue': true, 'value': 'table' },
+      'sorting': { 'menue': { 'field': 'Supporter_firstName', 'dir': 'ASC' } },
+      'lang': 'de'
+    } }
+  }
+}
+
+```
+
+Inside your template:
+```xml
+<template>
+  <div id="app">
+    <WidgetUserList :options="options" />
+  </div>
+</template>
+
 ```
 
 ### Browser
