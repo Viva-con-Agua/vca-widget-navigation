@@ -26,6 +26,8 @@ import WidgetUserList from 'vca-widget-user'
 // You need a specific loader for CSS files like https://github.com/webpack/css-loader
 import 'vca-widget-user/dist/vca-widget-user.css'
 
+Vue.use(WidgetUserList)
+
 export default {
   name: 'App',
   components: { WidgetUserList },
@@ -47,8 +49,42 @@ Inside your template:
     <WidgetUserList :options="options" />
   </div>
 </template>
-
 ```
+
+#### Existing internationalization
+If you already use [vue-i18n](https://www.npmjs.com/package/vue-i18n) to handle your internationalization and localization, we have to merge our messages into 
+yours. You can do this in your `main.js` before you instantiate your Vue App.
+
+```js
+import Vue from 'vue';
+...
+import VueI18n from 'vue-i18n';
+import WidgetUserList from 'vca-widget-user' // use `WidgetUser` if you don't need a list of users
+
+Vue.use(VueI18n);
+
+const i18n = new VueI18n({
+    locale: locale,
+    messages: {
+        'en-US': require('@/lang/en_US'),
+        'de-DE': require('@/lang/de_VCA'),
+        'ja-JA': require('../node_modules/element-ui/lib/locale/lang/ja')
+    }
+});
+
+// the most important line of code here
+Vue.use(WidgetUserList, { 'i18n': i18n })
+
+/* eslint-disable no-new */
+
+new Vue({
+  ...
+  i18n,
+  components: { WidgetUserList },
+  ...
+}).$mount('#app');
+```
+Afterwards, you don't have to use `Vue.use(WidgetUserList)` in your components again.
 
 ### Browser
 

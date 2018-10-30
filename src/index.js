@@ -4,16 +4,32 @@ import VueI18n from 'vue-i18n'
 import en from './lang/en.json'
 import de from './lang/de.json'
 
+function getLang(Vue, options) {
+
+  function exists(options) {
+    return (typeof options !== "undefined") && options.hasOwnProperty("i18n") && (typeof options.i18n !== "undefined") && options.i18n !== null
+  }
+
+  if(!exists(options)) {
+    Vue.use(VueI18n)
+
+    const i18n = new VueI18n({
+      locale: 'de',
+      fallbackLocale: 'en',
+      messages: {en, de}
+    })
+
+    Vue.prototype.$vcaI18n = i18n
+  } else {
+    options.i18n.mergeLocaleMessage('de', de)
+    options.i18n.mergeLocaleMessage('en', en)
+    Vue.prototype.$vcaI18n = options.i18n
+  }
+  return Vue
+}
+
 WidgetUser.install = function (Vue, options) {
-  Vue.use(VueI18n)
-
-  const i18n = new VueI18n({
-    locale: 'de',
-    fallbackLocale: 'en',
-    messages: { en, de }
-  })
-
-  Vue.prototype.$vcaI18n = i18n
+  Vue = getLang(Vue, options)
 
   if (options != null && typeof options === 'object' && options.hasOwnProperty('uuid')) {
     Vue.prototype.$widgetUserDefaultUUID = options.uuid
@@ -29,7 +45,8 @@ WidgetUser.install = function (Vue, options) {
 }
 
 WidgetUserList.install = function (Vue, options) {
-  Vue.use(WidgetUser)
+  Vue = getLang(Vue, options)
+  Vue.use(WidgetUser, options)
   Vue.component('widget-user-list', WidgetUserList)
 }
 
