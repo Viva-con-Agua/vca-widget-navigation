@@ -14,15 +14,15 @@ function getLang(Vue, options) {
     Vue.use(VueI18n)
 
     const i18n = new VueI18n({
-      locale: 'de',
-      fallbackLocale: 'en',
-      messages: {en, de}
+      locale: 'de-DE',
+      fallbackLocale: 'en-US',
+      messages: {'en-US': en, 'de-DE': de}
     })
 
     Vue.prototype.$vcaI18n = i18n
   } else {
-    options.i18n.mergeLocaleMessage('de', de)
-    options.i18n.mergeLocaleMessage('en', en)
+    options.i18n.mergeLocaleMessage('de-DE', de)
+    options.i18n.mergeLocaleMessage('en-US', en)
     Vue.prototype.$vcaI18n = options.i18n
   }
   return Vue

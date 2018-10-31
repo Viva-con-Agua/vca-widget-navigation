@@ -98,5 +98,5 @@ Config.default = {
     "size": 40,
     "sliding": 20
   },
-  "lang": "de"
+  "lang": "de-DE"
 }
