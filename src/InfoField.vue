@@ -25,7 +25,7 @@
       </div>
       <div class="vca details-column">
         <span v-if="type !== 'small'" class="since">{{ $vcaI18n.t('label.since') + $vcaI18n.t('label.separator') + getSince() }}</span>
-        <span v-if="type !== 'small' && showCrew()" class="crew">{{ user.profiles[0].supporter.crew }}</span>
+        <span v-if="type !== 'small' && showCrew()" class="crew">{{ user.profiles[0].supporter.crew.name }}</span>
         <span v-else-if="type !== 'small'" class="crew">{{ $vcaI18n.t('fallback.noCrew') }}</span>
       </div>
     </div>

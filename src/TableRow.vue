@@ -15,8 +15,8 @@
     </td>
     <td class="name"><a :href="getURL()" ref="profileLink">{{ user.profiles[0].supporter.fullName }}</a></td>
     <td class="since">{{ getSince() }}</td>
-    <td class="crew">{{ hasCrew() ? user.profiles[0].supporter.crew : $vcaI18n.t('fallback.noCrew') }}</td>
-    <td class="email noPhone">{{ user.profiles[0].email }}</td>
+    <td class="crew">{{ hasCrew() ? user.profiles[0].supporter.crew.name : $vcaI18n.t('fallback.noCrew') }}</td>
+    <td class="email noPhone">{{ user.profilea[0].email }}</td>
     <td class="mobilePhone noPhone">{{ user.profiles[0].supporter.mobilePhone }}</td>
     <td class="age noPhone noTablet">{{ getAge() }}</td>
     <td class="gender noPhone noTablet">{{ $vcaI18n.t('value.gender.' + user.profiles[0].supporter.sex) }}</td>
