@@ -143,19 +143,19 @@ export default class FilterFieldKeyword {
     }
     return [{ "keyword": keyword, "masked": range }]
   }
-  
+
   static getPhoneFields () {
     return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name === "Supporter_mobilePhone")
   }
-  
+
   static getDateFields () {
     return FilterFieldKeyword.Fields.filter(field => field.type === "Number" && (field.name === "Supporter_birthday" || field.name === "User_created"))
   }
-  
+
   static getGenderFields () {
     return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name === "Supporter_sex")
   }
-  
+
   static getDefaultFields () {
     return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" && field.name !== "Supporter_sex")
   }
@@ -228,5 +228,10 @@ FilterFieldKeyword.Fields = [{
   "name": "Supporter_sex",
   "path": "supporter.sex",
   "op": "=", // Todo: transform input in possible values!
+  "type": "String"
+}, {
+  "name": "Supporter_Crew_name",
+  "path": "supporterCrew.name",
+  "op": "LIKE",
   "type": "String"
 }]

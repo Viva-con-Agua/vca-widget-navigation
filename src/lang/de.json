@@ -66,6 +66,7 @@
       "Supporter_mobilePhone": "Handynummer",
       "Supporter_birthday": "Geburtstag",
       "Supporter_sex": "Geschlecht",
+      "Supporter_Crew_name": "Crew",
       "remove": {
         "tag": "Entferne diese Suchbedingung"
       },

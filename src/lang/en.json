@@ -66,6 +66,7 @@
       "Supporter_mobilePhone": "Mobile phone",
       "Supporter_birthday": "Age",
       "Supporter_sex": "Gender",
+      "Supporter_Crew_name": "Crew",
       "remove": {
         "tag": "Remove query condition"
       },
