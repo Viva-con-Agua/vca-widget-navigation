@@ -97,6 +97,22 @@ export default class FilterFieldKeyword {
     return keyword.match(FilterFieldKeyword.Match.male.pattern) || keyword.match(FilterFieldKeyword.Match.female.pattern)
   }
 
+  static isRole (keyword, special) {
+    console.log(FilterFieldKeyword.Match.roles
+      .filter((role) => {
+        var vm = role.name === "VolunteerManager" && special
+        var notVm = role.name !== "VolunteerManager" && !special
+        return vm || notVm
+      }))
+    return FilterFieldKeyword.Match.roles
+      .filter((role) => {
+        var vm = role.name === "VolunteerManager" && special
+        var notVm = role.name !== "VolunteerManager" && !special
+        return vm || notVm
+      })
+      .reduce(((roleMatched, role) => keyword.match(role.pattern) || roleMatched), false)
+  }
+
   static getString (keyword) {
     return keyword.split(" ").map(token => {
       return { "keyword": token, "masked": "%" + token + "%" }
@@ -144,20 +160,38 @@ export default class FilterFieldKeyword {
     return [{ "keyword": keyword, "masked": range }]
   }
 
+  static getRole (keyword) {
+    var res = [{ "keyword": keyword, "masked": "" }]
+    var role = FilterFieldKeyword.Match.roles.find(role => keyword.match(role.pattern))
+    if(role.hasOwnProperty("name")) {
+      res = [{ "keyword": keyword, "masked": role.name }]
+    }
+    return res
+  }
+
   static getPhoneFields () {
     return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name === "Supporter_mobilePhone")
   }
 
   static getDateFields () {
-    return FilterFieldKeyword.Fields.filter(field => field.type === "Number" && (field.name === "Supporter_birthday" || field.name === "User_created"))
+    return FilterFieldKeyword.Fields.filter(field => field.type === "Number" && (field.name === "Supporter_birthday" ||
+      field.name === "User_created"))
   }
 
   static getGenderFields () {
     return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name === "Supporter_sex")
   }
 
+  static getRoleFields (special) {
+    return FilterFieldKeyword.Fields.filter((field) =>
+      ((field.type === "String" && field.name === "Supporter_Crew_role" && special) ||
+      (field.type === "String" && field.name === "User_roles" && !special))
+    )
+  }
+
   static getDefaultFields () {
-    return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" && field.name !== "Supporter_sex")
+    return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" &&
+      field.name !== "Supporter_sex" && field.name !== "Supporter_Crew_role" && field.name !== "User_roles")
   }
 }
 
@@ -185,7 +219,21 @@ FilterFieldKeyword.Match = {
   'female': {
     'name': 'female',
     'pattern': /^((females?)|(weiblich)|(frau)|(frauen)|(woman)|(women))$/i
-  }
+  },
+  'roles': [
+    {
+      'name': 'VolunteerManager',
+      'pattern': /^(ASP)|(A(n(s(p(r(e(c(h(p(a(r(t(n(e(r)?)?)?)?)?)?)?)?)?)?)?)?)?)?)$/i
+    },
+    {
+      'name': 'admin',
+      'pattern': /^(admin)|(administrator)|(root)$/i
+    },
+    {
+      'name': 'employee',
+      'pattern': /^(employee(s)?)|(mitarbeiter(in(nen)?)?)|(hauptamt(lich(e(r)?)?)?)|(botschafter(in(nen)?)?)$/i
+    }
+  ]
 }
 
 
@@ -232,6 +280,16 @@ FilterFieldKeyword.Fields = [{
 }, {
   "name": "Supporter_Crew_name",
   "path": "supporterCrew.name",
+  "op": "LIKE",
+  "type": "String"
+}, {
+  "name": "Supporter_Crew_role",
+  "path": "supporterCrew.role",
+  "op": "=",
+  "type": "String"
+}, {
+  "name": "User_roles",
+  "path": "user.roles",
   "op": "LIKE",
   "type": "String"
 }]

@@ -127,6 +127,14 @@ export default class FilterQuery {
       queries.push(FilterQuery.construct(FilterFieldKeyword.getGenderFields(), FilterFieldKeyword.getGender(keyword)))
     }
 
+    if(FilterFieldKeyword.isRole(keyword, true)) {
+      queries.push(FilterQuery.construct(FilterFieldKeyword.getRoleFields(true), FilterFieldKeyword.getRole(keyword)))
+    }
+
+    if(FilterFieldKeyword.isRole(keyword, false)) {
+      queries.push(FilterQuery.construct(FilterFieldKeyword.getRoleFields(false), FilterFieldKeyword.getRole(keyword)))
+    }
+
     if(defaultSearch) {
       queries.push(FilterQuery.construct(FilterFieldKeyword.getDefaultFields(), FilterFieldKeyword.getString(keyword)))
     }

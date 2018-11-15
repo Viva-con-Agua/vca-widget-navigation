@@ -67,6 +67,8 @@
       "Supporter_birthday": "Age",
       "Supporter_sex": "Gender",
       "Supporter_Crew_name": "Crew",
+      "User_roles": "VcA role",
+      "Supporter_Crew_role": "Crew role",
       "remove": {
         "tag": "Remove query condition"
       },
