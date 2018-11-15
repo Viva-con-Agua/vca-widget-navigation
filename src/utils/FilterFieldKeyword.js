@@ -98,12 +98,6 @@ export default class FilterFieldKeyword {
   }
 
   static isRole (keyword, special) {
-    console.log(FilterFieldKeyword.Match.roles
-      .filter((role) => {
-        var vm = role.name === "VolunteerManager" && special
-        var notVm = role.name !== "VolunteerManager" && !special
-        return vm || notVm
-      }))
     return FilterFieldKeyword.Match.roles
       .filter((role) => {
         var vm = role.name === "VolunteerManager" && special
@@ -111,6 +105,12 @@ export default class FilterFieldKeyword {
         return vm || notVm
       })
       .reduce(((roleMatched, role) => keyword.match(role.pattern) || roleMatched), false)
+  }
+
+
+  static isPillar (keyword) {
+    return FilterFieldKeyword.Match.pillar
+      .reduce(((pillarMatched, pillar) => keyword.match(pillar.pattern) || pillarMatched), false)
   }
 
   static getString (keyword) {
@@ -169,6 +169,15 @@ export default class FilterFieldKeyword {
     return res
   }
 
+  static getPillar (keyword) {
+    var res = [{ "keyword": keyword, "masked": "" }]
+    var pillar = FilterFieldKeyword.Match.pillar.find(role => keyword.match(role.pattern))
+    if(pillar.hasOwnProperty("name")) {
+      res = [{ "keyword": keyword, "masked": pillar.name }]
+    }
+    return res
+  }
+
   static getPhoneFields () {
     return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name === "Supporter_mobilePhone")
   }
@@ -189,9 +198,15 @@ export default class FilterFieldKeyword {
     )
   }
 
+  static getPillarFields () {
+    return FilterFieldKeyword.Fields.filter((field) =>
+      (field.type === "String" && field.name === "Supporter_Crew_pillar")
+    )
+  }
+
   static getDefaultFields () {
     return FilterFieldKeyword.Fields.filter(field => field.type === "String" && field.name !== "Supporter_mobilePhone" &&
-      field.name !== "Supporter_sex" && field.name !== "Supporter_Crew_role" && field.name !== "User_roles")
+      field.name !== "Supporter_sex" && field.name !== "Supporter_Crew_role" && field.name !== "User_roles"  && field.name !== "Supporter_Crew_pillar")
   }
 }
 
@@ -232,6 +247,24 @@ FilterFieldKeyword.Match = {
     {
       'name': 'employee',
       'pattern': /^(employee(s)?)|(mitarbeiter(in(nen)?)?)|(hauptamt(lich(e(r)?)?)?)|(botschafter(in(nen)?)?)$/i
+    }
+  ],
+  'pillar': [
+    {
+      'name': 'operation',
+      'pattern': /^(aktion(en)?)|(action(s)?)$/i
+    },
+    {
+      'name': 'education',
+      'pattern': /^(bildung)|(education)$/i
+    },
+    {
+      'name': 'finance',
+      'pattern': /^(finanz(en)?)|(finance(s)?)$/i
+    },
+    {
+      'name': 'network',
+      'pattern': /^(netzwerk)|(network)$/i
     }
   ]
 }
@@ -291,5 +324,10 @@ FilterFieldKeyword.Fields = [{
   "name": "User_roles",
   "path": "user.roles",
   "op": "LIKE",
+  "type": "String"
+}, {
+  "name": "Supporter_Crew_pillar",
+  "path": "supporterCrew.pillar",
+  "op": "=",
   "type": "String"
 }]

@@ -67,8 +67,9 @@
       "Supporter_birthday": "Geburtstag",
       "Supporter_sex": "Geschlecht",
       "Supporter_Crew_name": "Crew",
-      "User_roles": "VcA-Rolle",
-      "Supporter_Crew_role": "Crewrolle",
+      "User_roles": "Mitarbeiter?",
+      "Supporter_Crew_role": "Crew-ASP?",
+      "Supporter_Crew_pillar": "Bereich",
       "remove": {
         "tag": "Entferne diese Suchbedingung"
       },

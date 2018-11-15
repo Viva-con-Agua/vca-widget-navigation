@@ -135,6 +135,10 @@ export default class FilterQuery {
       queries.push(FilterQuery.construct(FilterFieldKeyword.getRoleFields(false), FilterFieldKeyword.getRole(keyword)))
     }
 
+    if(FilterFieldKeyword.isPillar(keyword)) {
+      queries.push(FilterQuery.construct(FilterFieldKeyword.getPillarFields(), FilterFieldKeyword.getPillar(keyword)))
+    }
+
     if(defaultSearch) {
       queries.push(FilterQuery.construct(FilterFieldKeyword.getDefaultFields(), FilterFieldKeyword.getString(keyword)))
     }
