@@ -16,6 +16,8 @@
     "separator": ": ",
     "age": "Alter",
     "since": "Dabei seit",
+    "asp": "ASP",
+    "aspOfCrew": "ASP {crewName}",
     "sorting": {
       "dirButton" : {
         "ASC": "Klicken für absteigende Sortierung",

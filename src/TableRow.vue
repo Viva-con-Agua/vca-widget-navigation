@@ -15,8 +15,11 @@
     </td>
     <td class="name"><a :href="getURL()" ref="profileLink">{{ user.profiles[0].supporter.fullName }}</a></td>
     <td class="since">{{ getSince() }}</td>
-    <td class="crew">{{ hasCrew() ? user.profiles[0].supporter.crew.name : $vcaI18n.t('fallback.noCrew') }}</td>
-    <td class="email noPhone">{{ user.profilea[0].email }}</td>
+    <td class="crew">
+      {{ hasCrew() ? user.profiles[0].supporter.crew.name : $vcaI18n.t('fallback.noCrew') }}<br />
+      <span class="role" v-if="hasCrewRole()">{{ $vcaI18n.t('label.asp') }}</span>
+    </td>
+    <td class="email noPhone">{{ user.profiles[0].email }}</td>
     <td class="mobilePhone noPhone">{{ user.profiles[0].supporter.mobilePhone }}</td>
     <td class="age noPhone noTablet">{{ getAge() }}</td>
     <td class="gender noPhone noTablet">{{ $vcaI18n.t('value.gender.' + user.profiles[0].supporter.sex) }}</td>
@@ -54,6 +57,26 @@
         },
         callLink: function () {
           this.$refs.profileLink.click()
+        },
+        getCrewRole: function () {
+          var crew = this.user.profiles[0].supporter.crew
+          var res = null
+          if((typeof crew !== "undefined") && crew !== null && crew.hasOwnProperty("name")) {
+            var role = this.user.profiles[0].supporter.roles.find(function (role) {
+              var result = false
+              if (role.hasOwnProperty("crew")) {
+                result = role.crew.name === crew.name
+              }
+              return result
+            })
+            if (typeof role !== "undefined" && role !== null) {
+              res = role
+            }
+          }
+          return res
+        },
+        hasCrewRole: function () {
+          return this.getCrewRole() !== null
         }
       }
     }
@@ -62,6 +85,8 @@
 <style scoped lang="less">
   @import "./assets/general.less";
   @import "./assets/responsive.less";
+
+  @padding: 0.3em;
 
   .rowWrapper {
     height: 2em;
@@ -85,6 +110,13 @@
       .colorProfilePrimary();
       font-weight: bold;
     }
+  }
+
+  .role {
+    .colorProfileThirdly();
+    padding: @padding;
+    font-size: 0.7em;
+    border-radius: 0.5em;
   }
 
   .image {

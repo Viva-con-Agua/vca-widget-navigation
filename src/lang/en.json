@@ -16,6 +16,8 @@
     "separator": ": ",
     "age": "Age",
     "since": "Since",
+    "asp": "Manager",
+    "aspOfCrew": "Manager {crewName}",
     "sorting": {
       "dirButton" : {
         "ASC": "Click to sort descending",
