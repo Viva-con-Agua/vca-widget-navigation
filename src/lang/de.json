@@ -10,6 +10,10 @@
       "male": "Mann",
       "female": "Frau",
       "notDefined": "Nicht angegeben"
+    },
+    "roles": {
+      "admin": "Admin",
+      "employee": "Hauptamt"
     }
   },
   "label": {

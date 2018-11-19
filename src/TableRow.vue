@@ -13,7 +13,12 @@
     <td class="image">
       <Avatar v-bind:error-code="errorState" v-bind:user="user" type="medium"></Avatar>
     </td>
-    <td class="name"><a :href="getURL()" ref="profileLink">{{ user.profiles[0].supporter.fullName }}</a></td>
+    <td class="name">
+      <a :href="getURL()" ref="profileLink">{{ user.profiles[0].supporter.fullName }}</a><br />
+      <span v-for="role in user.roles.filter((r) => r.role !== 'supporter')" class="role">
+        {{ $vcaI18n.t('value.roles.' + role.role) }}
+      </span>
+    </td>
     <td class="since">{{ getSince() }}</td>
     <td class="crew">
       {{ hasCrew() ? user.profiles[0].supporter.crew.name : $vcaI18n.t('fallback.noCrew') }}<br />
@@ -117,6 +122,7 @@
     padding: @padding;
     font-size: 0.7em;
     border-radius: 0.5em;
+    margin: 0.2em;
   }
 
   .image {
