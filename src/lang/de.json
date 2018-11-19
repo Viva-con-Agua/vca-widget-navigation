@@ -10,12 +10,18 @@
       "male": "Mann",
       "female": "Frau",
       "notDefined": "Nicht angegeben"
+    },
+    "roles": {
+      "admin": "Admin",
+      "employee": "Hauptamt"
     }
   },
   "label": {
     "separator": ": ",
     "age": "Alter",
     "since": "Dabei seit",
+    "asp": "ASP",
+    "aspOfCrew": "ASP {crewName}",
     "sorting": {
       "dirButton" : {
         "ASC": "Klicken für absteigende Sortierung",
@@ -66,6 +72,10 @@
       "Supporter_mobilePhone": "Handynummer",
       "Supporter_birthday": "Geburtstag",
       "Supporter_sex": "Geschlecht",
+      "Supporter_Crew_name": "Crew",
+      "User_roles": "Mitarbeiter?",
+      "Supporter_Crew_role": "Crew-ASP?",
+      "Supporter_Crew_pillar": "Bereich",
       "remove": {
         "tag": "Entferne diese Suchbedingung"
       },

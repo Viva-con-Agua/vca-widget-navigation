@@ -10,12 +10,18 @@
       "male": "Man",
       "female": "Woman",
       "notDefined": "Not said"
+    },
+    "roles": {
+      "admin": "Admin",
+      "employee": "Employee"
     }
   },
   "label": {
     "separator": ": ",
     "age": "Age",
     "since": "Since",
+    "asp": "Manager",
+    "aspOfCrew": "Manager {crewName}",
     "sorting": {
       "dirButton" : {
         "ASC": "Click to sort descending",
@@ -66,6 +72,10 @@
       "Supporter_mobilePhone": "Mobile phone",
       "Supporter_birthday": "Age",
       "Supporter_sex": "Gender",
+      "Supporter_Crew_name": "Crew",
+      "User_roles": "Employee?",
+      "Supporter_Crew_role": "Crew Manager?",
+      "Supporter_Crew_pillar": "Section",
       "remove": {
         "tag": "Remove query condition"
       },

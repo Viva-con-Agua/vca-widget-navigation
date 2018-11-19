@@ -13,9 +13,17 @@
     <td class="image">
       <Avatar v-bind:error-code="errorState" v-bind:user="user" type="medium"></Avatar>
     </td>
-    <td class="name"><a :href="getURL()" ref="profileLink">{{ user.profiles[0].supporter.fullName }}</a></td>
+    <td class="name">
+      <a :href="getURL()" ref="profileLink">{{ user.profiles[0].supporter.fullName }}</a><br />
+      <span v-for="role in user.roles.filter((r) => r.role !== 'supporter')" class="role">
+        {{ $vcaI18n.t('value.roles.' + role.role) }}
+      </span>
+    </td>
     <td class="since">{{ getSince() }}</td>
-    <td class="crew">{{ hasCrew() ? user.profiles[0].supporter.crew : $vcaI18n.t('fallback.noCrew') }}</td>
+    <td class="crew">
+      {{ hasCrew() ? user.profiles[0].supporter.crew.name : $vcaI18n.t('fallback.noCrew') }}<br />
+      <span class="role" v-if="hasCrewRole()">{{ $vcaI18n.t('label.asp') }}</span>
+    </td>
     <td class="email noPhone">{{ user.profiles[0].email }}</td>
     <td class="mobilePhone noPhone">{{ user.profiles[0].supporter.mobilePhone }}</td>
     <td class="age noPhone noTablet">{{ getAge() }}</td>
@@ -54,6 +62,26 @@
         },
         callLink: function () {
           this.$refs.profileLink.click()
+        },
+        getCrewRole: function () {
+          var crew = this.user.profiles[0].supporter.crew
+          var res = null
+          if((typeof crew !== "undefined") && crew !== null && crew.hasOwnProperty("name")) {
+            var role = this.user.profiles[0].supporter.roles.find(function (role) {
+              var result = false
+              if (role.hasOwnProperty("crew")) {
+                result = role.crew.name === crew.name
+              }
+              return result
+            })
+            if (typeof role !== "undefined" && role !== null) {
+              res = role
+            }
+          }
+          return res
+        },
+        hasCrewRole: function () {
+          return this.getCrewRole() !== null
         }
       }
     }
@@ -62,6 +90,8 @@
 <style scoped lang="less">
   @import "./assets/general.less";
   @import "./assets/responsive.less";
+
+  @padding: 0.3em;
 
   .rowWrapper {
     height: 2em;
@@ -85,6 +115,14 @@
       .colorProfilePrimary();
       font-weight: bold;
     }
+  }
+
+  .role {
+    .colorProfileThirdly();
+    padding: @padding;
+    font-size: 0.7em;
+    border-radius: 0.5em;
+    margin: 0.2em;
   }
 
   .image {

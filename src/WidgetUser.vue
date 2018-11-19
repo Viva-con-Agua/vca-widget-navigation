@@ -1,12 +1,17 @@
 <template>
-  <div v-if="this.empty()" :class="type" class="card user">
-    <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></Avatar>
-    <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></InfoField>
+  <div class="user-role-wrapper" :class="rolesExist() ? type + ' roles' : type + ' noRoles'">
+    <div v-if="this.empty()" :class="type" class="card user">
+      <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></Avatar>
+      <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></InfoField>
+    </div>
+    <a v-else :class="type" class="card user" v-bind:href="getURL()">
+      <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></Avatar>
+      <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></InfoField>
+    </a>
+    <div v-if="type !== 'small'" class="roles" :class="rolesExist() ? 'exists' : 'empty'">
+      {{ getRoles().map((role) => $vcaI18n.t('value.roles.' + role.role)).join(", ") }}
+    </div>
   </div>
-  <a v-else :class="type" class="card user" v-bind:href="getURL()">
-    <Avatar v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></Avatar>
-    <InfoField v-bind:error-code="errorState" v-bind:user="userData" v-bind:type="type"></InfoField>
-  </a>
 </template>
 
 <script>
@@ -65,6 +70,12 @@
           result = '/arise/#/profile/' + this.userData.id
         }
         return result
+      },
+      getRoles: function () {
+        return this.userData.roles.filter((role) => role.role !== "supporter")
+      },
+      rolesExist: function () {
+        return this.getRoles().length > 0
       }
     }
   }
@@ -82,6 +93,32 @@
 
   #heights() {
     small: 2em;
+  }
+
+  .user-role-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    .roles {
+      height: 1.2em;
+      line-height: 1.2em;
+      font-size: 0.7em;
+      text-align: center;
+
+      &.exists {
+        background-color: #colors[thirdly];
+        color: #colors[secundary];
+      }
+    }
+    &.medium.roles, &.large.roles {
+      .button();
+    }
+
+    &.noRoles {
+      .card.medium, .card.large {
+        .button();
+      }
+    }
   }
 
   .card {
@@ -102,7 +139,6 @@
 
     &.medium {
       text-align: center;
-      .button();
       width: #sizes[medium];
       flex-direction: row;
 
@@ -117,7 +153,6 @@
 
     &.large {
       text-align: center;
-      .button();
       flex-direction: column;
       width: #sizes[large];
 

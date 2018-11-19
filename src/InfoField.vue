@@ -25,7 +25,9 @@
       </div>
       <div class="vca details-column">
         <span v-if="type !== 'small'" class="since">{{ $vcaI18n.t('label.since') + $vcaI18n.t('label.separator') + getSince() }}</span>
-        <span v-if="type !== 'small' && showCrew()" class="crew">{{ user.profiles[0].supporter.crew }}</span>
+        <span v-if="type !== 'small' && showCrew()" class="crew" :class="hasCrewRole() ? 'asp' : ''">
+          <span>{{ getCrew() }}</span>
+        </span>
         <span v-else-if="type !== 'small'" class="crew">{{ $vcaI18n.t('fallback.noCrew') }}</span>
       </div>
     </div>
@@ -67,6 +69,35 @@
       getSince: function () {
         var created = new Date(this.user.created)
         return created.getUTCFullYear()
+      },
+      getCrew: function () {
+        var crew = this.user.profiles[0].supporter.crew
+        var role = this.getCrewRole()
+        var res = crew.name
+        if(role !== null) {
+          res = this.$vcaI18n.t('label.aspOfCrew', { 'crewName': res })
+        }
+        return res;
+      },
+      getCrewRole: function () {
+        var crew = this.user.profiles[0].supporter.crew
+        var res = null
+        if((typeof crew !== "undefined") && crew !== null && crew.hasOwnProperty("name")) {
+          var role = this.user.profiles[0].supporter.roles.find(function (role) {
+            var result = false
+            if (role.hasOwnProperty("crew")) {
+              result = role.crew.name === crew.name
+            }
+            return result
+          })
+          if (typeof role !== "undefined" && role !== null) {
+            res = role
+          }
+        }
+        return res
+      },
+      hasCrewRole: function () {
+        return this.getCrewRole() !== null
       }
     }
   }
@@ -149,6 +180,28 @@
       span {
         font-style: italic;
         font-size: #fontSizes[details];
+        padding: 0.1em;
+      }
+
+      &.vca span {
+        padding-right: @padding;
+      }
+
+      .crew {
+
+        span {
+          font-size: 1em;
+        }
+
+        &.asp {
+          .colorProfileThirdly();
+          // background: linear-gradient(-60deg, #colors[thirdly] 30%, #colors[secundary] 70%);
+          padding-right: 0;
+          border-radius: 0.4em 0em 0em 0.4em;
+          span {
+            padding-right: @padding;
+          }
+        }
       }
     }
 
@@ -160,6 +213,7 @@
         flex-direction: row;
         justify-content: flex-start;
         height: #fontSizes[details];
+        padding: 0.1em;
 
         div {
           height: #fontSizes[details];
@@ -192,7 +246,9 @@
     }
 
     &.large .details, &.medium .details {
-      padding: @padding;
+      padding-top: @padding;
+      padding-left: @padding;
+      padding-bottom: @padding;
     }
   }
 </style>

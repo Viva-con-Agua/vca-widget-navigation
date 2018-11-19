@@ -26,7 +26,7 @@
     align-content: flex-start;
   }
 
-  .users-list >>> .user.card {
+  .users-list >>> .user-role-wrapper {
     margin: 0.5em;
   }
 </style>
