@@ -1,0 +1,47 @@
+<template>
+  <div class="footer-container vca-shadow-inverted">
+    <div class="footer-row">
+      <div class="footer-left">
+        <p class="screen-talign-left">
+          <a :title="$vcaI18n.t('nav.labels.footer.termsOfUse.description')" href="/pool/nutzungsbedingungen/">
+            {{ $vcaI18n.t('nav.labels.footer.termsOfUse.label') }}
+          </a>
+          <span class="footer-link">&nbsp;|&nbsp;</span>
+          <a :title="$vcaI18n.t('nav.labels.footer.privacyStatement.description')" href="/pool/datenschutzerklaerung/">
+            {{ $vcaI18n.t('nav.labels.footer.privacyStatement.label') }}
+          </a>
+          <span class="footer-link">&nbsp;|&nbsp;</span>
+          <a :title="$vcaI18n.t('nav.labels.footer.imprint.description')" href="/drops/impressum">
+            {{ $vcaI18n.t('nav.labels.footer.imprint.label') }}
+          </a>
+        </p>
+      </div>
+      <div class="footer-right">
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'BottomNavigation'
+  }
+</script>
+
+<style scoped lang="less">
+  @import "./assets/general.less";
+
+  .footer-container {
+    .colorProfilePrimary();
+    width: 100%;
+    margin-top: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 1em 0;
+
+    a {
+      color: #colors[secundary]
+    }
+  }
+</style>

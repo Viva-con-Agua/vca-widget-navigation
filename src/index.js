@@ -1,5 +1,5 @@
-import WidgetUser from './WidgetUser.vue'
-import WidgetUserList from './WidgetUserList.vue'
+import WidgetTopNavigation from './TopNavigation.vue'
+import WidgetBottomNavigation from './BottomNavigation.vue'
 import VueI18n from 'vue-i18n'
 import en from './lang/en.json'
 import de from './lang/de.json'
@@ -28,39 +28,27 @@ function getLang(Vue, options) {
   return Vue
 }
 
-WidgetUser.install = function (Vue, options) {
+WidgetTopNavigation.install = function (Vue, options) {
   Vue = getLang(Vue, options)
-
-  if (options != null && typeof options === 'object' && options.hasOwnProperty('uuid')) {
-    Vue.prototype.$widgetUserDefaultUUID = options.uuid
-  } else {
-    Vue.prototype.$widgetUserDefaultUUID = null
-  }
-  if (options != null && typeof options === 'object' && options.hasOwnProperty('type')) {
-    Vue.prototype.$widgetUserDefaultType = options.type
-  } else {
-    Vue.prototype.$widgetUserDefaultType = null
-  }
-  Vue.component('widget-user', WidgetUser)
+  Vue.component('widget-top-navigation', WidgetTopNavigation)
 }
 
-WidgetUserList.install = function (Vue, options) {
+WidgetBottomNavigation.install = function (Vue, options) {
   Vue = getLang(Vue, options)
-  Vue.use(WidgetUser, options)
-  Vue.component('widget-user-list', WidgetUserList)
+  Vue.component('widget-bottom-navigation', WidgetBottomNavigation)
 }
 
 // Install by default if using the script tag
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(WidgetUser)
-  window.Vue.use(WidgetUserList)
+  window.Vue.use(WidgetTopNavigation)
+  window.Vue.use(WidgetBottomNavigation)
 }
 
-export default WidgetUserList
+export default WidgetTopNavigation
 const version = '__VERSION__'
 // Export all components too
 export {
-  WidgetUser,
-  WidgetUserList,
+  WidgetTopNavigation,
+  WidgetBottomNavigation,
   version
 }

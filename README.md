@@ -1,25 +1,23 @@
-# WidgetUser
+# WidgetNavigation
 
-[![npm](https://img.shields.io/npm/v/vca-widget-user.svg)](https://www.npmjs.com/package/vca-widget-user) [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
+[![npm](https://img.shields.io/npm/v/vca-widget-navigation.svg)](https://www.npmjs.com/package/vca-widget-navigation) [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
-> Implements different visualizations for a user.
+> Implements a widget showing the menu of the Pool².
 
 ## Preconditions
-Using this package requires a running version of [Drops](https://github.com/Viva-con-Agua/drops), that has already 
-implemented [issue #225](https://github.com/Viva-con-Agua/drops/issues/225). Additionally, the web server has to use the 
-same domain and the same port to take requests for [Drops](https://github.com/Viva-con-Agua/drops) (using the path prefix 
-`/drops/`) and the front end application you want to use this plugin for.
+Todo
 
 ## Installation
 
 ```bash
-npm install --save vca-widget-user
+npm install --save vca-widget-navigation
 ```
 
 ## Usage
 
 ### Bundler (Webpack, Rollup)
 
+TODO
 ```js
 import Vue from 'vue'
 import WidgetUserList from 'vca-widget-user'

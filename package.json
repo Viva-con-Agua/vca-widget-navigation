@@ -1,13 +1,13 @@
 {
-  "name": "vca-widget-user",
-  "version": "0.3.6",
-  "description": "Implements different visualizations for a user.",
+  "name": "vca-widget-navigation",
+  "version": "0.0.0",
+  "description": "Implements a widget showing the menu of the Pool².",
   "author": "Johann Sell",
-  "main": "dist/vca-widget-user.common.js",
-  "module": "dist/vca-widget-user.esm.js",
-  "browser": "dist/vca-widget-user.js",
-  "unpkg": "dist/vca-widget-user.js",
-  "style": "dist/vca-widget-user.css",
+  "main": "dist/vca-widget-navigation.common.js",
+  "module": "dist/vca-widget-navigation.esm.js",
+  "browser": "dist/vca-widget-navigation.js",
+  "unpkg": "dist/vca-widget-navigation.js",
+  "style": "dist/vca-widget-navigation.css",
   "files": [
     "dist",
     "src"
@@ -99,14 +99,8 @@
     "yarn-or-npm": "^2.0.0"
   },
   "peerDependencies": {
-    "ajv": "^6.5.4",
     "axios": "^0.18.0",
-    "deepmerge": "^2.2.1",
-    "v-tooltip": "^2.0.0-rc.33",
-    "vue-i18n": "^8.1.0",
-    "vue-select": "^2.5.1",
-    "vue2-scrollbar": "0.0.3",
-    "xdate": "^0.8.2"
+    "vue-i18n": "^8.1.0"
   },
   "dllPlugin": {
     "name": "vuePluginTemplateDeps",
@@ -127,12 +121,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Viva-con-Agua/vca-widget-user"
+    "url": "git+https://github.com/Viva-con-Agua/vca-widget-navigation"
   },
   "bugs": {
-    "url": "https://github.com/Viva-con-Agua/vca-widget-user/issues"
+    "url": "https://github.com/Viva-con-Agua/vca-widget-navigation/issues"
   },
-  "homepage": "https://github.com/Viva-con-Agua/vca-widget-user#readme",
+  "homepage": "https://github.com/Viva-con-Agua/vca-widget-navigation#readme",
   "license": {
     "type": "MIT",
     "url": "http://www.opensource.org/licenses/mit-license.php"

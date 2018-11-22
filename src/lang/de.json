@@ -1,90 +1,33 @@
 {
+  "header": {
+    "applicationName": "Pool",
+    "organizationName": "Viva con Agua"
+  },
+  "nav": {
+    "labels": {
+      "screenreader": {
+        "toggle": "Ein Button zum Ausklappen des Menüs."
+      },
+      "footer": {
+        "termsOfUse": {
+          "label": "Nutzungsbedingungen",
+          "description": "Die Nutzungsbedingungen lesen"
+        },
+        "privacyStatement": {
+          "label": "Datenschutzerklärung",
+          "description": "Die Datenschutzerklärung lesen"
+        },
+        "imprint": {
+          "label": "Impressum",
+          "description": "Zum Impressum"
+        }
+      }
+    }
+  },
   "error": {
     "notFound": "Nichts gefunden",
     "notAuthenticated": "Nicht eingeloggt",
     "forbidden": "Keine Berechtigung",
     "unknown": "Ein unbekannter Fehler ist aufgetreten"
-  },
-  "value": {
-    "gender": {
-      "male": "Mann",
-      "female": "Frau",
-      "notDefined": "Nicht angegeben"
-    },
-    "roles": {
-      "admin": "Admin",
-      "employee": "Hauptamt"
-    }
-  },
-  "label": {
-    "separator": ": ",
-    "age": "Alter",
-    "since": "Dabei seit",
-    "asp": "ASP",
-    "aspOfCrew": "ASP {crewName}",
-    "sorting": {
-      "dirButton" : {
-        "ASC": "Klicken für absteigende Sortierung",
-        "DESC": "Klicken für aufsteigende Sortierung"
-      },
-      "fields": {
-        "firstName" : "Vorname",
-        "lastName" : "Nachname",
-        "email" : "Email",
-        "since" : "Dabei seit",
-        "residence" : "Wohnort",
-        "mobile" : "Handynummer",
-        "age" : "Alter",
-        "gender" : "Geschlecht"
-      }
-    },
-    "typeSelection": {
-      "large": "Große Widgets",
-      "medium": "Kleine Widgets",
-      "small": "Tags",
-      "table": "Tabelle"
-    },
-    "pagination": {
-      "button": {
-        "previous": "Keine vorherigen Supporter | Ersten Supporter | Vorherige %{number} Supporter",
-        "next": "Keine nächsten Supporter | Letzten Supporter | Nächste %{number} Supporter"
-      }
-    },
-    "table" : {
-      "avatar": "Avatar",
-      "name": "Name",
-      "since": "Dabei seit",
-      "crew": "Crew",
-      "email": "Email",
-      "mobile": "Handynummer",
-      "age": "Alter",
-      "gender": "Geschlecht"
-    },
-    "placeholder": {
-      "search": "Suche..."
-    },
-    "search": {
-      "Supporter_firstName": "Vorname",
-      "Supporter_lastName": "Nachname",
-      "Profile_email": "Email",
-      "User_created": "Dabei seid",
-      "Supporter_placeOfResidence": "Wohnort",
-      "Supporter_mobilePhone": "Handynummer",
-      "Supporter_birthday": "Geburtstag",
-      "Supporter_sex": "Geschlecht",
-      "Supporter_Crew_name": "Crew",
-      "User_roles": "Mitarbeiter?",
-      "Supporter_Crew_role": "Crew-ASP?",
-      "Supporter_Crew_pillar": "Bereich",
-      "remove": {
-        "tag": "Entferne diese Suchbedingung"
-      },
-      "button": {
-        "and": "Weitere Bedingung hinzufügen"
-      }
-    }
-  },
-  "fallback": {
-    "noCrew": "Keine Crew"
   }
 }
