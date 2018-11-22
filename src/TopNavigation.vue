@@ -19,10 +19,10 @@
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
           <li v-for="entry in entrys" :key="entry.id" class="vca-button-primary">
-            <a v-bind:href="entry.url">{{ entry.lable }}</a>
+            <a v-bind:href="entry.url">{{ $vcaI18n.t('nav.labels.header.' + entry.lable) }}</a>
             <ul class="nav-sub">
               <li v-for="node in entry.entrys" :key="node.id">
-                <a v-bind:href="node.url">{{ node.lable}}</a>
+                <a v-bind:href="node.url">{{ $vcaI18n.t('nav.labels.header.' + node.lable) }}</a>
               </li>
             </ul>
 
@@ -146,10 +146,23 @@
         .nav-sub {
           display: none;
           position: absolute;
-          background-color: #f1f1f1;
+          background-color: lighten(#colors[primary], 20%);
           min-width: 160px;
           box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
           z-index: 1;
+          list-style: none;
+          padding: 0;
+
+          li {
+            padding: 0.5em;
+            &:hover {
+              background-color: #colors[thirdlyHover];
+            }
+            a {
+              text-decoration: none;
+              color: #colors[secundary];
+            }
+          }
         }
 
         @media @tablet-down {
@@ -166,7 +179,7 @@
         }
 
       }
-      .nav:hover .nav-sub {
+      .nav li:hover .nav-sub {
         display: block;
       }
     }
