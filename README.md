@@ -17,36 +17,40 @@ npm install --save vca-widget-navigation
 
 ### Bundler (Webpack, Rollup)
 
-TODO
+Add the following to the component that uses the navigation:
 ```js
-import Vue from 'vue'
-import WidgetUserList from 'vca-widget-user'
-// You need a specific loader for CSS files like https://github.com/webpack/css-loader
-import 'vca-widget-user/dist/vca-widget-user.css'
-
-Vue.use(WidgetUserList)
-
+import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation';
 export default {
-  name: 'App',
-  components: { WidgetUserList },
-  data () {
-    return { options: {
-      'type': { 'menue': true, 'value': 'table' },
-      'sorting': { 'menue': { 'field': 'Supporter_firstName', 'dir': 'ASC' } },
-      'lang': 'de'
-    } }
-  }
+  name: 'App', // use the name of your component
+  components: { WidgetTopNavigation, WidgetBottomNavigation }
 }
-
 ```
 
 Inside your template:
 ```xml
 <template>
   <div id="app">
-    <WidgetUserList :options="options" />
-  </div>
+      <WidgetTopNavigation />
+      <div id="content">
+        <router-view/>
+      </div>
+      <WidgetBottomNavigation />
+    </div>
 </template>
+```
+
+Some additional CSS:
+```css
+  #app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  #content {
+    flex-grow: 1;
+    display: flex;
+    overflow: auto;
+  }
 ```
 
 #### Existing internationalization
@@ -57,7 +61,7 @@ yours. You can do this in your `main.js` before you instantiate your Vue App.
 import Vue from 'vue';
 ...
 import VueI18n from 'vue-i18n';
-import WidgetUserList from 'vca-widget-user' // use `WidgetUser` if you don't need a list of users
+import { WidgetTopNavigation, WidgetBottomNavigation } from 'vca-widget-navigation' 
 
 Vue.use(VueI18n);
 
@@ -71,18 +75,19 @@ const i18n = new VueI18n({
 });
 
 // the most important line of code here
-Vue.use(WidgetUserList, { 'i18n': i18n })
+Vue.use(WidgetTopNavigation, { 'i18n': i18n })
+Vue.use(WidgetBottomNavigation, { 'i18n': i18n })
 
 /* eslint-disable no-new */
 
 new Vue({
   ...
   i18n,
-  components: { WidgetUserList },
+  components: { WidgetTopNavigation, WidgetBottomNavigation },
   ...
 }).$mount('#app');
 ```
-Afterwards, you don't have to use `Vue.use(WidgetUserList)` in your components again.
+Afterwards, you don't have to use `Vue.use(WidgetTopNavigation)` or `Vue.use(WidgetBottomNavigation)` in your components again.
 
 ### Browser
 
