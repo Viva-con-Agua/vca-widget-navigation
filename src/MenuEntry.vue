@@ -78,6 +78,10 @@
 
   .vca-button-primary {
     margin-right: 0.5em;
+    @media @tablet-down {
+      margin-right: 0;
+      padding-bottom: 0;
+    }
 
     /**
      * Override default bootstrap style

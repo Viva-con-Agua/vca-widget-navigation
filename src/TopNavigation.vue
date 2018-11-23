@@ -111,7 +111,7 @@
         border-color: #colors[secundary];
 
         &:focus, &:hover {
-          background-color: darken(#colors[primary], 20%);
+          background-color: lighten(#colors[primary], 20%);
         }
 
         .icon-bar {
@@ -138,6 +138,10 @@
       padding: 0px;
       display: flex;
       flex-direction: row;
+
+      @media @tablet-down {
+        margin-left: 0.5em;
+      }
 
       div {
         display: flex;
