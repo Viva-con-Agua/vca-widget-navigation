@@ -1,0 +1,165 @@
+<template>
+  <li :class="getClasses()">
+    <a v-bind:href="getURL()" @click="handleClick">{{ $vcaI18n.t('nav.labels.header.' + getLabel()) }}</a>
+    <ul class="nav-sub">
+      <MenuEntry v-for="sub in entry.entrys" :key="sub.id" :entry="sub" type="menu-entry" :layer="layer + 1" />
+    </ul>
+  </li>
+</template>
+
+<script>
+    export default {
+      name: "MenuEntry",
+      props: {
+        'entry': {
+          'type': Object,
+          'required': true
+        },
+        'type': {
+          'type': String,
+          'required': true
+        },
+        'layer': {
+          'type': Number,
+          'required': false
+        }
+      },
+      methods: {
+        getURL: function () {
+          return !this.hasSubMenu() ? this.entry.url : '#'
+        },
+        getLabel: function () {
+          return this.entry.lable
+        },
+        getSubMenuClass: function () {
+          return this.hasSubMenu() ? 'hasSub' : ''
+        },
+        getTypeClass: function () {
+          return this.type === 'button' ?  'vca-button-primary' : 'menu-entry'
+        },
+        getLayerClass: function () {
+          return this.layer === 1 ? 'first-layer' : (this.layer === 2 ? 'second-layer' : '')
+        },
+        getClasses: function () {
+          return [this.getSubMenuClass(), this.getTypeClass(), this.getLayerClass()].filter((className) => className !== '').join(" ")
+        },
+        hasSubMenu: function () {
+          return this.entry.hasOwnProperty('entrys') && this.entry.entrys.length > 0
+        },
+        foldOut: function (event) {
+          event.preventDefault()
+          if(event.target.parentElement.classList.contains('folded')) {
+            event.target.parentElement.classList.remove('folded')
+          } else {
+            event.target.parentElement.classList.add('folded')
+          }
+        },
+        clickLink: function (event) {
+          event.target.click()
+        },
+        handleClick: function (event) {
+          if(this.hasSubMenu()) {
+            this.foldOut(event)
+          } else {
+            this.clickLink(event)
+          }
+        }
+      }
+    }
+</script>
+
+<style scoped lang="less">
+  @import "./assets/general.less";
+  @import "./assets/responsive.less";
+
+  a {
+    color: #colors[secundary] ! important;
+  }
+
+  .vca-button-primary {
+    margin-right: 0.5em;
+
+    /**
+     * Override default bootstrap style
+     */
+    & > a {
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+    }
+    &.hasSub:hover, &.hasSub.folded {
+      background-color: lighten(#colors[primary], 10%);
+    }
+  }
+
+  .menu-entry {
+
+    & > a {
+      padding: 0.5em 1em;
+      display: block;
+      text-decoration: none;
+      color: #colors[secundary];
+    }
+
+    &.first-layer {
+      background-color: lighten(#colors[primary], 20%);
+      &:hover {
+        background-color: #colors[thirdlyHover];
+      }
+      &.hasSub:hover, &.hasSub.folded {
+        background-color: lighten(#colors[thirdlyHover], 10%);
+      }
+    }
+
+    &.second-layer {
+      background-color: #colors[thirdlyHover];
+      &:hover {
+        background-color: #colors[thirdlyNoAlpha];
+      }
+      &.hasSub:hover, &.hasSub.folded {
+        background-color: lighten(#colors[thirdlyNoAlpha], 10%);
+      }
+    }
+  }
+
+  @media @tablet-down {
+    li {
+      box-shadow: none;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+      margin-right: 0;
+    }
+  }
+
+  .vca-button-primary > .nav-sub {
+    position: absolute;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+
+    @media @tablet-down {
+      position: static;
+      box-shadow: none;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+      z-index: auto;
+    }
+  }
+  .nav-sub {
+    /*visibility: hidden;*/
+    /*opacity: 0;*/
+    /*max-height: 0;*/
+    /*transition: visibility 0.3s, opacity 0.3s linear, max-height 0.3s ease-out;*/
+    /*overflow: hidden;*/
+    display: none;
+    background-color: lighten(#colors[primary], 20%);
+    min-width: 160px;
+    list-style: none;
+    padding: 0;
+  }
+  .hasSub:hover > .nav-sub, .hasSub.folded > .nav-sub {
+    /*max-height: 2000px;*/
+    /*transition: max-height 0.3s ease-in;*/
+    /*visibility: visible;*/
+    /*opacity: 1;*/
+    display: block;
+  }
+</style>

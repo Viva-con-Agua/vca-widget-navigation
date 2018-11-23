@@ -18,20 +18,7 @@
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
-          <li v-for="entry in entrys" :key="entry.id" class="vca-button-primary" :class="hasSubMenu(entry) ? 'hasSub' : ''">
-            <a v-bind:href="getUrl(entry)" @click="handleClick(entry, $event)">{{ $vcaI18n.t('nav.labels.header.' + entry.lable) }}</a>
-            <ul class="nav-sub">
-              <li v-for="node in entry.entrys" :key="node.id" :class="hasSubMenu(node) ? 'hasSub' : ''">
-                <a v-bind:href="node.url" @click="handleClick(node, $event)">{{ $vcaI18n.t('nav.labels.header.' + node.lable) }}</a>
-                <ul class="nav-sub">
-                  <li v-for="subNode in node.entrys" :key="subNode.id">
-                    <a v-bind:href="subNode.url">{{ $vcaI18n.t('nav.labels.header.' + subNode.lable) }}</a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-
-          </li>
+          <MenuEntry v-for="entry in entrys" :key="entry.id" :entry="entry" type="button" :layer="0" />
         </ul>
         <ul v-if="errors && errors.length">
           <li v-for="error of errors" :key="error.id">
@@ -45,9 +32,11 @@
 
 <script>
   import axios from 'axios'
+  import MenuEntry from './MenuEntry'
 
   export default {
     name: 'TopNavigation',
+    components: { MenuEntry },
     data () {
       return {
         entrys: [],
@@ -90,35 +79,6 @@
             })
           }
         })
-      },
-      foldOut: function (event) {
-        console.log("Fold Out function")
-        event.preventDefault()
-        if(event.target.parentElement.classList.contains('folded')) {
-          event.target.parentElement.classList.remove('folded')
-        } else {
-          event.target.parentElement.classList.add('folded')
-        }
-      },
-      clickLink: function (event) {
-        console.log("Click function")
-        event.target.click()
-      },
-      hasSubMenu: function (entry) {
-        return entry.hasOwnProperty('entrys') && entry.entrys.length > 0
-      },
-      handleClick: function (entry, event) {
-        console.log(entry)
-        console.log(event.target)
-        console.log("Has sub menu? " + this.hasSubMenu(entry))
-        if(this.hasSubMenu(entry)) {
-          this.foldOut(event)
-        } else {
-          this.clickLink(event)
-        }
-      },
-      getUrl: function (entry) {
-        return !this.hasSubMenu(entry) ? entry.url : '#'
       }
     },
     mounted () {
@@ -165,87 +125,11 @@
       border: 0;
 
       .nav {
-
-        & > li {
-          margin-right: 0.5em;
-
-          /**
-           * Override default bootstrap style
-           */
-          & > a {
-            color: #colors[secundary];
-            padding-top: 0.5em;
-            padding-bottom: 0.5em;
-          }
-        }
-        .nav-sub {
-          display: none;
-          position: absolute;
-          background-color: lighten(#colors[primary], 20%);
-          min-width: 160px;
-          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-          z-index: 1;
-          list-style: none;
-          padding: 0;
-
-          li {
-            padding: 0.5em;
-            &:hover {
-              background-color: #colors[thirdlyHover];
-            }
-            a {
-              text-decoration: none;
-              color: #colors[secundary];
-              padding: 0;
-            }
-          }
-        }
-
         @media @tablet-down {
           margin-top: 0px;
           margin-bottom: 0px;
           padding-top: 0.5em;
-
-          li {
-            box-shadow: none;
-            -moz-box-shadow: none;
-            -webkit-box-shadow: none;
-            margin-right: 0;
-          }
-
-          .nav-sub {
-            position: static;
-            box-shadow: none;
-            -moz-box-shadow: none;
-            -webkit-box-shadow: none;
-            z-index: auto;
-          }
         }
-
-      }
-
-      .hasSub:hover > .nav-sub, .hasSub.folded > .nav-sub {
-        display: block;
-      }
-
-      .hasSub.folded {
-        background-color: lighten(#colors[primary], 20%);
-      }
-
-      .hasSub > .nav-sub .nav-sub {
-        background-color: #colors[thirdlyHover];
-        position: static;
-        box-shadow: none;
-        -moz-box-shadow: none;
-        -webkit-box-shadow: none;
-        z-index: auto;
-
-        li:hover, .hasSub.folded {
-          background-color: #colors[thirdlyNoAlpha];
-        }
-      }
-      .hasSub .hasSub.folded {
-        background-color: #colors[thirdlyHover];
       }
     }
 
