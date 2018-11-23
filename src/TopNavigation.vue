@@ -18,11 +18,16 @@
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
-          <li v-for="entry in entrys" :key="entry.id" class="vca-button-primary" @click.stop="handleClick(entry, $event)">
-            <a v-bind:href="getUrl(entry)">{{ $vcaI18n.t('nav.labels.header.' + entry.lable) }}</a>
+          <li v-for="entry in entrys" :key="entry.id" class="vca-button-primary" :class="hasSubMenu(entry) ? 'hasSub' : ''">
+            <a v-bind:href="getUrl(entry)" @click="handleClick(entry, $event)">{{ $vcaI18n.t('nav.labels.header.' + entry.lable) }}</a>
             <ul class="nav-sub">
-              <li v-for="node in entry.entrys" :key="node.id">
-                <a v-bind:href="node.url">{{ $vcaI18n.t('nav.labels.header.' + node.lable) }}</a>
+              <li v-for="node in entry.entrys" :key="node.id" :class="hasSubMenu(node) ? 'hasSub' : ''">
+                <a v-bind:href="node.url" @click="handleClick(node, $event)">{{ $vcaI18n.t('nav.labels.header.' + node.lable) }}</a>
+                <ul class="nav-sub">
+                  <li v-for="subNode in node.entrys" :key="subNode.id">
+                    <a v-bind:href="subNode.url">{{ $vcaI18n.t('nav.labels.header.' + subNode.lable) }}</a>
+                  </li>
+                </ul>
               </li>
             </ul>
 
@@ -87,6 +92,8 @@
         })
       },
       foldOut: function (event) {
+        console.log("Fold Out function")
+        event.preventDefault()
         if(event.target.parentElement.classList.contains('folded')) {
           event.target.parentElement.classList.remove('folded')
         } else {
@@ -94,13 +101,21 @@
         }
       },
       clickLink: function (event) {
+        console.log("Click function")
         event.target.click()
       },
       hasSubMenu: function (entry) {
         return entry.hasOwnProperty('entrys') && entry.entrys.length > 0
       },
       handleClick: function (entry, event) {
-        return this.hasSubMenu(entry) ? this.foldOut(event) : this.clickLink(event)
+        console.log(entry)
+        console.log(event.target)
+        console.log("Has sub menu? " + this.hasSubMenu(entry))
+        if(this.hasSubMenu(entry)) {
+          this.foldOut(event)
+        } else {
+          this.clickLink(event)
+        }
       },
       getUrl: function (entry) {
         return !this.hasSubMenu(entry) ? entry.url : '#'
@@ -208,11 +223,29 @@
         }
 
       }
-      .nav li:hover .nav-sub, .nav li.folded .nav-sub {
+
+      .hasSub:hover > .nav-sub, .hasSub.folded > .nav-sub {
         display: block;
       }
-      .nav li.folded {
+
+      .hasSub.folded {
         background-color: lighten(#colors[primary], 20%);
+      }
+
+      .hasSub > .nav-sub .nav-sub {
+        background-color: #colors[thirdlyHover];
+        position: static;
+        box-shadow: none;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        z-index: auto;
+
+        li:hover, .hasSub.folded {
+          background-color: #colors[thirdlyNoAlpha];
+        }
+      }
+      .hasSub .hasSub.folded {
+        background-color: #colors[thirdlyHover];
       }
     }
 
