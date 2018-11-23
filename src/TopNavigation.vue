@@ -18,8 +18,8 @@
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
-          <li v-for="entry in entrys" :key="entry.id" class="vca-button-primary">
-            <a v-bind:href="entry.url">{{ $vcaI18n.t('nav.labels.header.' + entry.lable) }}</a>
+          <li v-for="entry in entrys" :key="entry.id" class="vca-button-primary" @click.stop="handleClick(entry, $event)">
+            <a v-bind:href="getUrl(entry)">{{ $vcaI18n.t('nav.labels.header.' + entry.lable) }}</a>
             <ul class="nav-sub">
               <li v-for="node in entry.entrys" :key="node.id">
                 <a v-bind:href="node.url">{{ $vcaI18n.t('nav.labels.header.' + node.lable) }}</a>
@@ -56,8 +56,9 @@
       }
     },
     created () {
+      var that = this;
       window.onhashchange = function(e) {
-        this.getNavigation()
+        that.getNavigation()
       }
     },
     methods: {
@@ -84,6 +85,25 @@
             })
           }
         })
+      },
+      foldOut: function (event) {
+        if(event.target.parentElement.classList.contains('folded')) {
+          event.target.parentElement.classList.remove('folded')
+        } else {
+          event.target.parentElement.classList.add('folded')
+        }
+      },
+      clickLink: function (event) {
+        event.target.click()
+      },
+      hasSubMenu: function (entry) {
+        return entry.hasOwnProperty('entrys') && entry.entrys.length > 0
+      },
+      handleClick: function (entry, event) {
+        return this.hasSubMenu(entry) ? this.foldOut(event) : this.clickLink(event)
+      },
+      getUrl: function (entry) {
+        return !this.hasSubMenu(entry) ? entry.url : '#'
       }
     },
     mounted () {
@@ -148,7 +168,7 @@
           position: absolute;
           background-color: lighten(#colors[primary], 20%);
           min-width: 160px;
-          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
           z-index: 1;
           list-style: none;
           padding: 0;
@@ -161,6 +181,7 @@
             a {
               text-decoration: none;
               color: #colors[secundary];
+              padding: 0;
             }
           }
         }
@@ -176,34 +197,45 @@
             -webkit-box-shadow: none;
             margin-right: 0;
           }
+
+          .nav-sub {
+            position: static;
+            box-shadow: none;
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+            z-index: auto;
+          }
         }
 
       }
-      .nav li:hover .nav-sub {
+      .nav li:hover .nav-sub, .nav li.folded .nav-sub {
         display: block;
       }
-    }
-  }
-
-  .navbar-brand {
-    margin: 0 0.5em 0 0;
-    padding: 0px;
-    display: flex;
-    flex-direction: row;
-
-    div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-
-      span.bold {
-        font-size: 1.6em;
+      .nav li.folded {
+        background-color: lighten(#colors[primary], 20%);
       }
     }
 
-    img {
-      margin-right: 0.5em;
-      font-size: 0.6em;
+    .navbar-brand {
+      margin: 0 0.5em 0 0;
+      padding: 0px;
+      display: flex;
+      flex-direction: row;
+
+      div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        span.bold {
+          font-size: 1.6em;
+        }
+      }
+
+      img {
+        margin-right: 0.5em;
+        font-size: 0.6em;
+      }
     }
   }
 </style>
