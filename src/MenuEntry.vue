@@ -2,7 +2,7 @@
   <li :class="getClasses()">
     <a v-bind:href="getURL()" @click="handleClick">{{ $vcaI18n.t('nav.labels.header.' + getLabel()) }}</a>
     <ul class="nav-sub">
-      <MenuEntry v-for="sub in entry.entrys" :key="sub.id" :entry="sub" type="menu-entry" :layer="layer + 1" />
+      <MenuEntry v-for="sub in getSubs()" :key="sub.id" :entry="sub" type="menu-entry" :layer="layer + 1" />
     </ul>
   </li>
 </template>
@@ -42,6 +42,13 @@
         },
         getClasses: function () {
           return [this.getSubMenuClass(), this.getTypeClass(), this.getLayerClass()].filter((className) => className !== '').join(" ")
+        },
+        getSubs: function () {
+          var res = []
+          if(this.entry.hasOwnProperty("entrys")) {
+            res = this.entry.entrys.filter((e) => e.hasOwnProperty('hasAccess') && e.hasAccess)
+          }
+          return res
         },
         hasSubMenu: function () {
           return this.entry.hasOwnProperty('entrys') && this.entry.entrys.length > 0

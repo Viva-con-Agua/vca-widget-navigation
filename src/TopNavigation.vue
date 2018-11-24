@@ -18,7 +18,7 @@
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
-          <MenuEntry v-for="entry in entrys" :key="entry.id" :entry="entry" type="button" :layer="0" />
+          <MenuEntry v-for="entry in getEntries()" :key="entry.id" :entry="entry" type="button" :layer="0" :roles="currentUserRoles" />
         </ul>
         <ul v-if="errors && errors.length">
           <li v-for="error of errors" :key="error.id">
@@ -39,9 +39,10 @@
     components: { MenuEntry },
     data () {
       return {
-        entrys: [],
-        errors: [],
-        location: ''
+        'entrys': [],
+        'errors': [],
+        'location': '',
+        'currentUserRoles': []
       }
     },
     watch: {
@@ -61,11 +62,19 @@
           name: 'new stuff'
         })
       },
+      getRoles: function(user) {
+        var roles = user.roles.map((role) => role.role)
+        this.currentUserRoles = roles.concat(
+          user.profiles.reduce((supporterRoles, profile) => supporterRoles.concat(profile.supporter.roles), [])
+        )
+      },
       getNavigation: function () {
-        axios.get('/drops/webapp/identity').then(response => {
+        axios.get('/drops/webapp/identity').then(response => { // /dispenser/identity
           if (response.status === 200) {
+            this.getRoles(response.data.additional_information)
             axios.get('/dispenser/navigation/get/id').then(r => {
               this.entrys = r.data
+              this.entrys = this.calcAccess(this.entrys)
             }).catch(e => {
               this.errors.push(e)
             })
@@ -74,10 +83,40 @@
           switch (error.response.status) {
             case 401: axios.get('/dispenser/navigation/get/default').then(response => {
               this.entrys = response.data
+              this.entrys = this.calcAccess(this.entrys)
             }).catch(e => {
               this.errors.push(e)
             })
           }
+        })
+      },
+      getEntries: function () {
+        return this.entrys.filter((e) => e.hasOwnProperty('hasAccess') && e.hasAccess)
+      },
+      hasAccess: function (entry) {
+        function compare(roleUser, roleRoute) {
+          function checkCrewName () {
+            return (!roleRoute.hasOwnProperty("crewNames") || (roleUser.hasOwnProperty("crew") && roleRoute.crewNames.some((crewName) => crewName === roleUser.crew.name)))
+          }
+          function checkPillar () {
+            return (!roleRoute.hasOwnProperty("pillars") || (roleUser.hasOwnProperty("pillar") && roleRoute.pillars.some((pillar) => pillar === roleUser.pillar.pillar)))
+          }
+          return ((typeof roleUser === "string") && roleUser === roleRoute.role && !roleRoute.hasOwnProperty("crewNames") && !roleRoute.hasOwnProperty("pillars")) ||
+            ((typeof roleUser === "object") && roleUser.name === roleRoute.role && checkCrewName() && checkPillar())
+        }
+        return entry.permission.reduce(
+          (access, roleRoute) => access || this.currentUserRoles.reduce((roleAccess, roleUser) => roleAccess || compare(roleUser, roleRoute), false),
+          false
+        )
+      },
+      calcAccess: function (entries) {
+        var that = this
+        return entries.map((entry) => {
+          entry['hasAccess'] = that.hasAccess(entry)
+          if(entry.hasOwnProperty("entrys")) {
+            entry.entrys = that.calcAccess(entry.entrys)
+          }
+          return entry
         })
       }
     },
