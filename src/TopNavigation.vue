@@ -104,7 +104,7 @@
           return ((typeof roleUser === "string") && roleUser === roleRoute.role && !roleRoute.hasOwnProperty("crewNames") && !roleRoute.hasOwnProperty("pillars")) ||
             ((typeof roleUser === "object") && roleUser.name === roleRoute.role && checkCrewName() && checkPillar())
         }
-        return entry.permission.reduce(
+        return !entry.hasOwnProperty('permission') || entry.permission.reduce(
           (access, roleRoute) => access || this.currentUserRoles.reduce((roleAccess, roleUser) => roleAccess || compare(roleUser, roleRoute), false),
           false
         )
