@@ -1,8 +1,7 @@
 <template>
   <div class="footer-container vca-shadow-inverted">
     <div class="footer-row">
-      <div class="footer-left">
-        <p class="screen-talign-left">
+      <p class="footer-center">
           <a :title="$vcaI18n.t('nav.labels.footer.termsOfUse.description')" href="/pool/nutzungsbedingungen/">
             {{ $vcaI18n.t('nav.labels.footer.termsOfUse.label') }}
           </a>
@@ -14,10 +13,7 @@
           <a :title="$vcaI18n.t('nav.labels.footer.imprint.description')" href="/drops/impressum">
             {{ $vcaI18n.t('nav.labels.footer.imprint.label') }}
           </a>
-        </p>
-      </div>
-      <div class="footer-right">
-      </div>
+      </p>
     </div>
   </div>
 </template>
@@ -42,6 +38,10 @@
 
     a {
       color: #colors[secundary]
+    }
+
+    .footer-center {
+      text-align: center;
     }
   }
 </style>
