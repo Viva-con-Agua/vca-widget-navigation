@@ -62,7 +62,8 @@
           }
         },
         clickLink: function (event) {
-          event.target.click()
+          var target = event.target || event.srcElement
+          target.click()
         },
         handleClick: function (event) {
           if(this.hasSubMenu()) {
