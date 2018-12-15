@@ -131,6 +131,10 @@
   @import "./assets/responsive.less";
   @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
 
+  .navbar {
+	min-height: 64px;
+  }
+  
   .navbar-vca {
     .colorProfilePrimary();
     border-radius: 0;
