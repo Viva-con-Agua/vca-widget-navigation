@@ -10,7 +10,7 @@
             {{ $vcaI18n.t('nav.labels.footer.privacyStatement.label') }}
           </a>
           <span class="footer-link">&nbsp;|&nbsp;</span>
-          <a :title="$vcaI18n.t('nav.labels.footer.imprint.description')" href="/drops/impressum">
+          <a :title="$vcaI18n.t('nav.labels.footer.imprint.description')" href="https://www.vivaconagua.org/impressum">
             {{ $vcaI18n.t('nav.labels.footer.imprint.label') }}
           </a>
       </p>
