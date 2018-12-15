@@ -167,11 +167,11 @@
     list-style: none;
     padding: 0;
   }
-  .hasSub:hover > .nav-sub, .hasSub.folded > .nav-sub {
+  .hasSub.folded > .nav-sub { /* .hasSub:hover > .nav-sub,*/
     /*max-height: 2000px;*/
     /*transition: max-height 0.3s ease-in;*/
     /*visibility: visible;*/
     /*opacity: 1;*/
-    /*display: block;*/
+    display: block;
   }
 </style>
