@@ -172,6 +172,6 @@
     /*transition: max-height 0.3s ease-in;*/
     /*visibility: visible;*/
     /*opacity: 1;*/
-    display: block;
+    /*display: block;*/
   }
 </style>
