@@ -1,6 +1,6 @@
 {
   "name": "vca-widget-navigation",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Implements a widget showing the menu of the Pool².",
   "author": "Johann Sell",
   "main": "dist/vca-widget-navigation.common.js",
