@@ -1,8 +1,8 @@
 <template>
-  <li :class="getClasses()">
+  <li :class="getClasses()" ref="menuEntry">
     <a v-bind:href="getURL()" @click="handleClick">{{ $vcaI18n.t('nav.labels.header.' + getLabel()) }}</a>
-    <ul class="nav-sub">
-      <MenuEntry v-for="sub in getSubs()" :key="sub.id" :entry="sub" type="menu-entry" :layer="layer + 1" />
+    <ul class="nav-sub" ref="subMenu">
+      <MenuEntry v-for="sub in getSubs()" :key="sub.id" :entry="sub" type="menu-entry" :layer="layer + 1" v-on:vca-close-sub="closeFolded" />
     </ul>
   </li>
 </template>
@@ -70,7 +70,14 @@
             this.foldOut(event)
           } else {
             this.clickLink(event)
+            this.closeFolded()
           }
+        },
+        closeFolded: function() {
+            this.$refs.menuEntry.classList.remove('folded')
+            if (this.layer > 0) {
+              this.$emit('vca-close-sub')
+            }
         }
       }
     }
