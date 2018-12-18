@@ -1,5 +1,5 @@
 <template>
-  <li :class="getClasses()" ref="menuEntry">
+  <li :class="getClasses()" ref="menuEntry" @mouseleave="closeFoldedOnLeave">
     <a v-bind:href="getURL()" @click="handleClick">{{ $vcaI18n.t('nav.labels.header.' + getLabel()) }}</a>
     <ul class="nav-sub" ref="subMenu">
       <MenuEntry v-for="sub in getSubs()" :key="sub.id" :entry="sub" type="menu-entry" :layer="layer + 1" v-on:vca-close-sub="closeFolded" />
@@ -78,6 +78,11 @@
             if (this.layer > 0) {
               this.$emit('vca-close-sub')
             }
+        },
+        closeFoldedOnLeave: function() {
+          if(this.layer === 0) {
+            this.$refs.menuEntry.classList.remove('folded')
+          }
         }
       }
     }
