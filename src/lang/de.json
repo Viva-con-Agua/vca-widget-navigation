@@ -63,7 +63,10 @@
         "poolFAQ": "Pool",
         "signOut": "Rausloggen",
         "signIn": "Reinloggen",
-        "signUp": "Mitmachen"
+        "signUp": "Mitmachen",
+        "household": "Haushalt",
+        "donations": "Spenden",
+        "wiki": "Wiki"
       }
     }
   },

@@ -63,7 +63,10 @@
         "poolFAQ": "Pool",
         "signOut": "Sign out",
         "signIn": "Sign in",
-        "signUp": "Sign up"
+        "signUp": "Sign up",
+        "household": "Household",
+        "donations": "Donations",
+        "wiki": "Wiki"
       }
     }
   },
