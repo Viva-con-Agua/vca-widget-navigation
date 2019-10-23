@@ -1,5 +1,5 @@
 <template>
-  <li :class="getClasses()" ref="menuEntry" @mouseleave="closeFoldedOnLeave">
+  <li :class="getClasses()" ref="menuEntry" @mouseleave="closeFoldedOnLeave" :style="getStyle()">
     <a v-bind:href="getURL()" @click="handleClick">{{ $vcaI18n.t('nav.labels.header.' + getLabel()) }}</a>
     <ul class="nav-sub" ref="subMenu">
       <MenuEntry v-for="sub in getSubs()" :key="sub.id" :entry="sub" type="menu-entry" :layer="layer + 1" v-on:vca-close-sub="closeFolded" />
@@ -25,6 +25,15 @@
         }
       },
       methods: {
+        getStyle: function() {
+          if (this.entry.hasOwnProperty('style')) {
+            console.log(this.entry)
+            return this.entry.style
+          } else {
+            console.log(this.entry)
+            return ""
+          } 
+        },
         getURL: function () {
           return !this.hasSubMenu() ? this.entry.url : '#'
         },
