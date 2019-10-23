@@ -4,8 +4,40 @@
 
 > Implements a widget showing the menu of the Pool².
 
-## Preconditions
-Todo
+## Widgets
+This package implements the following widgets. These widgets supporting a consistent navigation of Viva con Aguas Pool².
+Use it to integrate the main menu and the footer of the Pool².
+
+### Menu
+The menu implements basic HTML and a bit of CSS code to show the buttons of the main menu. During the initiation of it, 
+the widget requests the content of the menu by an ajax call to Dispenser. That means all buttons with labels and targets, 
+but also the structure of the menu are received from a database managed by Dispenser. Its designed to stay at the top 
+of the page.
+
+![](./src/images/menu.png)
+
+You can use it that way:
+```xml
+<WidgetTopNavigation />
+```
+*There are no parameters for this widget*<br />
+*There are no slots for this widget*
+
+> Attention! Please consider the additional CSS style needed to create the default Pool² layout (see [Usage](#usage)).
+
+### Footer
+The footer contains a menu with secundary priority. It is designed to be the bottom of the page. 
+
+![](./src/images/footer.png)
+
+You can use it that way:
+```xml
+<WidgetBottomNavigation />
+```
+*There are no parameters for this widget*<br />
+*There are no slots for this widget*
+
+> Attention! Please consider the additional CSS style needed to create the default Pool² layout (see [Usage](#usage)).
 
 ## Installation
 
@@ -39,7 +71,9 @@ Inside your template:
 </template>
 ```
 
-Some additional CSS:
+Attention! This is required to have the menu at the top and the footer at the bottom of the page. The conatiner of menu,
+footer and content has to displayed flexible and its content should be a column. The container of the content (in the 
+middle of menu and footer) has to grow:
 ```css
   #app {
     flex: 1;
@@ -51,6 +85,19 @@ Some additional CSS:
     display: flex;
     overflow: auto;
   }
+```
+
+### Browser
+
+```html
+<!-- Include after Vue -->
+<!-- Local files -->
+<link rel="stylesheet" href="widget-user/dist/widget-user.css"></link>
+<script src="vca-widget-user/dist/widget-user.js"></script>
+
+<!-- From CDN -->
+<link rel="stylesheet" href="https://unpkg.com/vca-widget-user/dist/widget-user.css"></link>
+<script src="https://unpkg.com/vca-widget-user"></script>
 ```
 
 #### Existing internationalization
@@ -89,32 +136,7 @@ new Vue({
 ```
 Afterwards, you don't have to use `Vue.use(WidgetTopNavigation)` or `Vue.use(WidgetBottomNavigation)` in your components again.
 
-### Browser
-
-```html
-<!-- Include after Vue -->
-<!-- Local files -->
-<link rel="stylesheet" href="widget-user/dist/widget-user.css"></link>
-<script src="vca-widget-user/dist/widget-user.js"></script>
-
-<!-- From CDN -->
-<link rel="stylesheet" href="https://unpkg.com/vca-widget-user/dist/widget-user.css"></link>
-<script src="https://unpkg.com/vca-widget-user"></script>
-```
-
 ## Development
-
-### Launch visual tests
-
-```bash
-npm run dev
-```
-
-### Launch Karma with coverage
-
-```bash
-npm run dev:coverage
-```
 
 ### Build
 
@@ -142,4 +164,4 @@ npm publish
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT) 
+[MIT](http://opensource.org/licenses/MIT)
