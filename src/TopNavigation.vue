@@ -42,7 +42,8 @@
         'entrys': [],
         'errors': [],
         'location': '',
-        'currentUserRoles': []
+        'currentUserRoles': [],
+        'locale': navigator.language
       }
     },
     watch: {
@@ -72,7 +73,8 @@
         axios.get('/drops/webapp/identity').then(response => { // /dispenser/identity
           if (response.status === 200) {
             this.getRoles(response.data.additional_information)
-            axios.get('/dispenser/navigation/get/id').then(r => {
+            var locale = this.getLocale()
+            axios.get('/dispenser/navigation/get/global' + locale).then(r => {
               this.entrys = r.data
               this.entrys = this.calcAccess(this.entrys)
             }).catch(e => {
@@ -81,17 +83,26 @@
           }
         }).catch(error => {
           switch (error.response.status) {
-            case 401: axios.get('/dispenser/navigation/get/default').then(response => {
-              this.entrys = response.data
-              this.entrys = this.calcAccess(this.entrys)
-            }).catch(e => {
-              this.errors.push(e)
+            case 401: 
+              var locale = this.getLocale()
+              axios.get('/dispenser/navigation/get/default' + locale).then(response => {
+                this.entrys = response.data
+                this.entrys = this.calcAccess(this.entrys)
+              }).catch(e => {
+                this.errors.push(e)
             })
           }
         })
       },
       getEntries: function () {
         return this.entrys.filter((e) => e.hasOwnProperty('hasAccess') && e.hasAccess)
+      },
+      getLocale: function () {
+        if (navigator.language === 'de-DE') {
+          return '/de'
+        } else {
+          return '/en'
+        }
       },
       hasAccess: function (entry) {
         function compare(roleUser, roleRoute) {
