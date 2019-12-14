@@ -33,6 +33,7 @@
     margin-top: 2em;
     display: flex;
     flex-direction: row;
+    flex-shrink: 0;
     justify-content: center;
     padding: 1em 0;
 

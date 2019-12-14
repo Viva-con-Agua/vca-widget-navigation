@@ -82,6 +82,7 @@ middle of menu and footer) has to grow:
   }
   #content {
     flex-grow: 1;
+    flex-shrink: 0;
     display: flex;
     overflow: auto;
   }
