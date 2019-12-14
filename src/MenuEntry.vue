@@ -27,10 +27,8 @@
       methods: {
         getStyle: function() {
           if (this.entry.hasOwnProperty('style')) {
-            console.log(this.entry)
             return this.entry.style
           } else {
-            console.log(this.entry)
             return ""
           } 
         },
