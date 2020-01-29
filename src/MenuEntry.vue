@@ -36,7 +36,11 @@
           return !this.hasSubMenu() ? this.entry.url : '#'
         },
         getLabel: function () {
-          return this.entry.lable
+          if (navigator.language === 'de-DE') {
+            return this.entry.label.de_DE
+          } else {
+            return this.entry.label.en_EN
+          }
         },
         getSubMenuClass: function () {
           return this.hasSubMenu() ? 'hasSub' : ''
