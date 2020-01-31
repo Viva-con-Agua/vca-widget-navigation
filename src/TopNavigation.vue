@@ -73,8 +73,7 @@
         axios.get('/drops/webapp/identity').then(response => { // /dispenser/identity
           if (response.status === 200) {
             this.getRoles(response.data.additional_information)
-            var locale = this.getLocale()
-            axios.get('/dispenser/navigation/get/global' + locale).then(r => {
+            axios.get('/dispenser/navigation/global').then(r => {
               this.entrys = r.data
               this.entrys = this.calcAccess(this.entrys)
             }).catch(e => {
@@ -84,8 +83,7 @@
         }).catch(error => {
           switch (error.response.status) {
             case 401: 
-              var locale = this.getLocale()
-              axios.get('/dispenser/navigation/get/default' + locale).then(response => {
+              axios.get('/dispenser/navigation/default').then(response => {
                 this.entrys = response.data
                 this.entrys = this.calcAccess(this.entrys)
               }).catch(e => {
@@ -96,13 +94,6 @@
       },
       getEntries: function () {
         return this.entrys.filter((e) => e.hasOwnProperty('hasAccess') && e.hasAccess)
-      },
-      getLocale: function () {
-        if (navigator.language === 'de-DE') {
-          return '/de'
-        } else {
-          return '/en'
-        }
       },
       hasAccess: function (entry) {
         function compare(roleUser, roleRoute) {
