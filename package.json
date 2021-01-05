@@ -99,7 +99,7 @@
     "yarn-or-npm": "^2.0.0"
   },
   "peerDependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "vue-i18n": "^8.1.0"
   },
   "dllPlugin": {
@@ -135,7 +135,7 @@
     "last 2 versions"
   ],
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "vue-i18n": "8.1.0"
   }
 }
